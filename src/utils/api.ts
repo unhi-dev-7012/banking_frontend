@@ -1,3 +1,4 @@
+import { useAuthStore } from "@features/auth/stores/authStore";
 import axios from "axios";
 
 const api = axios.create({
@@ -21,11 +22,40 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    return response;
+    return response.data;
   },
-  (error) => {
-    if (error.response?.status === 403) {
-      window.location.href = "/login";
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) {
+        useAuthStore.getState().handleLogout();
+        window.location.href = "/";
+        return Promise.reject(error);
+      }
+      try {
+        const { data } = await axios.post(
+          "http://localhost:3000/api/auth/v1/refresh_access",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${refreshToken}`,
+            },
+          }
+        );
+        console.log("handle log out in refreshTry:", data.data);
+        const { accessToken: newAccessToken } = data.data;
+        localStorage.setItem("accessToken", newAccessToken);
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        console.log("handle log out in refreshError");
+        useAuthStore.getState().handleLogout();
+        window.location.href = "/";
+        return Promise.reject(refreshError);
+      }
     }
     return Promise.reject(error);
   }

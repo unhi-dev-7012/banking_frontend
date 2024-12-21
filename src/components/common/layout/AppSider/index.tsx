@@ -37,7 +37,7 @@ export const AppSider: React.FC = () => {
   const location = useLocation();
   const selectedKey = location.pathname || "/";
   const { isSiderCollapsed } = useAppStore();
-  const { role } = useAuthStore();
+  const { role, handleLogout } = useAuthStore();
 
   const [userData, setUserData] = useState<UserData>({
     fullName: "Unknown User",
@@ -263,7 +263,12 @@ export const AppSider: React.FC = () => {
         getItem({
           key: "Logout",
           label: (
-            <Flex align="center" gap={8} style={{ width: 140 }}>
+            <Flex
+              align="center"
+              gap={8}
+              style={{ width: 140 }}
+              onClick={handleLogout}
+            >
               <LogOut size={20} />
               Đăng xuất
             </Flex>

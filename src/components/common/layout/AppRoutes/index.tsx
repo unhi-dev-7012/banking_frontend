@@ -86,7 +86,9 @@ export const AppRoutes: React.FC = () => (
       {createProtectedRoute(
         ROUTES_PATH.CUSTOMER.DASHBOARD,
         [EROLE.CUSTOMER],
-        CustomerDashboard
+        () => (
+          <Navigate to={ROUTES_PATH.CUSTOMER.DASHBOARD} replace />
+        )
       )}
       {createProtectedRoute(
         ROUTES_PATH.CUSTOMER.ACCOUNT,
@@ -176,11 +178,9 @@ export const AppRoutes: React.FC = () => (
         EmployeeHistory
       )}
       {/* Admin Routes */}
-      {createProtectedRoute(
-        ROUTES_PATH.ADMIN.DASHBOARD,
-        [EROLE.ADMIN],
-        AdminDashboard
-      )}
+      {createProtectedRoute(ROUTES_PATH.ADMIN.DASHBOARD, [EROLE.ADMIN], () => (
+        <Navigate to={ROUTES_PATH.ADMIN.DASHBOARD} replace />
+      ))}
       {createProtectedRoute(ROUTES_PATH.ADMIN.EMPLOYEE, [EROLE.ADMIN], () => (
         <Navigate to={ROUTES_PATH.ADMIN.EMPLOYEE_LIST} replace />
       ))}

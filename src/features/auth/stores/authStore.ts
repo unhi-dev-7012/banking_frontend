@@ -30,6 +30,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
   },
   handleLogout: () => {
+    console.log("handle logout");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("role");
