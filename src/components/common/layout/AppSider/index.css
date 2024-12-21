@@ -1,0 +1,31 @@
+.appSider {
+  >div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ant-menu-item-selected {
+    font-weight: 600;
+  }
+
+  .appSider_TopMenuCollapsed .ant-menu-submenu-title {
+    padding-inline: calc(50% - 14px);
+  }
+
+  .appSider_TopMenuCollapsed .ant-menu-submenu-title svg {
+    margin-top: 10px;
+  }
+
+  .appSider_TopMenuCollapsed .ant-menu-submenu-selected>.ant-menu-submenu-title {
+    background-color: #e6f4ff;
+  }
+
+  .appSider_BottomMenu .ant-menu-submenu-title {
+    line-height: unset;
+    height: unset;
+  }
+  .appSider_BottomMenuCollapsed .ant-menu-submenu-title {
+    padding-inline: calc(50% - 22px);
+    height: fit-content;
+  }
+}
