@@ -7,7 +7,6 @@ const routeTitles: Record<string, string> = {
   // General
   [ROUTES_PATH.LOGIN]: "Đăng nhập",
   [ROUTES_PATH.NOTIFICATION]: "Thông báo",
-  [ROUTES_PATH.SETTING]: "Cài đặt",
 
   //Customer
   [ROUTES_PATH.CUSTOMER.DASHBOARD]: "Trang chủ",
@@ -21,7 +20,7 @@ const routeTitles: Record<string, string> = {
   [ROUTES_PATH.CUSTOMER.DEBT]: "Quản lý nợ",
   [ROUTES_PATH.CUSTOMER.DEBT_LIST]: "Danh sách nợ",
   [ROUTES_PATH.CUSTOMER.HISTORY]: "Lịch sử giao dịch",
-  [ROUTES_PATH.CUSTOMER.PROFILE]: "Thông tin khách hàng",
+  [ROUTES_PATH.PROFILE]: "Thông tin",
 
   //EMPLOYEE
   [ROUTES_PATH.EMPLOYEE.CUSTOMER]: "Quản lý khách hàng",

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { SignInFormValues } from "src/features/auth/autTypes";
 import { EROLE } from "@constants/authorization";
@@ -7,12 +6,15 @@ import { ROUTES_PATH } from "@constants/path";
 import useLogin from "@features/auth/hooks/useLogin";
 import { useAuthStore } from "@features/auth/stores/authStore";
 import SignInForm from "@features/auth/components/SignInForm";
+import { MessageInstance } from "antd/es/message/interface";
 
-interface ILoginScreenProps {}
+interface ILoginScreenProps {
+  messageApi: MessageInstance; // Prop to pass messageApi
+}
 
-const LoginScreen: React.FC<ILoginScreenProps> = () => {
+const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
   const navigate = useNavigate();
-  const { login, loading } = useLogin();
+  const { login, loading } = useLogin(messageApi);
   const { isAuthenticated, role, handleLogin } = useAuthStore();
   const [loginError, setLoginError] = useState<string | null>(null);
 
@@ -38,14 +40,10 @@ const LoginScreen: React.FC<ILoginScreenProps> = () => {
       );
 
       handleLogin(accessToken, refreshToken, role);
-      message.success(`Login Successfully! ${role}`);
     } catch (error: any) {
-      setLoginError(
-        error?.message || "An unexpected error occurred. Please try again."
-      );
-      message.error(
-        loginError || "Login failed. Please check your credentials."
-      );
+      const errorMessage =
+        error?.message || "An unexpected error occurred. Please try again.";
+      setLoginError(errorMessage);
     }
   };
   if (isAuthenticated) return null;

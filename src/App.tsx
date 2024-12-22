@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, message } from "antd";
 import { Spinner } from "@components/common/Spinner";
 import { ROUTES_PATH } from "./constants/path";
 
@@ -21,6 +21,8 @@ const queryClient = new QueryClient({
 });
 
 const App: React.FC = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+
   return (
     // Config the query client provider
     <QueryClientProvider client={queryClient}>
@@ -32,11 +34,15 @@ const App: React.FC = () => {
           },
         }}
       >
+        {contextHolder}
         {/* Config the application routers */}
         <BrowserRouter>
           <Suspense fallback={<Spinner />}>
             <Routes>
-              <Route path={ROUTES_PATH.LOGIN} element={<LoginScreen />} />
+              <Route
+                path={ROUTES_PATH.LOGIN}
+                element={<LoginScreen messageApi={messageApi} />}
+              />
               <Route path="/*" element={<AppLayout />} />
             </Routes>
           </Suspense>

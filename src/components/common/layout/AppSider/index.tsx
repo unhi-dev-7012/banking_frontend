@@ -23,6 +23,7 @@ import {
   Settings,
   UserPlus,
   UserRound,
+  UserRoundCog,
   Users,
 } from "lucide-react";
 import "./index.css";
@@ -47,10 +48,8 @@ export const AppSider: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getUserData();
-      console.log("notiff", data);
 
       if (data) {
-        console.log("iff", data);
         setUserData(data);
       }
     };
@@ -149,6 +148,14 @@ export const AppSider: React.FC = () => {
       ],
       requiredRoles: [EROLE.CUSTOMER],
     }),
+
+    getItem({
+      key: ROUTES_PATH.CUSTOMER.HISTORY,
+      label: "Lịch sử giao dịch",
+      icon: <Clock size={20} />, // Replace with an appropriate icon
+      path: ROUTES_PATH.CUSTOMER.HISTORY,
+      requiredRoles: [EROLE.CUSTOMER],
+    }),
     // End customer
 
     //Start Employee
@@ -196,6 +203,7 @@ export const AppSider: React.FC = () => {
       path: ROUTES_PATH.ADMIN.DASHBOARD,
       requiredRoles: [EROLE.ADMIN],
     }),
+
     getItem({
       key: ROUTES_PATH.ADMIN.EMPLOYEE,
       label: "Quản lý nhân viên",
@@ -250,11 +258,11 @@ export const AppSider: React.FC = () => {
           key: "Setting",
           label: (
             <Flex align="center" gap={8} style={{ width: 140 }}>
-              <Settings size={20} />
-              Cài đặt
+              <UserRoundCog size={20} />
+              Thông tin
             </Flex>
           ),
-          path: ROUTES_PATH.SETTING,
+          path: ROUTES_PATH.PROFILE,
         }),
         {
           key: "Divider",

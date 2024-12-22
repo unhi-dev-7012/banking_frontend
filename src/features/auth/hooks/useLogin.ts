@@ -1,8 +1,9 @@
 import { useState } from "react";
 import loginUser from "../services/loginUser";
 import { LoginResponse } from "../autTypes";
+import { MessageInstance } from "antd/es/message/interface";
 
-const useLogin = () => {
+const useLogin = (messageApi: MessageInstance) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,15 +18,25 @@ const useLogin = () => {
         email,
         password
       );
+      messageApi.success("Login Successfully!");
       return { accessToken, refreshToken, role };
     } catch (err: any) {
-      if (err.response?.status === 401)
+      if (err.response?.status === 400) {
         setError("Incorrect email or password. Please try again.");
-      else if (err.response?.status === 403)
+        messageApi.error("Incorrect email or password. Please try again.");
+      } else if (err.response?.status === 403) {
         setError("Account is unauthorized. Please try again.");
-      else if (err.response?.status === 404)
+        messageApi.error("Account is unauthorized. Please try again.");
+      } else if (err.response?.status === 404) {
         setError("Account not found. Please check your credentials.");
-      else setError("An unexpected error occurred. Please try again later.");
+        messageApi.error("Account not found. Please check your credentials.");
+      } else {
+        setError("An unexpected error occurred. Please try again later.");
+        messageApi.error(
+          "An unexpected error occurred. Please try again later."
+        );
+      }
+
       throw err;
     } finally {
       setLoading(false);

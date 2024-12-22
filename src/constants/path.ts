@@ -12,14 +12,13 @@ export const ROUTES_PATH = {
     DEBT: "/debt",
     DEBT_LIST: "/debt/list",
     HISTORY: "/customer/history",
-    PROFILE: "/profile",
   },
   EMPLOYEE: {
     CUSTOMER: "/customer",
     CUSTOMER_LIST: "/customer/list",
     CUSTOMER_CREATE: "/customer/create",
     DEPOSIT: "/deposit",
-    HISTORY: "/employee/history",
+    HISTORY: "/employee/history/:customerId",
   },
   ADMIN: {
     DASHBOARD: "/admin/dashboard",
@@ -29,8 +28,8 @@ export const ROUTES_PATH = {
 
   // General
   LOGIN: "/",
+  PROFILE: "/profile",
   // LANDING: "/",
   NOTIFICATION: "/notification",
-  SETTING: "/setting",
   NOTFOUND: "/notfound",
 };

@@ -11,13 +11,11 @@ const NotFoundScreen = lazy(
 const NotificationScreen = lazy(
   () => import("@screens/authentication/NotificationScreen")
 );
-const SettingScreen = lazy(
-  () => import("@screens/authentication/SettingScreen")
-);
 
 const CustomerDashboard = lazy(
   () => import("@screens/customer/CustomerDashboardScreen")
 );
+
 const CustomerAccounts = lazy(
   () => import("@screens/customer/CustomerAccountListScreen")
 );
@@ -36,7 +34,7 @@ const CustomerDebts = lazy(
 const CustomerHistory = lazy(
   () => import("@screens/customer/CustomerHistoryScreen")
 );
-const CustomerProfile = lazy(() => import("@screens/customer/ProfileScreen"));
+const Profile = lazy(() => import("@screens/authentication/ProfileScreen"));
 
 const EmployeeCustomerList = lazy(
   () => import("@screens/employee/accounts/AccountListScreen")
@@ -72,24 +70,25 @@ const createProtectedRoute = (
 export const AppRoutes: React.FC = () => (
   <Suspense fallback={<Spinner />}>
     <Routes>
+      {/* Common */}
       {createProtectedRoute(
         ROUTES_PATH.NOTIFICATION,
         [EROLE.CUSTOMER, EROLE.ADMIN, EROLE.EMPLOYEE],
-        CustomerAccounts
-      )}{" "}
-      {createProtectedRoute(
-        ROUTES_PATH.SETTING,
-        [EROLE.CUSTOMER, EROLE.ADMIN, EROLE.EMPLOYEE],
-        CustomerAccounts
+        NotificationScreen
       )}
+      {createProtectedRoute(
+        ROUTES_PATH.PROFILE,
+        [EROLE.CUSTOMER, EROLE.ADMIN, EROLE.EMPLOYEE],
+        Profile
+      )}
+
       {/* Customer Routes */}
       {createProtectedRoute(
         ROUTES_PATH.CUSTOMER.DASHBOARD,
         [EROLE.CUSTOMER],
-        () => (
-          <Navigate to={ROUTES_PATH.CUSTOMER.DASHBOARD} replace />
-        )
+        CustomerDashboard
       )}
+
       {createProtectedRoute(
         ROUTES_PATH.CUSTOMER.ACCOUNT,
         [EROLE.CUSTOMER],
@@ -144,11 +143,6 @@ export const AppRoutes: React.FC = () => (
         [EROLE.CUSTOMER],
         CustomerHistory
       )}
-      {createProtectedRoute(
-        ROUTES_PATH.CUSTOMER.PROFILE,
-        [EROLE.CUSTOMER],
-        CustomerProfile
-      )}
       {/* Employee Routes */}
       {createProtectedRoute(
         ROUTES_PATH.EMPLOYEE.CUSTOMER,
@@ -178,12 +172,13 @@ export const AppRoutes: React.FC = () => (
         EmployeeHistory
       )}
       {/* Admin Routes */}
-      {createProtectedRoute(ROUTES_PATH.ADMIN.DASHBOARD, [EROLE.ADMIN], () => (
-        <Navigate to={ROUTES_PATH.ADMIN.DASHBOARD} replace />
-      ))}
-      {createProtectedRoute(ROUTES_PATH.ADMIN.EMPLOYEE, [EROLE.ADMIN], () => (
-        <Navigate to={ROUTES_PATH.ADMIN.EMPLOYEE_LIST} replace />
-      ))}
+
+      {createProtectedRoute(
+        ROUTES_PATH.ADMIN.DASHBOARD,
+        [EROLE.ADMIN],
+        AdminDashboard
+      )}
+
       {createProtectedRoute(
         ROUTES_PATH.ADMIN.EMPLOYEE_LIST,
         [EROLE.ADMIN],
