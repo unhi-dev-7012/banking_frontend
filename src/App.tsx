@@ -5,7 +5,9 @@ import { ConfigProvider, message } from "antd";
 import { Spinner } from "@components/common/Spinner";
 import { ROUTES_PATH } from "./constants/path";
 
-const LoginScreen = lazy(() => import("@screens/authentication/LoginScreen"));
+const LoginScreen = lazy(
+  () => import("@screens/authentication/login/LoginScreen")
+);
 
 const AppLayout = lazy(() => import("@components/common/layout/AppLayout"));
 

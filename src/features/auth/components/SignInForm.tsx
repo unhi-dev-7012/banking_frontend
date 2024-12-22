@@ -1,10 +1,14 @@
 import React from "react";
-import { Button, Form, Input } from "antd";
+import { Button, Checkbox, Flex, Form, Input, Typography } from "antd";
 import { SignInFormValues } from "../autTypes";
+
+import styles from "@screens/authentication/login/login.module.css";
+import { Link } from "react-router-dom";
 
 interface SignInFormProps {
   onFinish: (value: SignInFormValues) => void;
   loading?: boolean;
+  onForgotPassword: () => void; // Add this prop
 }
 
 type FieldType = {
@@ -12,38 +16,83 @@ type FieldType = {
   password?: string;
 };
 
-const SignInForm: React.FC<SignInFormProps> = ({ onFinish, loading }) => (
-  <Form
-    name="signin"
-    labelCol={{ span: 8 }}
-    wrapperCol={{ span: 16 }}
-    style={{ maxWidth: 600 }}
-    initialValues={{ remember: true }}
-    onFinish={onFinish}
-    autoComplete="off"
-  >
-    <Form.Item<FieldType>
-      label="Username"
-      name="username"
-      rules={[{ required: true, message: "Please input your username!" }]}
+const SignInForm: React.FC<SignInFormProps> = ({
+  onFinish,
+  loading,
+  onForgotPassword,
+}) => (
+  <>
+    <Typography.Title
+      level={1}
+      style={{ fontSize: "48px", marginBottom: "10px" }}
     >
-      <Input />
-    </Form.Item>
-
-    <Form.Item<FieldType>
-      label="Password"
-      name="password"
-      rules={[{ required: true, message: "Please input your password!" }]}
+      Chào mừng trở lại
+    </Typography.Title>
+    <Typography.Text
+      style={{ fontSize: "18px", color: "#b2b2b2", marginBottom: "20px" }}
     >
-      <Input.Password />
-    </Form.Item>
+      Hãy nhập vào tên đăng nhập và mật khẩu để truy cập vào tài khoản
+    </Typography.Text>
+    <Form
+      layout="vertical"
+      size="large"
+      requiredMark={false}
+      name="signin"
+      style={{ minWidth: 480 }}
+      onFinish={onFinish}
+      autoComplete="off"
+    >
+      <Form.Item<FieldType>
+        className={styles.customLabelName}
+        label="Tên đăng nhập"
+        name="username"
+        rules={[
+          {
+            required: true,
+            message: "Hãy nhập vào tên đăng nhập của bạn!",
+          },
+        ]}
+      >
+        <Input placeholder="Tên đăng nhập" />
+      </Form.Item>
 
-    <Form.Item label={null}>
+      <Form.Item<FieldType>
+        className={styles.customLabelPass}
+        label="Mật khẩu"
+        name="password"
+        rules={[{ required: true, message: "Hãy nhập vào mật khẩu của bạn!" }]}
+      >
+        <Input.Password placeholder="Mật khẩu" />
+      </Form.Item>
+
+      <Form.Item>
+        <Flex justify="flex-end" align="center">
+          <Link onClick={onForgotPassword} to={"/"}>
+            Quên mật khẩu?
+          </Link>{" "}
+          {/* Use Ant Design Link */}
+        </Flex>
+      </Form.Item>
+
+      <Form.Item>
+        <Button
+          block
+          type="primary"
+          htmlType="submit"
+          loading={loading}
+          style={{ height: "45px" }}
+        >
+          Đăng nhập
+        </Button>
+      </Form.Item>
+
+      {/* <Form.Item label={null}>
       <Button type="primary" htmlType="submit" loading={loading}>
         Login
       </Button>
-    </Form.Item>
-  </Form>
+    </Form.Item> */}
+    </Form>
+  </>
 );
 
 export default SignInForm;

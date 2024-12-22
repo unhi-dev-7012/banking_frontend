@@ -1,0 +1,41 @@
+.loginScreen{
+  width: 100vw;
+  height: 100vh;
+}
+
+.leftContainer, .rightContainer {
+  width: 50%;
+  height: 100vh;
+}
+.leftContainer{
+  border-radius: 26px;
+}
+
+.leftContainer img{
+  max-width: 100%;
+  max-height: 98%;
+  object-fit: contain;
+  border-radius: 20px;
+ 
+}
+
+.customLabelName label, .customLabelPass label, .customLabelEmail label {
+  font-size: 16px !important;
+  /* Change font size for the first and second labels */
+}
+
+.customLabelName input, .customLabelPass span{
+  background-color: #f5f7fa !important;
+  border-color: #f5f7fa !important;
+  height: 50px;
+  
+}
+
+ .customLabelEmail input{
+  background-color: white !important;
+ }
+
+ .inputOTP input{
+  line-height: 3 !important;
+  font-size: 19px !important;
+ }
