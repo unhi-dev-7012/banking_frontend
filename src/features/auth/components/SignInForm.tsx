@@ -10,7 +10,7 @@ interface SignInFormProps {
   onFinish: (value: SignInFormValues) => void;
   loading?: boolean;
   onForgotPassword: () => void; // Add this prop
-  onCaptchaChange: (token: string | null) => void;
+  recaptchaRef: React.RefObject<ReCAPTCHA>; // Add ref prop
 }
 
 type FieldType = {
@@ -22,7 +22,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
   onFinish,
   loading,
   onForgotPassword,
-  onCaptchaChange,
+  recaptchaRef,
 }) => (
   <>
     <Typography.Title
@@ -84,10 +84,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
           alignItems: "center", // Center vertically (optional based on your layout)
         }}
       >
-        <ReCAPTCHA
-          sitekey={import.meta.env.VITE_SITE_KEY}
-          onChange={onCaptchaChange}
-        />
+        <ReCAPTCHA sitekey={import.meta.env.VITE_SITE_KEY} ref={recaptchaRef} />
       </Form.Item>
 
       <Form.Item>

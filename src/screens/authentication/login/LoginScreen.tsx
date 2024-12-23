@@ -12,6 +12,7 @@ import styles from "@screens/authentication/login/login.module.css";
 import ForgotPasswordForm from "@features/auth/components/ForgotPasswordForm";
 import OTPForm from "@features/auth/components/OTPForm";
 import SetNewPasswordForm from "@features/auth/components/SetNewPasswordForm";
+import ReCAPTCHA from "react-google-recaptcha";
 
 interface ILoginScreenProps {
   messageApi: MessageInstance; // Prop to pass messageApi
@@ -24,7 +25,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
   const [loginError, setLoginError] = useState<string | null>(null);
   const [currentForm, setCurrentForm] = useState("loginForm");
   const [email, setEmail] = useState<string>("");
-  const captchaTokenRef = useRef<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -40,7 +41,8 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
 
   const handleLoginSubmit = async (values: SignInFormValues) => {
     setLoginError(null);
-    if (!captchaTokenRef.current) {
+    const token = recaptchaRef.current?.getValue(); // Get the CAPTCHA token here
+    if (!token) {
       messageApi.error("Vui lòng xác thực CAPTCHA");
       return;
     }
@@ -49,37 +51,40 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
       const { accessToken, refreshToken, role } = await login(
         username,
         password,
-        captchaTokenRef.current
+        token
       );
 
       handleLogin(accessToken, refreshToken, role);
     } catch (error: any) {
       const errorMessage = error?.message || "Có lỗi xảy ra, vui lòng thử lại!";
       setLoginError(errorMessage);
+
+      // Reset CAPTCHA when error occurs
+      recaptchaRef.current?.reset();
     }
   };
   if (isAuthenticated) return null;
 
-  const handleCaptchaChange = (token: string | null) => {
-    captchaTokenRef.current = token; // Update ref value
-  };
-
   const handleForgotPassword = () => {
     setCurrentForm("forgotPasswordForm"); // Switch to Forgot Password form
+    recaptchaRef.current?.reset();
   };
 
   const handleBackToLogin = () => {
     setCurrentForm("loginForm"); // Switch back to Login form
+    recaptchaRef.current?.reset();
   };
 
   const handleResetPassword = () => {
     // Store the email when resetting the password
     setEmail("user@example.com"); // This should be the email entered during the Forgot Password form
     setCurrentForm("otpForm"); // Switch to OTP form
+    recaptchaRef.current?.reset();
   };
 
   const handleSetNewPassword = () => {
     setCurrentForm("setNewPasswordForm"); // Switch to Set New Password form
+    recaptchaRef.current?.reset();
   };
 
   return (
@@ -99,14 +104,13 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
       >
         <img src="src/assets/images/horizontal_logo.png" alt="" />
 
-        {loginError && <p style={{ color: "red" }}>{loginError}</p>}
         {/* Conditional Rendering based on currentForm */}
         {currentForm === "loginForm" && (
           <SignInForm
             onFinish={handleLoginSubmit}
             loading={loading}
             onForgotPassword={handleForgotPassword}
-            onCaptchaChange={handleCaptchaChange}
+            recaptchaRef={recaptchaRef}
           />
         )}
         {currentForm === "forgotPasswordForm" && (

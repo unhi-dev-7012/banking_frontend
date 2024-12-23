@@ -8,7 +8,11 @@ const loginUser = async (
   if (!captchaToken) {
     throw new Error("CAPTCHA token is required");
   }
-  const response = await api.post("/api/auth/v1/login", { username, password });
+  const response = await api.post("/api/auth/v1/login", {
+    username,
+    password,
+    captchaToken,
+  });
   return response.data;
 };
 
