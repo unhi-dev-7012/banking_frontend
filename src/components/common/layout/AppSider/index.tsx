@@ -20,7 +20,6 @@ import {
   FileText,
   Home,
   LogOut,
-  Settings,
   UserPlus,
   UserRound,
   UserRoundCog,

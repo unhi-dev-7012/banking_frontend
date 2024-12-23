@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SignInFormValues } from "src/features/auth/autTypes";
 import { EROLE } from "@constants/authorization";
@@ -24,6 +24,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
   const [loginError, setLoginError] = useState<string | null>(null);
   const [currentForm, setCurrentForm] = useState("loginForm");
   const [email, setEmail] = useState<string>("");
+  const captchaTokenRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -39,21 +40,29 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
 
   const handleLoginSubmit = async (values: SignInFormValues) => {
     setLoginError(null);
+    if (!captchaTokenRef.current) {
+      messageApi.error("Vui lòng xác thực CAPTCHA");
+      return;
+    }
     try {
       const { username, password } = values;
       const { accessToken, refreshToken, role } = await login(
         username,
-        password
+        password,
+        captchaTokenRef.current
       );
 
       handleLogin(accessToken, refreshToken, role);
     } catch (error: any) {
-      const errorMessage =
-        error?.message || "An unexpected error occurred. Please try again.";
+      const errorMessage = error?.message || "Có lỗi xảy ra, vui lòng thử lại!";
       setLoginError(errorMessage);
     }
   };
   if (isAuthenticated) return null;
+
+  const handleCaptchaChange = (token: string | null) => {
+    captchaTokenRef.current = token; // Update ref value
+  };
 
   const handleForgotPassword = () => {
     setCurrentForm("forgotPasswordForm"); // Switch to Forgot Password form
@@ -77,7 +86,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
     <Flex className={styles.loginScreen}>
       <Flex className={styles.leftContainer} align="center" justify="center">
         <img
-          src="https://cdn.dribbble.com/userupload/14694731/file/original-3536340a75b501a14793a49cfeb71193.png?resize=1024x1024&vertical=center"
+          src="https://img.freepik.com/free-vector/abstract-digital-landscape-background_52683-96754.jpg?t=st=1734947456~exp=1734951056~hmac=86f4ef3b5ec54ee0acd21477e6fe51c536bf5957d3b1589b758d26d21433a7ee&w=1380"
           alt=""
         />
       </Flex>
@@ -88,6 +97,8 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
         gap="middle"
         justify="center"
       >
+        <img src="src/assets/images/horizontal_logo.png" alt="" />
+
         {loginError && <p style={{ color: "red" }}>{loginError}</p>}
         {/* Conditional Rendering based on currentForm */}
         {currentForm === "loginForm" && (
@@ -95,6 +106,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
             onFinish={handleLoginSubmit}
             loading={loading}
             onForgotPassword={handleForgotPassword}
+            onCaptchaChange={handleCaptchaChange}
           />
         )}
         {currentForm === "forgotPasswordForm" && (

@@ -1,14 +1,16 @@
 import React from "react";
-import { Button, Checkbox, Flex, Form, Input, Typography } from "antd";
+import { Button, Flex, Form, Input, Typography } from "antd";
 import { SignInFormValues } from "../autTypes";
 
 import styles from "@screens/authentication/login/login.module.css";
 import { Link } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha"; // Import ReCAPTCHA
 
 interface SignInFormProps {
   onFinish: (value: SignInFormValues) => void;
   loading?: boolean;
   onForgotPassword: () => void; // Add this prop
+  onCaptchaChange: (token: string | null) => void;
 }
 
 type FieldType = {
@@ -20,6 +22,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
   onFinish,
   loading,
   onForgotPassword,
+  onCaptchaChange,
 }) => (
   <>
     <Typography.Title
@@ -38,7 +41,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
       size="large"
       requiredMark={false}
       name="signin"
-      style={{ minWidth: 480 }}
+      style={{ minWidth: 300 }}
       onFinish={onFinish}
       autoComplete="off"
     >
@@ -72,6 +75,19 @@ const SignInForm: React.FC<SignInFormProps> = ({
           </Link>{" "}
           {/* Use Ant Design Link */}
         </Flex>
+      </Form.Item>
+
+      <Form.Item
+        style={{
+          display: "flex", // Make the Form.Item a flex container
+          justifyContent: "center", // Center horizontally
+          alignItems: "center", // Center vertically (optional based on your layout)
+        }}
+      >
+        <ReCAPTCHA
+          sitekey={import.meta.env.VITE_SITE_KEY}
+          onChange={onCaptchaChange}
+        />
       </Form.Item>
 
       <Form.Item>

@@ -4,21 +4,34 @@
 }
 
 .leftContainer, .rightContainer {
-  width: 50%;
   height: 100vh;
 }
 .leftContainer{
+  width: 60%;
   border-radius: 26px;
+  position: relative;
 }
 
 .leftContainer img{
-  max-width: 100%;
-  max-height: 98%;
-  object-fit: contain;
+  width: 98%;
+  height: 98%;
+  object-fit: cover;
   border-radius: 20px;
  
 }
 
+.rightContainer {
+  width: 40%;
+  position: relative;
+}
+
+.rightContainer img {
+  position: absolute;
+  top: 0;
+  left: 42%;
+  width: 150px;
+  height: 150px;
+}
 .customLabelName label, .customLabelPass label, .customLabelEmail label {
   font-size: 16px !important;
   /* Change font size for the first and second labels */
