@@ -5,7 +5,12 @@ import styles from "@screens/authentication/login/login.module.css";
 
 interface SetNewPasswordFormProps {
   onBackToLogin: () => void;
-  onResetPassword: (newPassword: string) => void;
+  onResetPassword: (
+    newPassword: string,
+    confirmPassword: string,
+    resetToken: string
+  ) => void;
+  resetToken: string;
 }
 
 const { Title } = Typography;
@@ -13,11 +18,11 @@ const { Title } = Typography;
 const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({
   onBackToLogin,
   onResetPassword,
+  resetToken,
 }) => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-
   // Password validation
   const validatePassword = () => {
     if (password !== confirmPassword) {
@@ -33,8 +38,7 @@ const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({
   const handleSubmit = () => {
     if (validatePassword()) {
       setLoading(true);
-      // Call the onResetPassword function to handle the new password submission
-      onResetPassword(password);
+      onResetPassword(password, confirmPassword, resetToken);
     }
   };
 

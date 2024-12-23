@@ -10,7 +10,6 @@ export const getUserData = async (): Promise<UserData | null> => {
   const { role } = useAuthStore.getState();
 
   if (!role) {
-    console.error("No role found in the store.");
     return null;
   }
 
@@ -27,7 +26,6 @@ export const getUserData = async (): Promise<UserData | null> => {
       url = "/api/customer/v1/me";
       break;
     default:
-      console.error("Invalid role:", role);
       return null;
   }
 

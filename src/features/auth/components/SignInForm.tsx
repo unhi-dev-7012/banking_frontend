@@ -1,10 +1,9 @@
 import React from "react";
+import ReCAPTCHA from "react-google-recaptcha"; // Import ReCAPTCHA
 import { Button, Flex, Form, Input, Typography } from "antd";
 import { SignInFormValues } from "../autTypes";
 
 import styles from "@screens/authentication/login/login.module.css";
-import { Link } from "react-router-dom";
-import ReCAPTCHA from "react-google-recaptcha"; // Import ReCAPTCHA
 
 interface SignInFormProps {
   onFinish: (value: SignInFormValues) => void;
@@ -70,10 +69,9 @@ const SignInForm: React.FC<SignInFormProps> = ({
 
       <Form.Item>
         <Flex justify="flex-end" align="center">
-          <Link onClick={onForgotPassword} to={"/"}>
+          <Button type="link" onClick={onForgotPassword}>
             Quên mật khẩu?
-          </Link>{" "}
-          {/* Use Ant Design Link */}
+          </Button>
         </Flex>
       </Form.Item>
 

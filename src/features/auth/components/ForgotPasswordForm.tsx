@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, Input, Typography } from "antd";
 import { ArrowLeft, Fingerprint, Mail } from "lucide-react";
 import styles from "@screens/authentication/login/login.module.css";
 
 interface ForgotPasswordFormProps {
-  loading?: boolean;
   onBackToLogin: () => void; // Added prop to handle back to login
   onResetPassword: (email: string) => void;
 }
@@ -21,13 +20,21 @@ const validateMessages = {
 };
 
 const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
-  loading,
   onBackToLogin,
   onResetPassword,
 }) => {
-  const handleSubmit = (values: { email: string }) => {
-    // Call onResetPassword with email if valid
-    onResetPassword(values.email);
+  const [loading, setLoading] = useState<boolean>(false);
+  const handleSubmit = async (values: { email: string }) => {
+    setLoading(true); // Start loading when the form is submitted
+    try {
+      // Call onResetPassword with email
+      await onResetPassword(values.email);
+    } catch (error) {
+      // Handle any error if needed
+      console.error(error);
+    } finally {
+      setLoading(false); // Reset loading after the request
+    }
   };
   return (
     <>

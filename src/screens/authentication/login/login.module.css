@@ -37,11 +37,10 @@
   /* Change font size for the first and second labels */
 }
 
-.customLabelName input, .customLabelPass span{
+.customLabelName input, .customLabelPass>div>div:nth-child(2)>div>div>span{
   background-color: #f5f7fa !important;
   border-color: #f5f7fa !important;
   height: 50px;
-  
 }
 
  .customLabelEmail input{
@@ -52,3 +51,20 @@
   line-height: 3 !important;
   font-size: 19px !important;
  }
+
+ .sendOTPAgainContainer *{
+  line-height: 0;
+ }
+
+ .countDownContainer {
+  display: block;
+  width: 66px;
+  margin-left: 5px;
+  align-items: center;
+}
+
+ .countDownContainer span {
+  font-size: 20px;
+  color: blue;
+  
+}

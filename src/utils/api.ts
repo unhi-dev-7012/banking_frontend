@@ -36,7 +36,7 @@ api.interceptors.response.use(
       }
       try {
         const { data } = await axios.post(
-          "http://localhost:3000/api/auth/v1/refresh_access",
+          `${import.meta.env.VITE_API_URL}/api/auth/v1/refresh_access`,
           {},
           {
             headers: {

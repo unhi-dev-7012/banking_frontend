@@ -13,19 +13,30 @@ import ForgotPasswordForm from "@features/auth/components/ForgotPasswordForm";
 import OTPForm from "@features/auth/components/OTPForm";
 import SetNewPasswordForm from "@features/auth/components/SetNewPasswordForm";
 import ReCAPTCHA from "react-google-recaptcha";
+import requestResetPassword from "@features/auth/services/requestResetPassword";
+import resetPassword from "@features/auth/services/resetPassword";
 
 interface ILoginScreenProps {
   messageApi: MessageInstance; // Prop to pass messageApi
+}
+
+enum FormState {
+  LOGIN = "login",
+  FORGOT_PASSWORD = "forgotPassword",
+  OTP = "otp",
+  SET_NEW_PASSWORD = "setNewPassword",
 }
 
 const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
   const navigate = useNavigate();
   const { login, loading } = useLogin(messageApi);
   const { isAuthenticated, role, handleLogin } = useAuthStore();
-  const [loginError, setLoginError] = useState<string | null>(null);
-  const [currentForm, setCurrentForm] = useState("loginForm");
+  const [currentForm, setCurrentForm] = useState<FormState>(FormState.LOGIN);
   const [email, setEmail] = useState<string>("");
   const recaptchaRef = useRef<ReCAPTCHA>(null);
+
+  const [userId, setUserId] = useState<string | null>(null);
+  const [resetToken, setResetToken] = useState<string | null>(null);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -40,7 +51,6 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
   }, [isAuthenticated, role, navigate]);
 
   const handleLoginSubmit = async (values: SignInFormValues) => {
-    setLoginError(null);
     const token = recaptchaRef.current?.getValue(); // Get the CAPTCHA token here
     if (!token) {
       messageApi.error("Vui lòng xác thực CAPTCHA");
@@ -56,35 +66,52 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
 
       handleLogin(accessToken, refreshToken, role);
     } catch (error: any) {
-      const errorMessage = error?.message || "Có lỗi xảy ra, vui lòng thử lại!";
-      setLoginError(errorMessage);
-
       // Reset CAPTCHA when error occurs
       recaptchaRef.current?.reset();
     }
   };
   if (isAuthenticated) return null;
 
-  const handleForgotPassword = () => {
-    setCurrentForm("forgotPasswordForm"); // Switch to Forgot Password form
-    recaptchaRef.current?.reset();
+  const handleForgotPassword = () => setCurrentForm(FormState.FORGOT_PASSWORD);
+  const handleBackToLogin = () => setCurrentForm(FormState.LOGIN);
+  const handleToOtpForm = async (email: string) => {
+    setEmail(email);
+    console.log(email);
+    try {
+      const { userId } = await requestResetPassword(email);
+      setUserId(userId);
+      setCurrentForm(FormState.OTP);
+      messageApi.success("Mã OTP đã được gửi đến email của bạn!");
+    } catch (error: any) {
+      messageApi.error("Không tìm thấy thông tin tài khoản!");
+    }
   };
 
-  const handleBackToLogin = () => {
-    setCurrentForm("loginForm"); // Switch back to Login form
-    recaptchaRef.current?.reset();
+  const handleSetNewPassword = async (
+    newPassword: string,
+    confirmPassword: string,
+    resetToken: string
+  ) => {
+    try {
+      const response = await resetPassword(
+        newPassword,
+        confirmPassword,
+        resetToken
+      ); // Assuming resetPasswordAPI accepts newPassword and userId
+      if (response) {
+        messageApi.success("Mật khẩu đã được thay đổi thành công!");
+        setCurrentForm(FormState.LOGIN); // Redirect to login page after success
+      } else {
+        messageApi.error("Đặt lại mật khẩu thất bại. Vui lòng thử lại.");
+      }
+    } catch (error: any) {
+      messageApi.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
+    }
   };
 
-  const handleResetPassword = () => {
-    // Store the email when resetting the password
-    setEmail("user@example.com"); // This should be the email entered during the Forgot Password form
-    setCurrentForm("otpForm"); // Switch to OTP form
-    recaptchaRef.current?.reset();
-  };
-
-  const handleSetNewPassword = () => {
-    setCurrentForm("setNewPasswordForm"); // Switch to Set New Password form
-    recaptchaRef.current?.reset();
+  const handleOtpContinue = (resetToken: string) => {
+    setResetToken(resetToken);
+    setCurrentForm(FormState.SET_NEW_PASSWORD); // Move to set new password form
   };
 
   return (
@@ -105,7 +132,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
         <img src="src/assets/images/horizontal_logo.png" alt="" />
 
         {/* Conditional Rendering based on currentForm */}
-        {currentForm === "loginForm" && (
+        {currentForm === FormState.LOGIN && (
           <SignInForm
             onFinish={handleLoginSubmit}
             loading={loading}
@@ -113,24 +140,27 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
             recaptchaRef={recaptchaRef}
           />
         )}
-        {currentForm === "forgotPasswordForm" && (
+        {currentForm === FormState.FORGOT_PASSWORD && (
           <ForgotPasswordForm
             onBackToLogin={handleBackToLogin}
-            onResetPassword={handleResetPassword}
-            loading={loading}
+            onResetPassword={(email) => handleToOtpForm(email)}
           />
         )}
-        {currentForm === "otpForm" && (
+        {currentForm === FormState.OTP && (
           <OTPForm
             email={email}
+            userId={userId}
             onBackToLogin={handleBackToLogin}
-            onContinue={handleSetNewPassword}
+            onContinue={handleOtpContinue}
           />
         )}
-        {currentForm === "setNewPasswordForm" && (
+        {currentForm === FormState.SET_NEW_PASSWORD && (
           <SetNewPasswordForm
             onBackToLogin={handleBackToLogin}
-            onResetPassword={handleBackToLogin}
+            onResetPassword={(newPassword, confirmPassword, resetPassword) =>
+              handleSetNewPassword(newPassword, confirmPassword, resetPassword)
+            }
+            resetToken={resetToken || ""}
           />
         )}
       </Flex>
