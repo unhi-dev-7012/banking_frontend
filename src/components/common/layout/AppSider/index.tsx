@@ -16,6 +16,7 @@ import {
   ArrowRightCircle,
   Bell,
   Clock,
+  CreditCard,
   DollarSign,
   FileText,
   Home,
@@ -95,14 +96,14 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.CUSTOMER.DASHBOARD,
       label: "Trang chủ",
-      icon: <Home size={20} />, // Replace with an appropriate icon
+      icon: <Home size={20} />,
       path: ROUTES_PATH.CUSTOMER.DASHBOARD,
       requiredRoles: [EROLE.CUSTOMER],
     }),
     getItem({
       key: ROUTES_PATH.CUSTOMER.TRANSFER,
       label: "Chuyển tiền",
-      icon: <ArrowRightCircle size={20} />, // Replace with an appropriate icon
+      icon: <ArrowRightCircle size={20} />,
       children: [
         getItem({
           key: ROUTES_PATH.CUSTOMER.INTERNAL_TRANSFER,
@@ -120,9 +121,24 @@ export const AppSider: React.FC = () => {
       requiredRoles: [EROLE.CUSTOMER],
     }),
     getItem({
+      key: ROUTES_PATH.CUSTOMER.ACCOUNT,
+      label: "Tài khoản",
+      icon: <CreditCard size={20} />,
+      children: [
+        getItem({
+          key: ROUTES_PATH.CUSTOMER.ACCOUNT_LIST,
+          label: "Danh sách tài khoản",
+          path: ROUTES_PATH.CUSTOMER.ACCOUNT_LIST,
+          requiredRoles: [EROLE.CUSTOMER],
+        }),
+      ],
+      requiredRoles: [EROLE.CUSTOMER],
+    }),
+
+    getItem({
       key: ROUTES_PATH.CUSTOMER.DEBT,
       label: "Quản lý nợ",
-      icon: <FileText size={20} />, // Replace with an appropriate icon
+      icon: <FileText size={20} />,
       children: [
         getItem({
           key: ROUTES_PATH.CUSTOMER.DEBT_LIST,
@@ -136,7 +152,7 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.CUSTOMER.CONTACT,
       label: "Danh bạ",
-      icon: <UserPlus size={20} />, // Replace with an appropriate icon
+      icon: <UserPlus size={20} />,
       children: [
         getItem({
           key: ROUTES_PATH.CUSTOMER.CONTACT_LIST,
@@ -151,7 +167,7 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.CUSTOMER.HISTORY,
       label: "Lịch sử giao dịch",
-      icon: <Clock size={20} />, // Replace with an appropriate icon
+      icon: <Clock size={20} />,
       path: ROUTES_PATH.CUSTOMER.HISTORY,
       requiredRoles: [EROLE.CUSTOMER],
     }),
@@ -161,7 +177,7 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.EMPLOYEE.CUSTOMER,
       label: "Quản lý tài khoản",
-      icon: <UserRound size={20} />, // Replace with an appropriate icon
+      icon: <UserRound size={20} />,
       children: [
         getItem({
           key: ROUTES_PATH.EMPLOYEE.CUSTOMER_LIST,
@@ -181,14 +197,14 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.EMPLOYEE.DEPOSIT,
       label: "Nạp tiền",
-      icon: <DollarSign size={20} />, // Replace with an appropriate icon
+      icon: <DollarSign size={20} />,
       path: ROUTES_PATH.EMPLOYEE.DEPOSIT,
       requiredRoles: [EROLE.EMPLOYEE],
     }),
     getItem({
       key: ROUTES_PATH.EMPLOYEE.HISTORY,
       label: "Lịch sử giao dịch",
-      icon: <Clock size={20} />, // Replace with an appropriate icon
+      icon: <Clock size={20} />,
       path: ROUTES_PATH.EMPLOYEE.HISTORY,
       requiredRoles: [EROLE.EMPLOYEE],
     }),
@@ -198,7 +214,7 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.ADMIN.DASHBOARD,
       label: "Trang chủ",
-      icon: <Home size={20} />, // Replace with an appropriate icon
+      icon: <Home size={20} />,
       path: ROUTES_PATH.ADMIN.DASHBOARD,
       requiredRoles: [EROLE.ADMIN],
     }),
@@ -206,7 +222,7 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.ADMIN.EMPLOYEE,
       label: "Quản lý nhân viên",
-      icon: <Users size={20} />, // Replace with an appropriate icon
+      icon: <Users size={20} />,
       children: [
         getItem({
           key: ROUTES_PATH.ADMIN.EMPLOYEE_LIST,
