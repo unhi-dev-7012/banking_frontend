@@ -38,7 +38,7 @@ const CustomerAccountListScreen: React.FC<
     >
       <Row style={{ marginBottom: 16 }}>
         <Col span={24}>
-          <Text style={{ fontSize: 14, color: "#595959" }}>Số tài khoản</Text>
+          <Text style={{ fontSize: 12, color: "#595959" }}>Số tài khoản</Text>
         </Col>
         <Col span={24}>
           <Space
@@ -49,13 +49,17 @@ const CustomerAccountListScreen: React.FC<
             }}
           >
             <Text
-              style={{ fontWeight: "bold", fontSize: 16, color: "#1677ff" }}
+              style={{
+                fontWeight: "bold",
+                fontSize: 20,
+                color: "#1677ff",
+              }}
             >
               1234 5678
             </Text>
             <Space>
               <Copy
-                style={{ fontSize: 18, color: "#bfbfbf", cursor: "pointer" }}
+                style={{ fontSize: 8, color: "#bfbfbf", cursor: "pointer" }}
                 onClick={handleCopyAccountNumber}
               />
             </Space>
@@ -65,7 +69,7 @@ const CustomerAccountListScreen: React.FC<
 
       <Row style={{ marginBottom: 16 }}>
         <Col span={24}>
-          <Text style={{ fontSize: 14, color: "#595959" }}>
+          <Text style={{ fontSize: 12, color: "#595959" }}>
             Số dư tài khoản
           </Text>
         </Col>
@@ -78,18 +82,18 @@ const CustomerAccountListScreen: React.FC<
             }}
           >
             <Text
-              style={{ fontWeight: "bold", fontSize: 16, color: "#1677ff" }}
+              style={{ fontWeight: "bold", fontSize: 20, color: "#1677ff" }}
             >
               {isBalanceVisible ? "**********" : "100,000,000 VND"}{" "}
             </Text>
             {isBalanceVisible ? (
               <EyeOff
-                style={{ fontSize: 18, color: "#bfbfbf", cursor: "pointer" }}
+                style={{ fontSize: 8, color: "#bfbfbf", cursor: "pointer" }}
                 onClick={toggleBalance}
               />
             ) : (
               <Eye
-                style={{ fontSize: 18, color: "#bfbfbf", cursor: "pointer" }}
+                style={{ color: "#bfbfbf", cursor: "pointer" }}
                 onClick={toggleBalance}
               />
             )}
@@ -108,7 +112,7 @@ const CustomerAccountListScreen: React.FC<
               color: "#1677ff",
             }}
           >
-            <Clock />
+            <Clock size="small" />
             Lịch sử giao dịch
           </Button>
         </Col>
@@ -122,7 +126,7 @@ const CustomerAccountListScreen: React.FC<
               color: "#1677ff",
             }}
           >
-            <ArrowRightCircle />
+            <ArrowRightCircle size="small" />
             Chuyển tiền
           </Button>
         </Col>
