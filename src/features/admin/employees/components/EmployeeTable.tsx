@@ -1,32 +1,38 @@
-import React, { useEffect } from "react";
-import { useEmployeeStore } from "../stores/employeeStore";
-import { Button, message, Modal, Table, Tag } from "antd";
+import { useEffect } from "react";
+import { useEmployeeTable } from "../stores/employeeStore";
+import {
+  Button,
+  message,
+  Modal,
+  TableColumnsType,
+  TablePaginationConfig,
+  Tag,
+} from "antd";
+import TableComponent from "@components/common/Table/TableComponent";
 import { Employee } from "../employeeType";
-import { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import styles from "./table.module.css";
 import { LockIcon, LockOpenIcon } from "lucide-react";
+import { blockEmployee } from "../services/blockEmployee";
+
+const tagMessage = (isBlocked: boolean): string => {
+  return isBlocked ? "Đã khóa" : "Đang hoạt động";
+};
+
+const tagColor = (isBlocked: boolean): string => {
+  return isBlocked ? "volcano" : "green";
+};
 
 const EmployeeTable: React.FC = () => {
-  const {
-    employees,
-    pagination,
-    loading,
-    totalItems,
-    listEmployees,
-    blockEmployee,
-    setPagination,
-  } = useEmployeeStore();
+  const { data, pagination, loading, fetchTableData, setPagination } =
+    useEmployeeTable();
+
+  useEffect(() => {
+    fetchTableData();
+  }, [pagination.current, pagination.total]);
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
-    setPagination(pagination.current || 1, pagination.pageSize || 10);
-  };
-
-  const tagMessage = (isBlocked: boolean): string => {
-    return isBlocked ? "Đã khóa" : "Đang hoạt động";
-  };
-
-  const tagColor = (isBlocked: boolean): string => {
-    return isBlocked ? "volcano" : "green";
+    setPagination({
+      current: pagination.current,
+    });
   };
 
   const handleBlock = (id: string, isBlocked: boolean) => {
@@ -45,7 +51,7 @@ const EmployeeTable: React.FC = () => {
         try {
           await blockEmployee(id, !isBlocked);
           message.success(actionSuccessMessage);
-          listEmployees();
+          fetchTableData();
         } catch (error) {
           message.error("Không thể thực hiện hành động này.");
         }
@@ -53,7 +59,7 @@ const EmployeeTable: React.FC = () => {
     });
   };
 
-  const columns: ColumnsType<Employee> = [
+  const columns: TableColumnsType<Employee> = [
     {
       title: "Họ tên",
       dataIndex: "fullName",
@@ -77,9 +83,8 @@ const EmployeeTable: React.FC = () => {
     {
       title: "Ngày tạo",
       dataIndex: "createdAt",
-      key: "createdAt",
+      render: (_, { createdAt }) => <>{new Date(createdAt).toLocaleString()}</>,
     },
-
     {
       title: "Hành động",
       key: "action",
@@ -101,29 +106,13 @@ const EmployeeTable: React.FC = () => {
     },
   ];
 
-  const rowClassName = (_record: any, index: number): string => {
-    return index % 2 === 1 ? styles.evenRow : styles.oddRow; // Dòng chẵn và lẻ
-  };
-
-  useEffect(() => {
-    listEmployees();
-  }, [pagination.current, pagination.pageSize]);
-
   return (
-    <Table<Employee>
-      columns={columns}
-      dataSource={employees}
-      pagination={{
-        current: pagination.current,
-        pageSize: pagination.pageSize,
-        total: totalItems,
-        showSizeChanger: false,
-        position: ["bottomCenter"],
-      }}
-      onChange={handleTableChange}
-      rowKey={(record) => record.id}
-      rowClassName={rowClassName}
+    <TableComponent<Employee>
+      datasource={data}
+      pagination={pagination}
       loading={loading}
+      handleTableChange={handleTableChange}
+      columns={columns}
     />
   );
 };

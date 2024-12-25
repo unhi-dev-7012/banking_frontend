@@ -1,71 +1,56 @@
+import { TableState } from "@constants/tableState";
+import { Employee } from "../employeeType";
 import { create } from "zustand";
-import { CreateEmployeeForm, Employee } from "../employeeType";
-import { listEmployees } from "../services/listEmployees";
-import { blockEmployee } from "../services/blockEmployee";
-import { createEmployee } from "../services/createEmployee";
+import { fetchTableData } from "@services/fetchTableData";
 
-interface EmployeesState {
-  employees: Employee[];
-  loading: boolean;
-  pagination: {
-    current: number;
-    pageSize: number;
-  };
-  totalItems: number;
-  listEmployees: () => Promise<void>;
-  blockEmployee: (id: string, isBlocked: boolean) => Promise<void>;
-  createEmployee: (formData: CreateEmployeeForm) => Promise<void>;
-  setLoading: (loading: boolean) => void;
-  setPagination: (current: number, pageSize: number) => void;
-}
+const API_ENPOINT = "api/admin/v1/users";
 
-export const useEmployeeStore = create<EmployeesState>((set, get) => ({
-  employees: [],
+interface EmployeeTableState extends TableState<Employee> {}
+
+export const useEmployeeTable = create<EmployeeTableState>((set, get) => ({
+  data: [],
+  loading: false,
+  error: null,
   pagination: {
     current: 1,
-    pageSize: 10,
+    pageSize: 4,
+    total: 0,
   },
-  totalItems: 0,
-  loading: false,
-  listEmployees: async () => {
+  setData: async (data) => {
+    set({ data: data });
+  },
+  setLoading: (loading) => {
+    set({ loading: loading });
+  },
+  setError: (error) => {
+    set({ error: error });
+  },
+  setPagination: (pagination) =>
+    set((state) => ({
+      pagination: { ...state.pagination, ...pagination },
+    })),
+  fetchTableData: async () => {
+    const { pagination } = get();
     try {
       set({ loading: true });
-      const { pagination } = get();
-      const response = await listEmployees(
-        pagination.current,
-        pagination.pageSize
-      );
+      const response = await fetchTableData<Employee>(API_ENPOINT, {
+        page: pagination.current,
+        limit: pagination.pageSize,
+        role: "employee",
+      });
+
       set({
-        employees: response.data,
-        loading: false,
-        totalItems: response.metadata.totalCount,
+        pagination: {
+          ...pagination,
+          total: response.metadata.totalCount,
+        },
+        data: response.data,
       });
     } catch (error) {
+      console.error("[STORE]: ", error);
+      throw error;
+    } finally {
       set({ loading: false });
-      console.error(error);
     }
-  },
-  blockEmployee: async (id: string, isBlocked: boolean) => {
-    set({ loading: true });
-    await blockEmployee(id, isBlocked);
-    set({ loading: false });
-  },
-  createEmployee: async (formData: CreateEmployeeForm) => {
-    set({ loading: true });
-    await createEmployee(formData);
-    set({ loading: false });
-  },
-  setLoading: (loading: boolean) => {
-    set({
-      loading: loading,
-    });
-  },
-  setPagination: (current, pageSize) => {
-    set({
-      pagination: {
-        current: current,
-        pageSize: pageSize,
-      },
-    });
   },
 }));

@@ -12,9 +12,9 @@ const EmployeeListScreen: React.FC<IEmployeeListScreenProps> = () => {
       <Typography.Text>
         Bạn có thể dùng trang này để quản lý tài khoản của nhân viên ngân hàng.
       </Typography.Text>
-      <Flex justify="end">
+      {/* <Flex justify="end">
         <EmployeeForm />
-      </Flex>
+      </Flex> */}
       <EmployeeTable />
     </Flex>
   );
