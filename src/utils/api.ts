@@ -22,6 +22,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
+    console.log(response.request.responseURL);
     return response.data;
   },
   async (error) => {
