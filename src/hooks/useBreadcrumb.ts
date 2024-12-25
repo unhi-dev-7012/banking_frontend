@@ -29,7 +29,7 @@ const routeTitles: Record<string, string> = {
   [ROUTES_PATH.EMPLOYEE.DEPOSIT]: "Nạp tiền",
   [ROUTES_PATH.EMPLOYEE.HISTORY]: "Lịch sử giao dịch",
 
-  //EMPLOYEE
+  //ADMIN
   [ROUTES_PATH.ADMIN.DASHBOARD]: "Trang chủ",
   [ROUTES_PATH.ADMIN.EMPLOYEE]: "Quản lý nhân viên",
   [ROUTES_PATH.ADMIN.EMPLOYEE_LIST]: "Danh sách nhân viên",
