@@ -1,16 +1,18 @@
+import EmployeeTable from "@features/admin/employees/components/EmployeeTable";
+import { Flex, Typography } from "antd";
 import React from "react";
-import { Typography } from "antd";
 
 interface IEmployeeListScreenProps {}
 
 const EmployeeListScreen: React.FC<IEmployeeListScreenProps> = () => {
   return (
-    <div>
-      <Typography.Title level={2}>EmployeeListScreen</Typography.Title>
-      <Typography.Paragraph>
-        This is the EmployeeListScreen page.
-      </Typography.Paragraph>
-    </div>
+    <Flex vertical gap="middle">
+      <Typography.Title level={2}>Quản lý nhân viên</Typography.Title>
+      <Typography.Text>
+        Bạn có thể dùng trang này để quản lý tài khoản của nhân viên ngân hàng.
+      </Typography.Text>
+      <EmployeeTable />
+    </Flex>
   );
 };
 
