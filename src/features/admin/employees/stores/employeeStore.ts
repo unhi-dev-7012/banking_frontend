@@ -1,37 +1,71 @@
 import { create } from "zustand";
-import { Employee } from "../employeeType";
+import { CreateEmployeeForm, Employee } from "../employeeType";
 import { listEmployees } from "../services/listEmployees";
+import { blockEmployee } from "../services/blockEmployee";
+import { createEmployee } from "../services/createEmployee";
 
 interface EmployeesState {
   employees: Employee[];
+  loading: boolean;
   pagination: {
     current: number;
     pageSize: number;
-    total: number;
   };
-  listEmployees: (current: number, pageSize: number) => Promise<void>;
+  totalItems: number;
+  listEmployees: () => Promise<void>;
+  blockEmployee: (id: string, isBlocked: boolean) => Promise<void>;
+  createEmployee: (formData: CreateEmployeeForm) => Promise<void>;
+  setLoading: (loading: boolean) => void;
+  setPagination: (current: number, pageSize: number) => void;
 }
 
-export const useEmployeeStore = create<EmployeesState>((set) => ({
+export const useEmployeeStore = create<EmployeesState>((set, get) => ({
   employees: [],
   pagination: {
     current: 1,
     pageSize: 10,
-    total: 0,
   },
-  listEmployees: async (current: number, pageSize: number) => {
+  totalItems: 0,
+  loading: false,
+  listEmployees: async () => {
     try {
-      const response = await listEmployees(current, pageSize);
+      set({ loading: true });
+      const { pagination } = get();
+      const response = await listEmployees(
+        pagination.current,
+        pagination.pageSize
+      );
       set({
         employees: response.data,
-        pagination: {
-          current: current,
-          pageSize: pageSize,
-          total: response.metadata.totalCount,
-        },
+        loading: false,
+        totalItems: response.metadata.totalCount,
       });
     } catch (error) {
+      set({ loading: false });
       console.error(error);
     }
+  },
+  blockEmployee: async (id: string, isBlocked: boolean) => {
+    set({ loading: true });
+    await blockEmployee(id, isBlocked);
+    set({ loading: false });
+  },
+  createEmployee: async (formData: CreateEmployeeForm) => {
+    set({ loading: true });
+    await createEmployee(formData);
+    set({ loading: false });
+  },
+  setLoading: (loading: boolean) => {
+    set({
+      loading: loading,
+    });
+  },
+  setPagination: (current, pageSize) => {
+    set({
+      pagination: {
+        current: current,
+        pageSize: pageSize,
+      },
+    });
   },
 }));

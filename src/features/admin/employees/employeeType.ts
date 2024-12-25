@@ -5,6 +5,7 @@ export interface Employee {
   email: string;
   fullName: string;
   role: string;
+  isBlocked: false;
 }
 
 export interface CreateEmployeeForm {
