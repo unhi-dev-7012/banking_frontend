@@ -1,19 +1,22 @@
 import { TableState } from "@constants/tableState";
-import { Employee } from "../employeeType";
+import { CreateEmployeeForm, Employee } from "../employeeType";
 import { create } from "zustand";
 import { fetchTableData } from "@services/fetchTableData";
+import { createEmployee } from "../services/createEmployee";
 
 const API_ENPOINT = "api/admin/v1/users";
 
-interface EmployeeTableState extends TableState<Employee> {}
+interface EmployeeTableState extends TableState<Employee> {
+  createEmployee: (values: CreateEmployeeForm) => Promise<void>;
+}
 
-export const useEmployeeTable = create<EmployeeTableState>((set, get) => ({
+export const useEmployeeStore = create<EmployeeTableState>((set, get) => ({
   data: [],
   loading: false,
   error: null,
   pagination: {
     current: 1,
-    pageSize: 4,
+    pageSize: 10,
     total: 0,
   },
   setData: async (data) => {
@@ -48,6 +51,16 @@ export const useEmployeeTable = create<EmployeeTableState>((set, get) => ({
       });
     } catch (error) {
       console.error("[STORE]: ", error);
+      throw error;
+    } finally {
+      set({ loading: false });
+    }
+  },
+  createEmployee: async (values: CreateEmployeeForm) => {
+    try {
+      set({ loading: true });
+      await createEmployee(values);
+    } catch (error) {
       throw error;
     } finally {
       set({ loading: false });

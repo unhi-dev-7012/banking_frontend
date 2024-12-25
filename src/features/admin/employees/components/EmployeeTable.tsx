@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useEmployeeTable } from "../stores/employeeStore";
+import { useEmployeeStore } from "../stores/employeeStore";
 import {
   Button,
   message,
@@ -23,7 +23,7 @@ const tagColor = (isBlocked: boolean): string => {
 
 const EmployeeTable: React.FC = () => {
   const { data, pagination, loading, fetchTableData, setPagination } =
-    useEmployeeTable();
+    useEmployeeStore();
 
   useEffect(() => {
     fetchTableData();
@@ -47,6 +47,8 @@ const EmployeeTable: React.FC = () => {
     Modal.confirm({
       title: actionConfirmMessage,
       content: `Hành động này sẽ ${actionLabel} người dùng.`,
+      okText: "Xác nhận",
+      cancelText: "Hủy",
       onOk: async () => {
         try {
           await blockEmployee(id, !isBlocked);
