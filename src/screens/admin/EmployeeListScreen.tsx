@@ -25,11 +25,18 @@ const EmployeeListScreen: React.FC<IEmployeeListScreenProps> = () => {
   const closeModal = () => setModalVisible(false);
 
   return (
-    <Flex vertical gap="middle">
-      <Typography.Title level={2}>{messages.title}</Typography.Title>
-      <Typography.Text>{messages.description}</Typography.Text>
+    <Flex
+      vertical
+      style={{
+        height: "100%",
+        padding: "0px 14px 0px 14px",
+      }}
+      gap="middle"
+    >
+      <Typography.Title level={3}>{messages.title}</Typography.Title>
 
-      <Flex justify="end">
+      <Flex justify="space-between">
+        <Typography.Text>{messages.description}</Typography.Text>
         <Button type="primary" onClick={openModal}>
           {messages.buttons.create}
         </Button>
@@ -41,8 +48,25 @@ const EmployeeListScreen: React.FC<IEmployeeListScreenProps> = () => {
           <EmployeeForm closeModal={closeModal} />
         </ModalWrapper>
       </Flex>
-
-      <EmployeeTable />
+      <div
+        style={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <EmployeeTable />
+      </div>
+      {/* <Flex
+        vertical
+        style={{
+          height: "100%",
+          scrollBehavior: "smooth",
+        }}
+      >
+        <EmployeeTable />
+      </Flex> */}
     </Flex>
   );
 };

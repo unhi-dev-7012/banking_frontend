@@ -23,6 +23,7 @@ export default function TableComponent<T>({
 
   return (
     <Table<T>
+      bordered
       columns={columns}
       dataSource={datasource}
       pagination={{
@@ -31,6 +32,10 @@ export default function TableComponent<T>({
         total: pagination.total,
         showSizeChanger: false,
         position: ["bottomCenter"],
+      }}
+      scroll={{
+        scrollToFirstRowOnChange: true,
+        y: 600,
       }}
       onChange={handleTableChange}
       rowClassName={rowClassName}
