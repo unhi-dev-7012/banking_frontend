@@ -18,7 +18,7 @@ export const ROUTES_PATH = {
     CUSTOMER_LIST: "/customer/list",
     CUSTOMER_CREATE: "/customer/create",
     DEPOSIT: "/deposit",
-    HISTORY: "/employee/history/:customerId",
+    HISTORY: "/employee-history",
   },
   ADMIN: {
     DASHBOARD: "/admin/dashboard",
