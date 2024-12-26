@@ -1,6 +1,6 @@
 import { Typography } from "antd";
 import React, { useState } from "react";
-import TableComponent from "../../components/common/Table/TableComponent";
+import TableComponent from "../../components/common/HyTable/TableComponent";
 import { EmployeeTransactionHistoryColumnConfig } from "../../features/history/historyType";
 import EmployeeDetailTransactionModal from "../../features/history/components/DetailTransaction/EmployeeDetailTransactionModal";
 

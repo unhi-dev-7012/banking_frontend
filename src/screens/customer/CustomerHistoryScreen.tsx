@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Typography, message } from "antd";
-import TableComponent from "../../components/common/Table/TableComponent";
+import TableComponent from "../../components/common/HyTable/TableComponent";
 import TabComponent from "../../components/common/Tab/TabComponent";
 import CustomerDetailTransactionModal from "../../features/history/components/DetailTransaction/CustomerDetailTransactionModal";
 import {
