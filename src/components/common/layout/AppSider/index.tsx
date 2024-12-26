@@ -336,7 +336,7 @@ export const AppSider: React.FC = () => {
           style={{
             height: 56,
             padding: isSiderCollapsed ? "0px" : "0px 20px",
-            margin: isSiderCollapsed ? "0px" : "10px 0",
+            margin: isSiderCollapsed ? "0px 0px 30px 0" : "0px 10px 30px 0px",
           }}
         >
           <div className="appSider_LogoContainer">
