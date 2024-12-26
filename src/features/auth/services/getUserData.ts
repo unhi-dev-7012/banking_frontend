@@ -34,12 +34,11 @@ export const getUserData = async (): Promise<UserData | null> => {
   try {
     const response = await api.get(url);
     const data = response.data;
-
     return {
       fullName: data.fullName || "Unknown User",
       email: data.email || "unknown@example.com",
-      bankAccount: data.bankAccount.id,
-      balance: data.bankAccount.balance || 0,
+      bankAccount: data.bankAccount.id || "",
+      balance: data.bankAccount.balance || "",
     };
   } catch (error) {
     console.error("Failed to fetch user data:", error);

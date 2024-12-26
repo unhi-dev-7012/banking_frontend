@@ -31,7 +31,7 @@ export const getTransactions = async (
 
   switch (role) {
     case "admin":
-      url = "/api/admins/v1/trnsactions";
+      url = "/api/admin/v1/transactions";
       break;
     case "employee":
       url = "/api/employee/v1/transactions";
@@ -42,7 +42,6 @@ export const getTransactions = async (
     default:
       return null;
   }
-  console.log("url", url);
   const response = await api.get(url, {
     params: {
       page,

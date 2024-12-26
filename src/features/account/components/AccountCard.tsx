@@ -25,7 +25,7 @@ const AccountCard: React.FC = () => {
       })
       .catch((error) => {
         console.log(error);
-        message.error("Copy số tài khoản thất bại");
+        message.error("Sao chép số tài khoản thất bại");
       });
   };
 

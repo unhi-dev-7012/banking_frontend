@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { TablePaginationConfig, Typography, message } from "antd";
 import TabComponent from "../../components/common/Tab/TabComponent";
 import CustomerDetailTransactionModal from "../../features/transactions/components/DetailTransaction/CustomerDetailTransactionModal";
-import {
-  CustomerTransactionHistoryColumnConfig,
-  TransactionHistoryTabs,
-} from "../../features/transactions/transactionType";
+import { TransactionHistoryTabs } from "../../features/transactions/transactionType";
 import { useHistory } from "../../features/transactions/stores/useTransactionHistory";
-import { TransactionCategory } from "../../features/transactions/services/customerTransactionHistory";
+import { TransactionCategory } from "../../features/transactions/services/transactionHistory";
 import TableComponent from "../../components/common/Table/TableComponent";
+import { CustomerTransactionHistoryColumnConfig } from "../../features/transactions/components/TableTransactionColumnConfig/CustomerTransactionColumnConfig";
 
 const { Title } = Typography;
 

@@ -3,7 +3,7 @@ import {
   TransactionStatus,
   TransactionCategory,
   getTransactions,
-} from "../services/customerTransactionHistory";
+} from "../services/transactionHistory";
 
 interface TransactionHistoryState {
   transactionHistory: Record<string, any>[];
