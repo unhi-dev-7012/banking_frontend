@@ -41,12 +41,12 @@ const EmployeeDetailTransactionModal: React.FC<
           </Descriptions.Item>
           <Descriptions.Item label="Người nhận">
             <div>
-              <Text strong>{transaction.receiver.name.toUpperCase()}</Text>
+              <Text strong>{transaction.beneficiary.name.toUpperCase()}</Text>
               <br />
-              <Text type="secondary">{transaction.receiver.id}</Text>
+              <Text type="secondary">{transaction.beneficiary.id}</Text>
               <br />
               <Text type="secondary" style={{ fontSize: "12px" }}>
-                {transaction.receiver.bankName}
+                {transaction.beneficiary.bankName}
               </Text>
             </div>
           </Descriptions.Item>

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Typography, message } from "antd";
-import TableComponent from "../../components/common/HyTable/TableComponent";
+import { TablePaginationConfig, Typography, message } from "antd";
 import TabComponent from "../../components/common/Tab/TabComponent";
-import CustomerDetailTransactionModal from "../../features/history/components/DetailTransaction/CustomerDetailTransactionModal";
+import CustomerDetailTransactionModal from "../../features/transactions/components/DetailTransaction/CustomerDetailTransactionModal";
 import {
   CustomerTransactionHistoryColumnConfig,
   TransactionHistoryTabs,
-} from "../../features/history/historyType";
-import { useHistory } from "../../features/history/stores/useTransactionHistory";
-import { TransactionCategory } from "../../features/history/services/customerHistory";
+} from "../../features/transactions/transactionType";
+import { useHistory } from "../../features/transactions/stores/useTransactionHistory";
+import { TransactionCategory } from "../../features/transactions/services/customerTransactionHistory";
+import TableComponent from "../../components/common/Table/TableComponent";
 
 const { Title } = Typography;
 
@@ -19,29 +19,36 @@ const CustomerHistoryScreen: React.FC = () => {
   const {
     transactionHistory,
     fetchTransactionHistory,
-    isLoading,
+    loading,
     errorMessage,
+    pagination,
+    setPagination,
   } = useHistory();
 
   const handleTabChange = (key: string) => {
     if (key === "all") {
-      fetchTransactionHistory(1, undefined, undefined, undefined, undefined);
+      setPagination({ current: 1 });
+      fetchTransactionHistory(undefined, undefined, undefined);
       if (errorMessage) {
         message.error(errorMessage);
       }
     } else {
-      fetchTransactionHistory(
-        1,
-        undefined,
-        key as TransactionCategory,
-        undefined,
-        undefined
-      );
+      setPagination({ current: 1 });
+      fetchTransactionHistory(undefined, key as TransactionCategory, undefined);
     }
   };
 
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    setPagination({
+      current: pagination.current,
+    });
+  };
+
   useEffect(() => {
-    fetchTransactionHistory(1, undefined, undefined, undefined, undefined);
+    fetchTransactionHistory(undefined, undefined, undefined);
+    if (errorMessage) {
+      message.error(errorMessage);
+    }
   }, []);
 
   return (
@@ -54,13 +61,15 @@ const CustomerHistoryScreen: React.FC = () => {
         items={TransactionHistoryTabs}
       />
 
-      <TableComponent
+      <TableComponent<Record<string, any>>
+        datasource={transactionHistory}
+        pagination={pagination}
         columns={CustomerTransactionHistoryColumnConfig(
           setIsModalVisible,
           setSelectedTransaction
         )}
-        data={transactionHistory}
-        isLoading={isLoading}
+        handleTableChange={handleTableChange}
+        loading={loading}
       />
 
       {selectedTransaction && (

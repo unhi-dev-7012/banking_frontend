@@ -109,13 +109,13 @@ export const EmployeeTransactionHistoryColumnConfig = (
   },
   {
     title: "Người nhận",
-    dataIndex: "receiver",
-    key: "receiver",
-    render: (receiver: Record<string, any>) => (
+    dataIndex: "beneficiary",
+    key: "beneficiary",
+    render: (beneficiary: Record<string, any>) => (
       <div>
-        <Text strong>{receiver.name}</Text> <br />
-        <Text type="secondary">Số tài khoản: {receiver.id}</Text> <br />
-        <Text type="secondary">{receiver.bankName}</Text>
+        <Text strong>{beneficiary.name}</Text> <br />
+        <Text type="secondary">Số tài khoản: {beneficiary.id}</Text> <br />
+        <Text type="secondary">{beneficiary.bankName}</Text>
       </div>
     ),
   },

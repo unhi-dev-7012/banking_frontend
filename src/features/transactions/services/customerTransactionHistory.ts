@@ -19,7 +19,6 @@ export const getTransactions = async (
   page: number,
   status: TransactionStatus | undefined,
   category: TransactionCategory | undefined,
-  userId: string | undefined,
   bankId: string | undefined
 ): Promise<Record<string, any> | null | undefined> => {
   const { role } = useAuthStore.getState();
@@ -35,10 +34,10 @@ export const getTransactions = async (
       url = "/api/admins/v1/trnsactions";
       break;
     case "employee":
-      url = "/api/employees/v1/tranactions";
+      url = "/api/employee/v1/transactions";
       break;
     case "customer":
-      url = "/api/customers/v1/transactions";
+      url = "/api/customer/v1/transactions";
       break;
     default:
       return null;
@@ -49,7 +48,6 @@ export const getTransactions = async (
       page,
       status,
       category,
-      userId,
       bankId,
       sort: "createdAt",
       direction: "desc",

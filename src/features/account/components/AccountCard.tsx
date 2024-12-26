@@ -21,7 +21,7 @@ const AccountCard: React.FC = () => {
     navigator.clipboard
       .writeText(accountNumber ?? "")
       .then(() => {
-        message.success("Copy số tài khoản thành công");
+        message.success("Sao chép số tài khoản thành công");
       })
       .catch((error) => {
         console.log(error);

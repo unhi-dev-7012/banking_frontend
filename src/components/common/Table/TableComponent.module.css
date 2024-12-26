@@ -5,3 +5,8 @@
 .oddRow {
   background-color: #ffffff;
 }
+
+.custom-table .ant-table-thead th {
+  background-color: #e6f4ff !important;
+  color: white;
+}
