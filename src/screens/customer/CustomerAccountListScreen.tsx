@@ -1,19 +1,8 @@
 import React from "react";
-import { Typography } from "antd";
+import AccountCard from "../../features/account/components/AccountCard";
 
-interface ICustomerAccountListScreenProps {}
-
-const CustomerAccountListScreen: React.FC<
-  ICustomerAccountListScreenProps
-> = () => {
-  return (
-    <div>
-      <Typography.Title level={2}>CustomerAccountListScreen</Typography.Title>
-      <Typography.Paragraph>
-        This is the CustomerAccountListScreen page.
-      </Typography.Paragraph>
-    </div>
-  );
+const CustomerAccountListScreen: React.FC = () => {
+  return <AccountCard />;
 };
 
 CustomerAccountListScreen.displayName = "CustomerAccountListScreen";

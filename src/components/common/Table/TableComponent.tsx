@@ -23,6 +23,7 @@ export default function TableComponent<T>({
 
   return (
     <Table<T>
+      className={styles.customTable}
       bordered
       columns={columns}
       dataSource={datasource}
