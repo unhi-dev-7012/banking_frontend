@@ -1,30 +1,45 @@
-import { Table } from "antd";
+import { PaginationParams } from "@constants/tableState";
+import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
+import styles from "./TableComponent.module.css";
 
-interface TableProps {
-  columns: any[];
-  data: Record<string, any>;
-  isLoading?: boolean;
+interface TableComponentProps<T> {
+  columns: ColumnsType<T>;
+  datasource: T[];
+  pagination: PaginationParams;
+  loading: boolean;
+  handleTableChange: (pagination: TablePaginationConfig) => void;
 }
 
-const TableComponent: React.FC<TableProps> = ({ columns, data, isLoading }) => {
+export default function TableComponent<T>({
+  columns,
+  datasource,
+  pagination,
+  loading,
+  handleTableChange,
+}: TableComponentProps<T>) {
+  const rowClassName = (_record: any, index: number): string => {
+    return index % 2 === 1 ? styles.evenRow : styles.oddRow;
+  };
+
   return (
-    <Table
-      className="custom-table"
+    <Table<T>
+      bordered
       columns={columns}
-      dataSource={data.data}
-      loading={isLoading}
-      rowKey="id"
+      dataSource={datasource}
       pagination={{
-        current: data.metadata.page,
-        total: data.metadata.totalCount,
-        pageSize: 5,
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+        total: pagination.total,
+        showSizeChanger: false,
+        position: ["bottomCenter"],
       }}
-      scroll={{ x: 800 }}
-      rowClassName={(_: any, index) =>
-        index % 2 === 0 ? "row-even" : "row-odd"
-      }
+      scroll={{
+        scrollToFirstRowOnChange: true,
+        y: 600,
+      }}
+      onChange={handleTableChange}
+      rowClassName={rowClassName}
+      loading={loading}
     />
   );
-};
-
-export default TableComponent;
+}
