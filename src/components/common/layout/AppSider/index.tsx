@@ -332,12 +332,20 @@ export const AppSider: React.FC = () => {
       >
         <Flex
           align="center"
-          justify="center"
-          style={{ height: 56, backgroundColor: "#ccc" }}
+          justify={isSiderCollapsed ? "center" : "flex-start"}
+          style={{
+            height: 56,
+            padding: isSiderCollapsed ? "0px" : "0px 20px",
+            margin: isSiderCollapsed ? "0px" : "10px 0",
+          }}
         >
-          Logo
+          <div className="appSider_LogoContainer">
+            <img src="../src/assets/images/only_logo.png" alt="Not found!" />
+          </div>
+          {!isSiderCollapsed && (
+            <span className="appSider_LogoText">NHBank</span>
+          )}
         </Flex>
-
         <div
           style={{
             display: "flex",
