@@ -28,7 +28,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
       level={1}
       style={{ fontSize: "48px", marginBottom: "10px" }}
     >
-      Chào mừng trở lại
+      Chào mừng Quý khách
     </Typography.Title>
     <Typography.Text
       style={{ fontSize: "18px", color: "#b2b2b2", marginBottom: "20px" }}
