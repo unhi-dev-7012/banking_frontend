@@ -3,6 +3,7 @@ import { Debt, DebtStatus } from "../debtType";
 import { Button } from "antd";
 import TableComponent from "@components/common/Table/TableComponent";
 import DebtStatusUI from "./DebtStatusUI";
+import { redactBankAccount } from "@utils/redactBankAccount";
 
 interface DebtListUIProps {
   debts: Debt[];
@@ -16,8 +17,18 @@ const DebtListUI: React.FC<DebtListUIProps> = ({ debts, activeTab }) => {
         activeTab === "created" ? "Tài khoản người nợ" : "Tài khoản nhắc nợ", // Change column title based on tab
       dataIndex: activeTab === "created" ? "debtorId" : "reminderId", // Adjust the field based on tab
       key: activeTab === "created" ? "debtorId" : "reminderId",
+      render: (text: string) => redactBankAccount(text), // Apply redaction here
     },
-    { title: "Số tiền", dataIndex: "amount", key: "amount" },
+    {
+      title: "Số tiền",
+      dataIndex: "amount",
+      key: "amount",
+      render: (amount: number) =>
+        amount.toLocaleString("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }),
+    },
     {
       title: "Trạng thái",
       dataIndex: "status",
