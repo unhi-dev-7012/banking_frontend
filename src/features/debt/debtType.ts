@@ -20,5 +20,5 @@ export enum DebtStatus {
 
 export const DebtTabItem = [
   { key: "created", label: "Nợ đã tạo" },
-  { key: "received", label: "Nợ nhận được" },
+  { key: "received", label: "Nợ được nhắc" },
 ];
