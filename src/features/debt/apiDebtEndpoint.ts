@@ -4,6 +4,8 @@ export const DebtApiEndpoints = {
   // Endpoint lấy danh sách nợ
   LIST_DEBTS: "/api/customer/v1/debt",
 
+  LIST_DEBTS_USER: "/api/customer/v1/debt?includeUser=true",
+
   // Endpoint lấy thông tin chi tiết một khoản nợ
   GET_DEBT_DETAILS: (id: string) => `/api/customer/v1/debt/${id}`,
 

@@ -14,11 +14,14 @@ export const fetchDebtData = async ({
   category,
 }: FetchDebtParams) => {
   try {
-    const response = await fetchTableData<Debt>(DebtApiEndpoints.LIST_DEBTS, {
-      page,
-      limit,
-      category,
-    });
+    const response = await fetchTableData<Debt>(
+      DebtApiEndpoints.LIST_DEBTS_USER,
+      {
+        page,
+        limit,
+        category,
+      }
+    );
     return response;
   } catch (error) {
     console.error("Error fetching debt data: ", error);
