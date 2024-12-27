@@ -2,6 +2,7 @@ import React from "react";
 import { Debt, DebtStatus } from "../debtType";
 import { Button } from "antd";
 import TableComponent from "@components/common/Table/TableComponent";
+import DebtStatusUI from "./DebtStatusUI";
 
 interface DebtListUIProps {
   debts: Debt[];
@@ -17,7 +18,12 @@ const DebtListUI: React.FC<DebtListUIProps> = ({ debts, activeTab }) => {
       key: activeTab === "created" ? "debtorId" : "reminderId",
     },
     { title: "Số tiền", dataIndex: "amount", key: "amount" },
-    { title: "Trạng thái", dataIndex: "status", key: "status" },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (_: any, record: Debt) => <DebtStatusUI status={record.status} />,
+    },
     { title: "Nội dung", dataIndex: "message", key: "message" },
     {
       title: "Hành động",
