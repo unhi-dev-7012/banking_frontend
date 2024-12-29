@@ -40,7 +40,7 @@ const AccountListScreen: React.FC = () => {
     if (error) {
       message.error(error);
     }
-  }, []);
+  }, [pagination.current, pagination.total]);
 
   return (
     <div style={{ padding: 12, maxHeight: "100vh", overflow: "auto" }}>

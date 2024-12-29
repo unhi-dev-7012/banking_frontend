@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { getCustomers } from "../services/getCustomerList";
 import { createCustomer } from "../services/createCustomer";
 import { CreateCustomerForm } from "../employeeType";
+import { depositCustomer } from "../services/deposit";
 
 interface Pagination {
   current: number;
@@ -18,6 +19,7 @@ interface CustomerManagementState {
   fetchCustomers: () => Promise<void>;
   setPagination: (pagination: Partial<Pagination>) => void;
   createCustomer: (values: CreateCustomerForm) => Promise<void>;
+  deposit: (id: string, email: string, amount: number) => Promise<void>;
 }
 
 export const useCustomerManagement = create<CustomerManagementState>(
@@ -34,8 +36,11 @@ export const useCustomerManagement = create<CustomerManagementState>(
     fetchCustomers: async () => {
       set({ loading: true, error: undefined, success: undefined });
       try {
-        const { current } = get().pagination;
-        const response = await getCustomers(current);
+        const { pagination } = get();
+        const response = await getCustomers(
+          pagination.current,
+          pagination.pageSize
+        );
 
         if (response && response.errorMessage) {
           set({
@@ -46,7 +51,8 @@ export const useCustomerManagement = create<CustomerManagementState>(
           set({
             customers: response.data,
             pagination: {
-              ...get().pagination,
+              ...pagination,
+              total: response.metadata.totalCount,
             },
             loading: false,
           });
@@ -63,8 +69,20 @@ export const useCustomerManagement = create<CustomerManagementState>(
       set({ loading: true, error: undefined, success: undefined });
       try {
         await createCustomer(values);
-        set({ success: "Thêm khách hàng thành công" });
         await get().fetchCustomers();
+        set({ success: "Thêm khách hàng thành công" });
+        set({ loading: false });
+      } catch (error: any) {
+        set({ loading: false, error: error.message });
+      }
+    },
+    deposit: async (id: string, email: string, amount: number) => {
+      set({ loading: true, error: undefined, success: undefined });
+      try {
+        await depositCustomer(id, email, amount);
+        await get().fetchCustomers();
+        set({ success: `Nạp tiền vào tài khoản ${id} thành công` });
+        set({ loading: false });
       } catch (error: any) {
         set({ loading: false, error: error.message });
       }
