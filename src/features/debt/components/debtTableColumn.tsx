@@ -2,6 +2,7 @@ import { Button, Flex, Popover } from "antd";
 import { Debt, DebtStatus } from "../debtType";
 import DebtStatusUI from "./DebtStatusUI";
 import { DollarSign, Ellipsis, Info, X } from "lucide-react";
+import { useState } from "react";
 
 // Hàm lấy cột của bảng nợ, có thể cấu hình cho các tab khác nhau
 // Reusable function to render action buttons based on conditions
@@ -9,7 +10,9 @@ const renderActionButtons = (
   record: Debt,
   onCancel: (debtId: string) => void,
   onPay: (debtId: string) => void,
-  activeTab: string
+  onView: (debtId: string) => void,
+  activeTab: string,
+  setPopoverVisible: (debtId: string, visible: boolean) => void
 ) => {
   const isCreatedTab = activeTab === "created";
   const isReceivedTab = activeTab === "received";
@@ -21,7 +24,10 @@ const renderActionButtons = (
     <Button
       key="view-details"
       type="text"
-      onClick={() => onPay(record.id)}
+      onClick={() => {
+        onView(record.id);
+        setPopoverVisible(record.id, false); // Close Popover
+      }}
       style={{ width: "100%", justifyContent: "flex-start", color: "#1677ff" }}
       icon={<Info size={14} />}
     >
@@ -49,7 +55,10 @@ const renderActionButtons = (
           key="pay"
           icon={<DollarSign size={14} />}
           type="text"
-          onClick={() => onPay(record.id)}
+          onClick={() => {
+            onPay(record.id);
+            setPopoverVisible(record.id, false); // Close Popover
+          }}
           style={{ width: "100%", justifyContent: "flex-start" }}
         >
           Thanh toán
@@ -59,7 +68,10 @@ const renderActionButtons = (
           key="cancel"
           icon={<X size={14} />}
           type="text"
-          onClick={() => onCancel(record.id)}
+          onClick={() => {
+            onCancel(record.id);
+            setPopoverVisible(record.id, false); // Close Popover
+          }}
           style={{ width: "100%", justifyContent: "flex-start" }}
           danger
         >
@@ -76,7 +88,10 @@ const renderActionButtons = (
           key="pay-received"
           icon={<DollarSign size={14} />}
           type="text"
-          onClick={() => onPay(record.id)}
+          onClick={() => {
+            onPay(record.id);
+            setPopoverVisible(record.id, false); // Close Popover
+          }}
           style={{ width: "100%", justifyContent: "flex-start" }}
         >
           Thanh toán
@@ -91,8 +106,19 @@ const renderActionButtons = (
 const getDebtColumns = (
   activeTab: string,
   onCancel: (debtId: string) => void,
-  onPay: (debtId: string) => void
+  onPay: (debtId: string) => void,
+  onView: (debtId: string) => void
 ) => {
+  const [popoverStates, setPopoverStates] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const setPopoverVisible = (debtId: string, visible: boolean) => {
+    setPopoverStates((prevState) => ({
+      ...prevState,
+      [debtId]: visible,
+    }));
+  };
+
   return [
     {
       title:
@@ -110,8 +136,8 @@ const getDebtColumns = (
       title: "Số tiền",
       dataIndex: "amount",
       key: "amount",
-      render: (amount: number) =>
-        amount?.toLocaleString("vi-VN", {
+      render: (amount: string) =>
+        Number(amount).toLocaleString("vi-VN", {
           style: "currency",
           currency: "VND",
         }),
@@ -130,12 +156,21 @@ const getDebtColumns = (
         <Popover
           content={
             <Flex vertical justify="flex-start">
-              {renderActionButtons(record, onCancel, onPay, activeTab)}
+              {renderActionButtons(
+                record,
+                onCancel,
+                onPay,
+                onView,
+                activeTab,
+                setPopoverVisible
+              )}
             </Flex>
           }
           title=""
           trigger="click"
+          open={popoverStates[record.id] || false} // Check visibility per debtId
           placement="bottomRight"
+          onOpenChange={(visible) => setPopoverVisible(record.id, visible)}
         >
           <Button icon={<Ellipsis />} />
         </Popover>

@@ -4,19 +4,17 @@ import { Debt } from "../debtType"; // Assuming Debt type is defined somewhere
 // Function to fetch debt details by ID
 export const getDebtDetail = async (debtId: string): Promise<Debt> => {
   try {
-    // Make the GET request with debtId and includeUser query parameter
     const { data } = await api.get(`/api/customer/v1/debt/${debtId}`, {
       params: { includeUser: true },
     });
+    console.log(data);
 
-    // Check if the response contains the debt data
     if (data) {
-      return data; // Return the debt object
+      return data.debt;
     } else {
       throw new Error("Không tìm thấy thông tin nợ.");
     }
   } catch (error: any) {
-    // Handle errors and throw with a custom message in Vietnamese
     if (error.response) {
       switch (error.response.status) {
         case 400:
