@@ -17,7 +17,7 @@ const messages = {
 };
 
 const DebtListScreen: React.FC = () => {
-  const { data, loading, fetchTableData, setCategory, pagination } =
+  const { data, loading, fetchTableData, setCategory, pagination, cancelDebt } =
     useDebtStore();
   const [activeTab, setActiveTab] = useState("created");
   const [modalVisible, setModalVisible] = useState(false);
@@ -41,8 +41,7 @@ const DebtListScreen: React.FC = () => {
 
   // Handler hủy nợ
   const handleCancelDebt = (debtId: string) => {
-    console.log("Hủy nợ với ID:", debtId);
-    // fetchTableData();
+    cancelDebt(debtId); // Gọi phương thức hủy nợ từ store
   };
 
   // Handler thanh toán nợ

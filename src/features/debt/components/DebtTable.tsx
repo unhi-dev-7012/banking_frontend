@@ -2,7 +2,7 @@ import TabComponent from "@components/common/Tab/TabComponent";
 import { Debt, DebtTabItem } from "../debtType";
 import { Spinner } from "@components/common/Spinner";
 import DebtListUI from "./DebtListUI";
-import { Modal } from "antd";
+import { message, Modal } from "antd";
 
 interface DebtTableProps {
   activeTab: string;
@@ -26,12 +26,15 @@ const DebtTable: React.FC<DebtTableProps> = ({
   const handleCancelDebt = (debtId: string) => {
     Modal.confirm({
       title: "Bạn có chắc chắn muốn hủy nợ này?",
-      onOk: () => {
-        onCancel(debtId); // Gọi handler hủy nợ
+      onOk: async () => {
+        try {
+          await onCancel(debtId); // Gọi handler hủy nợ
+        } catch (error) {
+          message.error("Hủy nợ thất bại.");
+        }
       },
     });
   };
-
   // Xử lý xác nhận hành động Thanh toán nợ
   const handlePayDebt = (debtId: string) => {
     Modal.confirm({
