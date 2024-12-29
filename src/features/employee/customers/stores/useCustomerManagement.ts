@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { getCustomers } from "../services/getCustomerList";
+import { createCustomer } from "../services/createCustomer";
+import { CreateCustomerForm } from "../employeeType";
 
 interface Pagination {
   current: number;
@@ -10,15 +12,18 @@ interface Pagination {
 interface CustomerManagementState {
   customers: Record<string, any>[];
   loading: boolean;
+  success?: string;
   error?: string;
   pagination: Pagination;
   fetchCustomers: () => Promise<void>;
   setPagination: (pagination: Partial<Pagination>) => void;
+  createCustomer: (values: CreateCustomerForm) => Promise<void>;
 }
 
 export const useCustomerManagement = create<CustomerManagementState>(
   (set, get) => ({
     customers: [],
+    success: undefined,
     loading: false,
     error: undefined,
     pagination: {
@@ -27,7 +32,7 @@ export const useCustomerManagement = create<CustomerManagementState>(
       total: 0,
     },
     fetchCustomers: async () => {
-      set({ loading: true, error: undefined });
+      set({ loading: true, error: undefined, success: undefined });
       try {
         const { current } = get().pagination;
         const response = await getCustomers(current);
@@ -54,5 +59,15 @@ export const useCustomerManagement = create<CustomerManagementState>(
       set((state) => ({
         pagination: { ...state.pagination, ...pagination },
       })),
+    createCustomer: async (values: CreateCustomerForm) => {
+      set({ loading: true, error: undefined, success: undefined });
+      try {
+        await createCustomer(values);
+        set({ success: "Thêm khách hàng thành công" });
+        await get().fetchCustomers();
+      } catch (error: any) {
+        set({ loading: false, error: error.message });
+      }
+    },
   })
 );
