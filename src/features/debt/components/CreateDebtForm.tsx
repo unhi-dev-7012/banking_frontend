@@ -1,9 +1,8 @@
 import { Button, Flex, Form, Input, InputNumber, message, Spin } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import { useDebtStore } from "../stores/debtStore";
 import { CreateDebtFormValue } from "../debtType";
 import AccountInput from "@components/common/autocomplete/AccountInput";
-import { getBankAccountWithUser } from "@services/getBankAccountWithUser";
 import { useDebtorForm } from "../hooks/useDebtorForm";
 
 const initialValues: CreateDebtFormValue = {

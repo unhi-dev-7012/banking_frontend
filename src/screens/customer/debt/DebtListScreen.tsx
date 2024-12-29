@@ -17,8 +17,15 @@ const messages = {
 };
 
 const DebtListScreen: React.FC = () => {
-  const { data, loading, fetchTableData, setCategory, pagination, cancelDebt } =
-    useDebtStore();
+  const {
+    data,
+    loading,
+    fetchTableData,
+    setCategory,
+    pagination,
+    cancelDebt,
+    setPagination,
+  } = useDebtStore();
   const [activeTab, setActiveTab] = useState("created");
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -36,6 +43,9 @@ const DebtListScreen: React.FC = () => {
         ? DebtCategory.CREATED_BY_ME
         : DebtCategory.CREATED_FOR_ME
     );
+    setPagination({
+      current: 1,
+    });
     fetchTableData(); // Fetch lại dữ liệu khi đổi tab
   };
 

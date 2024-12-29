@@ -6,6 +6,7 @@ export interface Debt {
   status: string;
   message: string;
   createdAt: string;
+  updatedAt: string;
   reminderFullName: string;
   debtorFullName: string;
 }

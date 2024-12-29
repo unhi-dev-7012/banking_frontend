@@ -10,6 +10,7 @@ interface DebtListUIProps {
   activeTab: string;
   onCancel: (debtId: string) => void;
   onPay: (debtId: string) => void;
+  onView: (debtId: string) => void;
 }
 
 const DebtListUI: React.FC<DebtListUIProps> = ({
@@ -17,9 +18,10 @@ const DebtListUI: React.FC<DebtListUIProps> = ({
   activeTab,
   onCancel,
   onPay,
+  onView,
 }) => {
   const { pagination, setPagination } = useDebtStore();
-  const columns = getDebtColumns(activeTab, onCancel, onPay);
+  const columns = getDebtColumns(activeTab, onCancel, onPay, onView);
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
     setPagination({
