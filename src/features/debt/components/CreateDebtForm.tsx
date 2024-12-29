@@ -1,9 +1,10 @@
-import { Button, Form, Input, InputNumber, message, Spin } from "antd";
+import { Button, Flex, Form, Input, InputNumber, message, Spin } from "antd";
 import React, { useState } from "react";
 import { useDebtStore } from "../stores/debtStore";
 import { CreateDebtFormValue } from "../debtType";
 import AccountInput from "@components/common/autocomplete/AccountInput";
 import { getBankAccountWithUser } from "@services/getBankAccountWithUser";
+import { useDebtorForm } from "../hooks/useDebtorForm";
 
 const initialValues: CreateDebtFormValue = {
   debtorId: "",
@@ -35,41 +36,20 @@ interface DebtFormProps {
 
 const CreateDebtForm: React.FC<DebtFormProps> = ({ closeModal }) => {
   const [form] = Form.useForm();
-  const { createDebt, loading, debtorList, setLoading } = useDebtStore();
-  const [debtorName, setDebtorName] = useState<string | null>(null);
-  const [isDebtorNameVisible, setIsDebtorNameVisible] = useState(false);
+  const { createDebt, loading, setLoading } = useDebtStore();
 
-  const [debtorLoading, setDebtorLoading] = useState(false);
-  const [accountError, setAccountError] = useState<string | null>(null);
+  const {
+    debtorName,
+    debtorId,
+    isDebtorNameVisible,
+    handleDebtorChange,
+    debtorLoading,
+    accountError,
+    setAccountError,
+  } = useDebtorForm();
 
-  const [debtorId, setDebtorId] = useState<string | undefined>("");
-
-  const handleDebtorChange = async (debtorId: string) => {
-    // Chỉ thay đổi khi người dùng nhập xong tài khoản và nhấn Enter hoặc blur.
-    setDebtorLoading(true);
-    setDebtorId(debtorId);
-
-    const debtor = debtorList.find((item) => item.debtorId === debtorId);
-    if (debtor) {
-      setDebtorName(debtor.debtorFullName); // Cập nhật tên người nhận nợ
-      setIsDebtorNameVisible(true); // Hiển thị tên người nhận nợ
-    } else {
-      try {
-        const result = await getBankAccountWithUser(debtorId);
-        if (result) {
-          setDebtorName(result.fullname);
-          setIsDebtorNameVisible(true);
-        } else {
-          message.error("Không tìm thấy tài khoản!");
-          setDebtorName(null);
-          setIsDebtorNameVisible(false);
-        }
-      } catch (error) {
-        message.error("Có lỗi xảy ra khi kiểm tra tài khoản.");
-      }
-    }
-    setDebtorLoading(false);
-    form.setFieldsValue({ debtorAccountId: debtorId }); // Đặt giá trị vào form
+  const handleSuggestedAmount = (amount: number) => {
+    form.setFieldsValue({ amount }); // Update the form field
   };
 
   const onFinish = async (values: CreateDebtFormValue) => {
@@ -94,6 +74,7 @@ const CreateDebtForm: React.FC<DebtFormProps> = ({ closeModal }) => {
       initialValues={initialValues}
       onFinish={onFinish}
       layout="vertical"
+      form={form}
     >
       {/* Debtor Account (Dropdown / Input) */}
       <Form.Item label="Số tài khoản người nhận nợ" name="debtorAccountId">
@@ -132,6 +113,7 @@ const CreateDebtForm: React.FC<DebtFormProps> = ({ closeModal }) => {
           placeholder="Nhập số tiền"
           style={{ width: "100%" }}
           min={1}
+          onChange={(value) => form.setFieldsValue({ amount: value ?? 0 })}
         />
       </Form.Item>
 
@@ -139,19 +121,17 @@ const CreateDebtForm: React.FC<DebtFormProps> = ({ closeModal }) => {
       <div style={{ marginBottom: 16 }}>
         <Button
           style={{ marginRight: 8 }}
-          onClick={() => form.setFieldsValue({ amount: 10000 })}
+          onClick={() => handleSuggestedAmount(10000)}
         >
           10,000
         </Button>
         <Button
           style={{ marginRight: 8 }}
-          onClick={() => form.setFieldsValue({ amount: 50000 })}
+          onClick={() => handleSuggestedAmount(50000)}
         >
           50,000
         </Button>
-        <Button onClick={() => form.setFieldsValue({ amount: 100000 })}>
-          100,000
-        </Button>
+        <Button onClick={() => handleSuggestedAmount(100000)}>100,000</Button>
       </div>
 
       {/* Message */}
@@ -161,13 +141,18 @@ const CreateDebtForm: React.FC<DebtFormProps> = ({ closeModal }) => {
 
       {/* Submit Button */}
       <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={loading} // Show loading spinner when creating debt
-        >
-          {loading ? "Đang tạo..." : messages.form.action}
-        </Button>
+        <Flex justify="flex-end" gap="middle">
+          <Button type="text" onClick={closeModal}>
+            Hủy
+          </Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={loading} // Show loading spinner when creating debt
+          >
+            {loading ? "Đang tạo..." : messages.form.action}
+          </Button>
+        </Flex>
       </Form.Item>
     </Form>
   );
