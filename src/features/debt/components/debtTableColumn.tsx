@@ -14,6 +14,7 @@ const renderActionButtons = (
   const isCreatedTab = activeTab === "created";
   const isReceivedTab = activeTab === "received";
   const isCanceled = record.status === DebtStatus.CANCELED;
+  const isPay = record.status === DebtStatus.SETTLED;
 
   // View Details button is always shown
   const buttons = [
@@ -40,16 +41,15 @@ const renderActionButtons = (
     />
   );
 
-  if (!isCanceled) {
+  if (!isCanceled && !isPay) {
     if (isCreatedTab) {
-      // Show "Thanh toán" and "Hủy" for "Created" tab
       buttons.push(
         hr,
         <Button
           key="pay"
           icon={<DollarSign size={14} />}
           type="text"
-          onClick={() => onCancel(record.id)}
+          onClick={() => onPay(record.id)}
           style={{ width: "100%", justifyContent: "flex-start" }}
         >
           Thanh toán
@@ -76,7 +76,7 @@ const renderActionButtons = (
           key="pay-received"
           icon={<DollarSign size={14} />}
           type="text"
-          onClick={() => onCancel(record.id)}
+          onClick={() => onPay(record.id)}
           style={{ width: "100%", justifyContent: "flex-start" }}
         >
           Thanh toán

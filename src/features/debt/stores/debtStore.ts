@@ -1,10 +1,17 @@
 import { TableState } from "@constants/tableState";
-import { CreateDebtFormValue, Debt, DebtCategory, Debtor } from "../debtType";
+import {
+  CreateDebtFormValue,
+  Debt,
+  DebtCategory,
+  Debtor,
+  DebtStatus,
+} from "../debtType";
 import { create } from "zustand";
 import { fetchDebtData } from "../services/fetchDebtData";
 import { createDebt } from "../services/createDebt";
 import { message } from "antd";
 import { getAllDebtor } from "../services/getAllDebtor";
+import { cancelDebt } from "../services/cancelDebt";
 
 interface DebtStore extends TableState<Debt> {
   category: DebtCategory;
@@ -13,6 +20,7 @@ interface DebtStore extends TableState<Debt> {
   fetchTableData: () => Promise<void>;
   fetchDebtorList: () => Promise<void>;
   createDebt: (values: CreateDebtFormValue) => Promise<void>;
+  cancelDebt: (debtId: string) => Promise<void>;
 }
 
 export const useDebtStore = create<DebtStore>((set, get) => ({
@@ -100,6 +108,32 @@ export const useDebtStore = create<DebtStore>((set, get) => ({
       set({ error: error.message || "Tạo nợ thất bại" });
 
       message.error(error.message || "Tạo nợ thất bại");
+    } finally {
+      set({ loading: false });
+    }
+  },
+  cancelDebt: async (debtId: string) => {
+    const { data } = get();
+    try {
+      set({ loading: true });
+
+      const isCancelled = await cancelDebt(debtId);
+
+      if (isCancelled) {
+        const updatedData = data.map((debt) =>
+          debt.id === debtId ? { ...debt, status: DebtStatus.CANCELED } : debt
+        );
+
+        set({
+          data: updatedData,
+        });
+
+        message.success("Nợ đã được hủy!");
+      }
+    } catch (error: any) {
+      console.error("[DebtStore]: ", error);
+      set({ error: error.message || "Hủy nợ thất bại" });
+      message.error(error.message || "Hủy nợ thất bại");
     } finally {
       set({ loading: false });
     }
