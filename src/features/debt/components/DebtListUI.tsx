@@ -1,8 +1,9 @@
 import React from "react";
 import { Debt, DebtStatus } from "../debtType";
-import { Button } from "antd";
+import { Button, TablePaginationConfig } from "antd";
 import TableComponent from "@components/common/Table/TableComponent";
 import DebtStatusUI from "./DebtStatusUI";
+import { useDebtStore } from "../stores/debtStore";
 
 interface DebtListUIProps {
   debts: Debt[];
@@ -10,6 +11,8 @@ interface DebtListUIProps {
 }
 
 const DebtListUI: React.FC<DebtListUIProps> = ({ debts, activeTab }) => {
+  const { pagination, setPagination } = useDebtStore();
+  console.log("debts :", debts);
   const columns = [
     {
       title:
@@ -29,7 +32,7 @@ const DebtListUI: React.FC<DebtListUIProps> = ({ debts, activeTab }) => {
       dataIndex: "amount",
       key: "amount",
       render: (amount: number) =>
-        amount.toLocaleString("vi-VN", {
+        amount?.toLocaleString("vi-VN", {
           style: "currency",
           currency: "VND",
         }),
@@ -56,14 +59,24 @@ const DebtListUI: React.FC<DebtListUIProps> = ({ debts, activeTab }) => {
       ),
     },
   ];
+
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    setPagination({
+      current: pagination.current,
+    });
+  };
   return (
     <TableComponent
       columns={columns}
       datasource={debts}
       rowKey="id"
-      pagination={{ current: 1, pageSize: 5, total: debts.length }}
+      pagination={{
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+        total: pagination.total,
+      }}
       loading={false}
-      handleTableChange={() => {}}
+      handleTableChange={handleTableChange}
     />
   );
 };
