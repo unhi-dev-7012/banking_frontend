@@ -1,12 +1,12 @@
 import TabComponent from "@components/common/Tab/TabComponent";
-import { DebtTabItem } from "../debtType";
+import { Debt, DebtTabItem } from "../debtType";
 import { Spinner } from "@components/common/Spinner";
 import DebtListUI from "./DebtListUI";
 
 interface DebtTableUIProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  debts: any[];
+  debts: Debt[];
   loading: boolean;
 }
 

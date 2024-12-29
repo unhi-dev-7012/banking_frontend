@@ -1,18 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { Typography } from "antd";
+import { Button, Typography, Modal } from "antd"; // Thêm Modal
 import { useDebtStore } from "@features/debt/stores/debtStore";
 import { DebtCategory } from "@features/debt/debtType";
 import DebtTable from "@features/debt/components/DebtTable";
+import CreateDebtForm from "@features/debt/components/CreateDebtForm";
 
-interface IDebtListScreenProps {}
+const messages = {
+  title: "Quản lý nợ",
+  description: "Bạn có thể quản lý danh sách nợ của mình từ trang này.",
+  buttons: {
+    create: "Tạo nợ",
+  },
+  modal: {
+    title: "Tạo nợ",
+  },
+};
 
-const DebtListScreen: React.FC<IDebtListScreenProps> = () => {
-  const { data, loading, fetchTableData, setCategory } = useDebtStore();
+const DebtListScreen: React.FC = () => {
+  const { data, loading, fetchTableData, setCategory, pagination } =
+    useDebtStore();
   const [activeTab, setActiveTab] = useState("created");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
 
   useEffect(() => {
     fetchTableData();
-  }, [fetchTableData]);
+  }, [pagination.current, pagination.total]);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -26,11 +41,30 @@ const DebtListScreen: React.FC<IDebtListScreenProps> = () => {
 
   return (
     <div>
-      <Typography.Title level={2}>DebtListScreen</Typography.Title>
+      <Typography.Title level={2}>{messages.title}</Typography.Title>
+      <Typography.Text>{messages.description}</Typography.Text>
+
+      {/* Nút "Tạo nợ" */}
+      <Button type="primary" onClick={openModal}>
+        {messages.buttons.create}
+      </Button>
+
+      {/* Modal tạo nợ */}
+      <Modal
+        title={messages.modal.title}
+        open={modalVisible}
+        onCancel={closeModal}
+        footer={null}
+        destroyOnClose
+      >
+        <CreateDebtForm closeModal={closeModal} />
+      </Modal>
+
+      {/* DebtTable */}
       <DebtTable
         activeTab={activeTab}
         setActiveTab={handleTabChange}
-        debts={data} // Dữ liệu này đã được phân loại ở phía store
+        debts={data}
         loading={loading}
       />
     </div>

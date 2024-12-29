@@ -1,16 +1,23 @@
 import { TableState } from "@constants/tableState";
-import { Debt, DebtCategory } from "../debtType";
+import { CreateDebtFormValue, Debt, DebtCategory, Debtor } from "../debtType";
 import { create } from "zustand";
 import { fetchDebtData } from "../services/fetchDebtData";
+import { createDebt } from "../services/createDebt";
+import { message } from "antd";
+import { getAllDebtor } from "../services/getAllDebtor";
 
 interface DebtStore extends TableState<Debt> {
   category: DebtCategory;
+  debtorList: Debtor[];
   setCategory: (category: DebtCategory) => void;
   fetchTableData: () => Promise<void>;
+  fetchDebtorList: () => Promise<void>;
+  createDebt: (values: CreateDebtFormValue) => Promise<void>;
 }
 
 export const useDebtStore = create<DebtStore>((set, get) => ({
   data: [],
+  debtorList: [],
   loading: false,
   error: null,
   pagination: {
@@ -45,6 +52,54 @@ export const useDebtStore = create<DebtStore>((set, get) => ({
     } catch (error) {
       console.error("[DebtStore]: ", error);
       set({ error: "Không thể tải dữ liệu nợ" });
+    } finally {
+      set({ loading: false });
+    }
+  },
+  fetchDebtorList: async () => {
+    try {
+      const response = await getAllDebtor();
+
+      const uniqueDebtors = response.debtors.reduce(
+        (acc: Debtor[], debt: Debtor) => {
+          // Check if the debtorId already exists in the accumulator
+          if (!acc.some((debtor) => debtor.debtorId === debt.debtorId)) {
+            acc.push({
+              debtorId: debt.debtorId,
+              debtorFullName: debt.debtorFullName,
+            });
+          }
+          return acc;
+        },
+        []
+      );
+      set({ debtorList: uniqueDebtors });
+    } catch (error) {
+      set({ error: "Không thể tải danh sách người nhận nợ" });
+    }
+  },
+  // Create a new debt and update the state
+  createDebt: async (values: CreateDebtFormValue) => {
+    const { data, pagination } = get();
+    try {
+      set({ loading: true });
+
+      const newDebt = await createDebt(values);
+      console.log("mew deb", newDebt);
+
+      set(() => ({
+        data: [newDebt, ...data],
+        pagination: { ...pagination, total: pagination.total + 1 },
+        error: null,
+      }));
+      set({ error: null });
+
+      message.success("Tạo nợ thành công!");
+    } catch (error: any) {
+      console.error("[DebtStore]: ", error);
+      set({ error: error.message || "Tạo nợ thất bại" });
+
+      message.error(error.message || "Tạo nợ thất bại");
     } finally {
       set({ loading: false });
     }

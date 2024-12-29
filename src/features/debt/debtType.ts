@@ -6,6 +6,8 @@ export interface Debt {
   status: string;
   message: string;
   createdAt: string;
+  reminderFullName: string;
+  debtorFullName: string;
 }
 export enum DebtCategory {
   CREATED_BY_ME = "created-by-me",
@@ -22,3 +24,15 @@ export const DebtTabItem = [
   { key: "created", label: "Nợ đã tạo" },
   { key: "received", label: "Nợ được nhắc" },
 ];
+
+export interface Debtor {
+  debtorId: string;
+  debtorFullName: string;
+}
+
+export interface CreateDebtFormValue {
+  debtorId: string;
+  fullname: string;
+  amount: number;
+  message: string;
+}
