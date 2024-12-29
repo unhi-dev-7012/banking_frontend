@@ -1,64 +1,25 @@
 import React from "react";
-import { Debt, DebtStatus } from "../debtType";
-import { Button, TablePaginationConfig } from "antd";
+import { Debt } from "../debtType";
+import { TablePaginationConfig } from "antd";
 import TableComponent from "@components/common/Table/TableComponent";
-import DebtStatusUI from "./DebtStatusUI";
 import { useDebtStore } from "../stores/debtStore";
+import getDebtColumns from "./debtTableColumn";
 
 interface DebtListUIProps {
   debts: Debt[];
   activeTab: string;
+  onCancel: (debtId: string) => void;
+  onPay: (debtId: string) => void;
 }
 
-const DebtListUI: React.FC<DebtListUIProps> = ({ debts, activeTab }) => {
+const DebtListUI: React.FC<DebtListUIProps> = ({
+  debts,
+  activeTab,
+  onCancel,
+  onPay,
+}) => {
   const { pagination, setPagination } = useDebtStore();
-  console.log("debts :", debts);
-  const columns = [
-    {
-      title:
-        activeTab === "created" ? "Tài khoản người nợ" : "Tài khoản nhắc nợ",
-      dataIndex: activeTab === "created" ? "debtorId" : "reminderId",
-      key: activeTab === "created" ? "debtorId" : "reminderId",
-    },
-    {
-      title: "Tên tài khoản",
-      dataIndex:
-        activeTab === "created" ? "debtorFullName" : "reminderFullName",
-      key: activeTab === "created" ? "debtorFullName" : "debtorFullName",
-    },
-
-    {
-      title: "Số tiền",
-      dataIndex: "amount",
-      key: "amount",
-      render: (amount: number) =>
-        amount?.toLocaleString("vi-VN", {
-          style: "currency",
-          currency: "VND",
-        }),
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (_: any, record: Debt) => <DebtStatusUI status={record.status} />,
-    },
-    { title: "Nội dung", dataIndex: "message", key: "message" },
-    {
-      title: "Hành động",
-      key: "action",
-      render: (_: any, record: Debt) => (
-        <div>
-          {record.status === DebtStatus.INDEBTED && (
-            <>
-              <Button key={`cancel-${record.debtorId}`}>Hủy</Button>
-              <Button key={`pay-${record.debtorId}`}>Thanh toán</Button>
-            </>
-          )}
-        </div>
-      ),
-    },
-  ];
+  const columns = getDebtColumns(activeTab, onCancel, onPay);
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
     setPagination({

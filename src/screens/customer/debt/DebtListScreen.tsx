@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Typography, Modal } from "antd"; // Thêm Modal
+import { Button, Typography, Modal, Flex } from "antd"; // Thêm Modal
 import { useDebtStore } from "@features/debt/stores/debtStore";
 import { DebtCategory } from "@features/debt/debtType";
 import DebtTable from "@features/debt/components/DebtTable";
@@ -39,15 +39,29 @@ const DebtListScreen: React.FC = () => {
     fetchTableData(); // Fetch lại dữ liệu khi đổi tab
   };
 
+  // Handler hủy nợ
+  const handleCancelDebt = (debtId: string) => {
+    console.log("Hủy nợ với ID:", debtId);
+    // fetchTableData();
+  };
+
+  // Handler thanh toán nợ
+  const handlePayDebt = (debtId: string) => {
+    console.log("Thanh toán nợ với ID:", debtId);
+    // fetchTableData();
+  };
+
   return (
     <div>
       <Typography.Title level={2}>{messages.title}</Typography.Title>
-      <Typography.Text>{messages.description}</Typography.Text>
+      <Flex justify="space-between">
+        <Typography.Text>{messages.description}</Typography.Text>
 
-      {/* Nút "Tạo nợ" */}
-      <Button type="primary" onClick={openModal}>
-        {messages.buttons.create}
-      </Button>
+        {/* Nút "Tạo nợ" */}
+        <Button type="primary" onClick={openModal}>
+          {messages.buttons.create}
+        </Button>
+      </Flex>
 
       {/* Modal tạo nợ */}
       <Modal
@@ -66,6 +80,8 @@ const DebtListScreen: React.FC = () => {
         setActiveTab={handleTabChange}
         debts={data}
         loading={loading}
+        onCancel={handleCancelDebt} // Truyền handler hủy nợ
+        onPay={handlePayDebt} // Truyền handler thanh toán nợ
       />
     </div>
   );
