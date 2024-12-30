@@ -25,7 +25,7 @@ export const useTransactionForm = () => {
       try {
         const result = await getBankAccountWithUser(beneficiaryId);
         if (result) {
-          setBeneficiaryName(result.fullname);
+          setBeneficiaryName(result.fullName);
           setIsBeneficiaryNameVisible(true);
         } else {
           setBeneficiaryName(null);

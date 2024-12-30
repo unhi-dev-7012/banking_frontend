@@ -3,9 +3,9 @@ import api from "@utils/api";
 
 export const getBankAccountWithUser = async (id: string) => {
   console.log("id", id);
-  const { data } = await api.get(
-    `/api/customer/v1/bank-accounts/${id}?includeUser=true`
-  );
+  const { data } = await api.post(`/api/customer/v1/bank-accounts/get-one`, {
+    id: id,
+  });
   console.log("data", data);
 
   return data;
