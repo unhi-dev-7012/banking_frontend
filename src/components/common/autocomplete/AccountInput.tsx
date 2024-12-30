@@ -5,7 +5,7 @@ import { useDebtStore } from "@features/customer/debt/stores/debtStore";
 import "./AccountInput.css";
 
 interface AccountInputProps {
-  setDebtorId: (id: string) => void; // Callback to set debtor ID in form
+  setBankAccountId: (id: string) => void; // Callback to set debtor ID in form
   setError: (error: string | null) => void;
   error: string | null;
 }
@@ -26,7 +26,7 @@ const accountIdValidationRules = [
   },
 ];
 const AccountInput: React.FC<AccountInputProps> = ({
-  setDebtorId,
+  setBankAccountId: setDebtorId,
   setError,
   error,
 }) => {
