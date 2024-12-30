@@ -1,6 +1,5 @@
-import { Button, Tag, Table, Flex } from "antd";
+import { Button, Table, Flex } from "antd";
 import { Debt } from "../debtType";
-import { DebtStatus } from "../debtType"; // Assuming DebtStatus is an enum or object with possible status values.
 import DebtStatusUI from "./DebtStatusUI";
 
 interface DebtViewProps {
