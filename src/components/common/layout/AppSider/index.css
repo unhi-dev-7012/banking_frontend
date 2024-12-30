@@ -28,4 +28,28 @@
     padding-inline: calc(50% - 22px);
     height: fit-content;
   }
+  .appSider_LogoContainer {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 20%;
+  }
+
+  .appSider_LogoContainer img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .appSider_LogoText {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: 'Segoe UI';
+    padding-left: 10px;
+  }
 }
