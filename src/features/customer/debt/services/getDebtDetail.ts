@@ -7,7 +7,6 @@ export const getDebtDetail = async (debtId: string): Promise<Debt> => {
     const { data } = await api.get(`/api/customer/v1/debt/${debtId}`, {
       params: { includeUser: true },
     });
-    console.log(data);
 
     if (data) {
       return data.debt;

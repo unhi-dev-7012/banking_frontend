@@ -22,7 +22,7 @@ export const useDebtorForm = () => {
       try {
         const result = await getBankAccountWithUser(debtorId);
         if (result) {
-          setDebtorName(result.fullname);
+          setDebtorName(result.fullName);
           setIsDebtorNameVisible(true);
         } else {
           setDebtorName(null);

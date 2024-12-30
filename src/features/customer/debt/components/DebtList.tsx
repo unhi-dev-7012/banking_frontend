@@ -13,7 +13,7 @@ interface DebtListUIProps {
   onView: (debtId: string) => void;
 }
 
-const DebtListUI: React.FC<DebtListUIProps> = ({
+const DebtList: React.FC<DebtListUIProps> = ({
   debts,
   activeTab,
   onCancel,
@@ -44,4 +44,4 @@ const DebtListUI: React.FC<DebtListUIProps> = ({
   );
 };
 
-export default DebtListUI;
+export default DebtList;

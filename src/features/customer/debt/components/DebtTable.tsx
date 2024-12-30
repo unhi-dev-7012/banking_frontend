@@ -1,7 +1,7 @@
 import TabComponent from "@components/common/Tab/TabComponent";
 import { Debt, DebtTabItem } from "../debtType";
 import { Spinner } from "@components/common/Spinner";
-import DebtListUI from "./DebtListUI";
+import DebtList from "./DebtList";
 import { message, Modal } from "antd";
 import { useState } from "react";
 import { DebtView } from "./ViewDebtForm";
@@ -97,7 +97,7 @@ const DebtTable: React.FC<DebtTableProps> = ({
       {loading ? (
         <Spinner size="small" />
       ) : (
-        <DebtListUI
+        <DebtList
           debts={debts}
           activeTab={activeTab}
           onCancel={handleCancelDebt} // Truyền handler vào DebtListUI
