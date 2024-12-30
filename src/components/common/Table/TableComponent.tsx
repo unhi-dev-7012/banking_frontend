@@ -8,6 +8,7 @@ interface TableComponentProps<T> {
   pagination: PaginationParams;
   loading: boolean;
   handleTableChange: (pagination: TablePaginationConfig) => void;
+  rowKey: string;
 }
 
 export default function TableComponent<T>({
@@ -16,6 +17,7 @@ export default function TableComponent<T>({
   pagination,
   loading,
   handleTableChange,
+  rowKey,
 }: TableComponentProps<T>) {
   const rowClassName = (_record: any, index: number): string => {
     return index % 2 === 1 ? styles.evenRow : styles.oddRow;
@@ -41,6 +43,7 @@ export default function TableComponent<T>({
       onChange={handleTableChange}
       rowClassName={rowClassName}
       loading={loading}
+      rowKey={rowKey}
     />
   );
 }
