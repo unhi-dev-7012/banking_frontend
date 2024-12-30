@@ -17,8 +17,8 @@ const accountIdValidationRules = [
     message: "Số tài khoản chỉ chứa chữ số",
   },
   {
-    min: 8, // Minimum length for account number
-    message: "Số tài khoản phải có ít nhất 8 chữ số",
+    min: 5, // Minimum length for account number
+    message: "Số tài khoản phải có ít nhất 5 chữ số",
   },
   {
     max: 15, // Maximum length for account number

@@ -38,7 +38,6 @@ const renderActionButtons = (
   // Add a horizontal line after the first button
   const hr = (
     <hr
-      key="line-1"
       style={{
         border: "none",
         borderTop: "1px solid #f0f0f0",
