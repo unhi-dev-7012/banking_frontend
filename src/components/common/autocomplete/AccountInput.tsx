@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Input, message, Dropdown, Button, MenuProps } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
-import { useDebtStore } from "@features/debt/stores/debtStore";
+import { useDebtStore } from "@features/customer/debt/stores/debtStore";
 import "./AccountInput.css";
 
 interface AccountInputProps {

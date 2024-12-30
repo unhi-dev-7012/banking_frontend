@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button, Typography, Modal, Flex } from "antd"; // Thêm Modal
-import { useDebtStore } from "@features/debt/stores/debtStore";
-import { DebtCategory } from "@features/debt/debtType";
-import DebtTable from "@features/debt/components/DebtTable";
-import CreateDebtForm from "@features/debt/components/CreateDebtForm";
+import { useDebtStore } from "@features/customer/debt/stores/debtStore";
+import { DebtCategory } from "@features/customer/debt/debtType";
+import DebtTable from "@features/customer/debt/components/DebtTable";
+import CreateDebtForm from "@features/customer/debt/components/CreateDebtForm";
 
 const messages = {
   title: "Quản lý nợ",
