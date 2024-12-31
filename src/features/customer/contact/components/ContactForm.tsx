@@ -4,6 +4,7 @@ import { ContactContext } from "./ContactContext";
 import api from "@utils/api";
 import { createContact } from "../services/createContact";
 import { updateContact } from "../services/updateContact";
+import { BankInfo } from "@features/admin/reconcile/stores/reconcileStore";
 
 interface ContactFormValue {
   id: string;
@@ -56,6 +57,10 @@ interface ContactFormProps {
   initialValues?: Partial<ContactFormValue>;
 }
 
+const getBankCode = (banks: BankInfo[], id: string): string | undefined => {
+  return banks.find((bank) => bank.id === id)?.code;
+};
+
 const ContactForm: React.FC<ContactFormProps> = ({
   closeModal,
   mode,
@@ -74,6 +79,8 @@ const ContactForm: React.FC<ContactFormProps> = ({
   }, [initialValues, mode]);
 
   const handleSubmit = async (values: ContactFormValue) => {
+    console.log(values);
+
     try {
       if (mode === "add") {
         await createContact(
@@ -82,10 +89,16 @@ const ContactForm: React.FC<ContactFormProps> = ({
           values.nickname
         );
       } else {
+        const bankCode = getBankCode(banks, values.bankId);
+        console.log(bankCode);
+
+        if (!bankCode) throw new Error("Ngân hàng không hợp lệ!");
+
         await updateContact(
           initialValues?.id as string,
           values.nickname,
-          values.beneficiaryId
+          values.beneficiaryId,
+          bankCode as string
         );
       }
       await fetchContact(banks, pagination);
@@ -126,7 +139,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
     bankId: string,
     beneficiaryId: string
   ) => {
-    const bankCode = banks.find((bank) => bank.id === bankId)?.code;
+    const bankCode = getBankCode(banks, bankId);
     if (!bankCode) return;
 
     try {
@@ -160,8 +173,8 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
   useEffect(() => {
     const formValues = form.getFieldsValue();
-    console.log("Form Values:", formValues); // Kiểm tra giá trị của form
-  }, [form]); // Hook này sẽ chạy mỗi khi form thay đổi
+    console.log("Form Values:", formValues);
+  }, [form]);
 
   const handleBankChange = (bankId: string) => {
     const beneficiaryId = form.getFieldValue(messages.form.beneficiaryId.name);
@@ -193,7 +206,6 @@ const ContactForm: React.FC<ContactFormProps> = ({
             value: bank.id,
             label: bank.name,
           }))}
-          disabled={mode !== "add"}
           onChange={handleBankChange}
           placeholder={messages.form.bank.placeholder}
         />

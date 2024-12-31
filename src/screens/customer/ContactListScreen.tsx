@@ -24,8 +24,6 @@ const emptyContact = {
   bankName: "",
   beneficiaryName: "",
   nickname: "",
-  id: "",
-  bankId: "",
 };
 
 const ContactListScreen: React.FC<IContactListScreenProps> = () => {
