@@ -39,8 +39,10 @@ export const getUserData = async (): Promise<UserData | null> => {
     return {
       fullName: data.fullName || "Unknown User",
       email: data.email || "unknown@example.com",
-      // bankAccount: data.bankAccount.id || "",
-      // balance: data.bankAccount.balance || "",
+      bankAccount: data?.bankAccount?.id || "",
+      balance: data?.bankAccount?.balance || 0,
+      username: data.username || "unknown",
+      createdAt: data.createdAt || undefined,
     };
   } catch (error) {
     console.error("Failed to fetch user data:", error);
