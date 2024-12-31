@@ -25,3 +25,4 @@ dist-ssr
 
 # ADD `.env` IN THE REAL PROJECT !!!
 .env
+firebase-config.json

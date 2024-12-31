@@ -1,9 +1,10 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider, message } from "antd";
 import { Spinner } from "@components/common/Spinner";
 import { ROUTES_PATH } from "./constants/path";
+import { requestForToken } from "./config/firebase";
 
 const LoginScreen = lazy(
   () => import("@screens/authentication/login/LoginScreen")
@@ -23,6 +24,20 @@ const queryClient = new QueryClient({
 });
 
 const App: React.FC = () => {
+  useEffect(() => {
+    const getToken = async () => {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        const token = await requestForToken();
+        if (token) {
+          localStorage.setItem("fcm_token", token);
+        }
+      }
+    };
+
+    getToken();
+  }, []);
+
   const [messageApi, contextHolder] = message.useMessage();
 
   return (
