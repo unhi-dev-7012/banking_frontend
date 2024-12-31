@@ -1,4 +1,4 @@
-import { Button, Flex, Form, Input, InputNumber, message, Spin } from "antd";
+import { Button, Flex, Form, Input, InputNumber, Spin } from "antd";
 import React from "react";
 import { useDebtStore } from "../stores/debtStore";
 import { CreateDebtFormValue } from "../debtType";
@@ -79,7 +79,7 @@ const CreateDebtForm: React.FC<DebtFormProps> = ({ closeModal }) => {
       <Form.Item label="Số tài khoản người nhận nợ" name="debtorAccountId">
         <AccountInput
           setError={setAccountError}
-          setDebtorId={handleDebtorChange}
+          setBankAccountId={handleDebtorChange}
           error={accountError}
         />
       </Form.Item>
