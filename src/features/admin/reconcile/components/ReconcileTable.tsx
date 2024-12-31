@@ -29,6 +29,7 @@ const ReconcileTable: React.FC = () => {
 
   return (
     <TableComponent<Transaction>
+      rowKey="reconcileTable"
       datasource={data}
       pagination={pagination}
       loading={loading}

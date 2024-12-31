@@ -110,6 +110,7 @@ const EmployeeTable: React.FC = () => {
 
   return (
     <TableComponent<Employee>
+      rowKey="employeeTable"
       datasource={data}
       pagination={pagination}
       loading={loading}

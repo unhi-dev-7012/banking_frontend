@@ -3,6 +3,10 @@ import { Typography } from "antd";
 
 interface IContactListScreenProps {}
 
+const messages = {
+  title: "",
+};
+
 const ContactListScreen: React.FC<IContactListScreenProps> = () => {
   return (
     <div>
