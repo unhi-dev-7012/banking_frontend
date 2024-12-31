@@ -35,10 +35,20 @@ export const reconcileColumns: ColumnsType<any> = [
     title: "Số tiền",
     key: "amount",
     dataIndex: "amount",
+    render: (amount: number) =>
+      amount.toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }),
   },
   {
     title: "Phí giao dịch",
     key: "transactionFee",
     dataIndex: "transactionFee",
+    render: (amount: number) =>
+      amount.toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }),
   },
 ];

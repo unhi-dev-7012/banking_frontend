@@ -2,6 +2,8 @@ import { TableState } from "@constants/tableState";
 import { fetchTableData } from "@services/fetchTableData";
 import { create } from "zustand";
 import { getBanks } from "../services/getBankList";
+import { getStatistic } from "../services/getStatistic";
+import { data } from "react-router-dom";
 
 export interface Transaction {
   id: string;
@@ -28,15 +30,23 @@ export interface BankInfo {
   label: string;
 }
 
+export interface ReconcileStatistic {
+  outcomingAmount: number;
+  incomingAmount: number;
+  transactionCount: number;
+}
+
 interface ReconcileState extends TableState<Transaction> {
   bankId: string;
   banks: BankInfo[];
   selectedMonthStr: string;
   from: string;
   to: string;
+  statistic: ReconcileStatistic;
   setSelectedMonth: (value: string) => void;
   setBankId: (value: string) => void;
   setBanks: () => Promise<void>;
+  fetchStatistic: () => Promise<void>;
 }
 
 const API_ENPOINT = "api/admin/v1/transactions/reconcile";
@@ -48,6 +58,11 @@ const defaultState = {
   selectedMonthStr: "",
   from: "",
   to: "",
+  statistic: {
+    outcomingAmount: 0,
+    incomingAmount: 0,
+    transactionCount: 0,
+  },
   loading: false,
   error: null,
   pagination: {
@@ -77,6 +92,7 @@ export const useReconcile = create<ReconcileState>((set, get) => ({
       pagination: { ...state.pagination, ...pagination },
     })),
   fetchTableData: async () => {
+    set({ loading: true });
     const { pagination, from, to, bankId, banks } = get();
 
     if (from === "" || to === "" || bankId === "") return;
@@ -110,6 +126,7 @@ export const useReconcile = create<ReconcileState>((set, get) => ({
 
     set({
       data: data,
+      loading: false,
     });
 
     console.log(data);
@@ -138,9 +155,25 @@ export const useReconcile = create<ReconcileState>((set, get) => ({
     });
   },
   setBanks: async () => {
+    set({ loading: true });
     const data = await getBanks();
     set({
+      loading: false,
       banks: data,
+    });
+  },
+  fetchStatistic: async () => {
+    set({ loading: true });
+    const { bankId } = get();
+
+    if (bankId === "") {
+      set({ loading: false });
+      return;
+    }
+    const data = await getStatistic(bankId);
+    set({
+      statistic: data,
+      loading: false,
     });
   },
 }));

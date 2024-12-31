@@ -19,7 +19,8 @@ interface IAdminDashboardScreenProps {}
 const AdminDashboardScreen: React.FC<IAdminDashboardScreenProps> = () => {
   const { Option } = Select;
   const ourBankCode = "NHB";
-  const { banks, from, setSelectedMonth, setBankId, setBanks } = useReconcile();
+  const { banks, statistic, setSelectedMonth, setBankId, setBanks } =
+    useReconcile();
 
   const handleChange = (_: any, dateString: string | string[]) => {
     setSelectedMonth(dateString as string);
@@ -31,7 +32,6 @@ const AdminDashboardScreen: React.FC<IAdminDashboardScreenProps> = () => {
 
   useEffect(() => {
     setBanks();
-    console.log(from);
   }, []);
 
   return (
@@ -66,7 +66,7 @@ const AdminDashboardScreen: React.FC<IAdminDashboardScreenProps> = () => {
         <Card style={{ flexGrow: 1 }} size="small">
           <p>Số tiền đã ứng</p>
           <h2>
-            {Number(1000000000).toLocaleString("vi-VN", {
+            {statistic.incomingAmount.toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
             })}
@@ -75,7 +75,7 @@ const AdminDashboardScreen: React.FC<IAdminDashboardScreenProps> = () => {
         <Card style={{ flexGrow: 1 }} size="small">
           <p>Số tiền được ứng</p>
           <h2>
-            {Number(1000000000).toLocaleString("vi-VN", {
+            {statistic.outcomingAmount.toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
             })}
@@ -83,7 +83,7 @@ const AdminDashboardScreen: React.FC<IAdminDashboardScreenProps> = () => {
         </Card>
         <Card style={{ flexGrow: 1 }} size="small">
           <p>Tổng số giao dịch</p>
-          <h2>120</h2>
+          <h2>{statistic.transactionCount}</h2>
         </Card>
       </Flex>
       <Typography.Title level={4}>Danh sách giao dịch</Typography.Title>
