@@ -1,20 +1,22 @@
 import React from "react";
 import { Typography } from "antd";
+import { ContactProvider } from "@features/customer/contact/components/ContactProvider";
+import { ContactTable } from "@features/customer/contact/components/ContactTable";
 
 interface IContactListScreenProps {}
 
 const messages = {
-  title: "",
+  title: "Danh bạ người nhận",
 };
 
 const ContactListScreen: React.FC<IContactListScreenProps> = () => {
   return (
-    <div>
-      <Typography.Title level={2}>ContactListScreen</Typography.Title>
-      <Typography.Paragraph>
-        This is the ContactListScreen page.
-      </Typography.Paragraph>
-    </div>
+    <ContactProvider>
+      <div>
+        <Typography.Title level={2}>{messages.title}</Typography.Title>
+        <ContactTable />
+      </div>
+    </ContactProvider>
   );
 };
 
