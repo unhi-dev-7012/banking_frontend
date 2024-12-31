@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, message, Steps, theme, Typography } from "antd";
+import { Button, Flex, message, Steps, theme, Typography } from "antd";
 import CreateTransactionForm from "@features/customer/transfer_transaction/components/CreateTransactionForm";
 import ViewTransactionForm from "@features/customer/transfer_transaction/components/ViewTransactionDetails";
 
@@ -53,28 +53,27 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
 
   const contentStyle: React.CSSProperties = {
     lineHeight: "260px",
-    textAlign: "center",
     color: token.colorTextTertiary,
-    backgroundColor: token.colorFillAlter,
+    padding: "10px",
+    // backgroundColor: token.colorFillAlter,
+    // backgroundColor: token.colorFillAlter,
     borderRadius: token.borderRadiusLG,
-    border: `1px dashed ${token.colorBorder}`,
-    marginTop: 16,
+    // border: `1px dashed ${token.colorBorder}`,
+    marginTop: 10,
   };
 
   return (
     <div>
-      <Typography.Title level={3}>{messages.title}</Typography.Title>
-      <Typography.Paragraph>{messages.description}</Typography.Paragraph>
+      <Typography.Title level={3} style={{ margin: "0 0 5px 0" }}>
+        {messages.title}
+      </Typography.Title>
 
-      <Steps current={current} items={items} />
-      <div style={contentStyle}>{steps(next)[current].content}</div>
-      <div style={{ marginTop: 24 }}>
-        {current > 0 && (
-          <Button style={{ margin: "0 8px" }} onClick={prev}>
-            Hủy giao dịch
-          </Button>
-        )}
-      </div>
+      <Flex style={{ width: "100%" }} justify="center">
+        <Steps current={current} items={items} style={{ width: "50%" }} />
+      </Flex>
+      <Flex justify="center" style={contentStyle}>
+        {steps(next)[current].content}
+      </Flex>
     </div>
   );
 };
