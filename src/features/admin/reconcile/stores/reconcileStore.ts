@@ -3,7 +3,6 @@ import { fetchTableData } from "@services/fetchTableData";
 import { create } from "zustand";
 import { getBanks } from "../services/getBankList";
 import { getStatistic } from "../services/getStatistic";
-import { data } from "react-router-dom";
 
 export interface Transaction {
   id: string;
@@ -128,8 +127,6 @@ export const useReconcile = create<ReconcileState>((set, get) => ({
       data: data,
       loading: false,
     });
-
-    console.log(data);
   },
   setSelectedMonth: (value) => {
     const [year, month] = value.split("-").map(Number);
