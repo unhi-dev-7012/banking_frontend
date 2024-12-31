@@ -13,10 +13,12 @@ const ReconcileTable: React.FC = () => {
     loading,
     fetchTableData,
     setPagination,
+    fetchStatistic,
   } = useReconcile();
 
   useEffect(() => {
     fetchTableData();
+    fetchStatistic();
   }, [pagination.current, pagination.total, bankId, selectedMonthStr]);
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
