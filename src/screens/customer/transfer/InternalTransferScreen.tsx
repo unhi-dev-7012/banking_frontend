@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, message, Steps, theme, Typography } from "antd";
 import CreateTransactionForm from "@features/customer/transfer_transaction/components/CreateTransactionForm";
+import ViewTransactionForm from "@features/customer/transfer_transaction/components/ViewTransactionDetails";
 
 interface IInternalTransferScreenProps {}
 
@@ -25,7 +26,11 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
     },
     {
       title: "Xác thực giao dịch",
-      content: "Second-content", // Placeholder, replace with OTP verification component
+      content: (
+        <ViewTransactionForm
+          onSubmitSuccess={next} // Trigger next step after success
+        />
+      ),
     },
     {
       title: "Thông báo kết quả",
@@ -64,14 +69,6 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
       <Steps current={current} items={items} />
       <div style={contentStyle}>{steps(next)[current].content}</div>
       <div style={{ marginTop: 24 }}>
-        {current === steps(next).length - 1 && (
-          <Button
-            type="primary"
-            onClick={() => message.success("Processing complete!")}
-          >
-            Hoàn tất giao dịch
-          </Button>
-        )}
         {current > 0 && (
           <Button style={{ margin: "0 8px" }} onClick={prev}>
             Hủy giao dịch

@@ -68,7 +68,6 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
         values.beneficiaryBankId = userInfo?.bankId;
       }
       await createTransaction(values);
-
       onSubmitSuccess();
     } catch (error) {
       console.error(error);
@@ -137,7 +136,13 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
           </Button>
         </Space>
 
-        <Form.Item label="Chọn hình thức tính phí" name="remitterPaidFee">
+        <Form.Item
+          label="Chọn hình thức tính phí"
+          name="remitterPaidFee"
+          rules={[
+            { required: true, message: "Vui lòng chọn hình thức tính phí!" },
+          ]}
+        >
           <Radio.Group>
             <Radio value={false}> Người nhận trả phí</Radio>
             <Radio value={true}> Người gửi trả phí </Radio>
