@@ -23,7 +23,7 @@ export const defaultState: ContactState = {
   error: null,
   pagination: {
     current: 1,
-    pageSize: 2,
+    pageSize: 10,
     total: 0,
   },
 };
