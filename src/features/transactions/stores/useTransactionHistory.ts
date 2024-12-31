@@ -43,11 +43,19 @@ export const useHistory = create<TransactionHistoryState>((set, get) => ({
       loading: true,
       errorMessage: undefined,
     });
-    const { current } = get().pagination;
+    const { current, pageSize } = get().pagination;
     const response = await getTransactions(current, status, category, bankId);
 
     response && !response.errorMessage
-      ? set({ transactionHistory: response.data, loading: false })
+      ? set({
+          transactionHistory: response.data,
+          loading: false,
+          pagination: {
+            current: current,
+            pageSize: pageSize,
+            total: response.metadata.totalCount,
+          },
+        })
       : set({
           transactionHistory: [],
           errorMessage: "Failed to fetch transaction history",
