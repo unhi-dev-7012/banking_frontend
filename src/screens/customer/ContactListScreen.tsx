@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Flex, Typography } from "antd";
 import { ContactProvider } from "@features/customer/contact/components/ContactProvider";
 import { ContactTable } from "@features/customer/contact/components/ContactTable";

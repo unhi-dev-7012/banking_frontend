@@ -94,10 +94,31 @@ const ContactForm: React.FC<ContactFormProps> = ({
       message.success(
         messages.notifications.success[mode === "add" ? "add" : "edit"]
       );
-    } catch (error) {
-      message.error(
-        messages.notifications.fail[mode === "add" ? "add" : "edit"]
-      );
+    } catch (error: any) {
+      if (error.response) {
+        const { status } = error.response;
+
+        switch (status) {
+          case 404:
+            message.error("Không tìm thấy tài nguyên yêu cầu.");
+            break;
+          case 400:
+            message.error("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.");
+            break;
+          case 409:
+            message.error(
+              "Tài khoản này trùng với tài khoản của bạn hoặc đã được thêm."
+            );
+            break;
+          default:
+            message.error(
+              messages.notifications.fail[mode === "add" ? "add" : "edit"]
+            );
+            break;
+        }
+      } else {
+        message.error("Đã xảy ra lỗi. Vui lòng thử lại.");
+      }
     }
   };
 
