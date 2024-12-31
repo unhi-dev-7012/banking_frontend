@@ -9,9 +9,9 @@ import {
 import { create } from "zustand";
 import { fetchDebtData } from "../services/fetchDebtData";
 import { createDebt } from "../services/createDebt";
-import { message } from "antd";
 import { getAllDebtor } from "../services/getAllDebtor";
 import { cancelDebt } from "../services/cancelDebt";
+import { message } from "antd";
 
 interface DebtStore extends TableState<Debt> {
   category: DebtCategory;
