@@ -4,6 +4,8 @@ import { useAuthStore } from "../stores/authStore";
 export interface UserData {
   fullName?: string;
   email?: string;
+  username?: string;
+  createdAt?: Date | undefined;
   bankAccount?: string;
   balance?: number;
 }
@@ -39,6 +41,10 @@ export const getUserData = async (): Promise<UserData | null> => {
       email: data.email || "unknown@example.com",
       bankAccount: data?.bankAccount?.id || "",
       balance: data?.bankAccount?.balance || 0,
+      username: data.username || "unknown",
+      createdAt: data.createdAt || undefined,
+      // // bankAccount: data.bankAccount.id || "",
+      // // balance: data.bankAccount.balance || "",
     };
   } catch (error) {
     console.error("Failed to fetch user data:", error);
