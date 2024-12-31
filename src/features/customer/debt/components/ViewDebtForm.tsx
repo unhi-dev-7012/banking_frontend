@@ -1,6 +1,7 @@
 import { Button, Table, Flex } from "antd";
 import { Debt } from "../debtType";
 import DebtStatusUI from "./DebtStatusUI";
+import { useDebtStore } from "../stores/debtStore";
 
 interface DebtViewProps {
   debt: Debt;
@@ -22,6 +23,8 @@ export const DebtView: React.FC<DebtViewProps> = ({
     updatedAt,
     status,
   } = debt;
+
+  const { activeTab } = useDebtStore();
 
   const handlePay = async (debtId: string) => {
     try {
@@ -107,7 +110,7 @@ export const DebtView: React.FC<DebtViewProps> = ({
         <Button style={{ marginLeft: 8 }} onClick={closeModal}>
           Đóng
         </Button>
-        {status === "indebted" && (
+        {status === "indebted" && activeTab === "received" && (
           <Button type="primary" onClick={() => handlePay(debt.id)}>
             Thanh toán
           </Button>

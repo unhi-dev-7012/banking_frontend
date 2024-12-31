@@ -25,8 +25,9 @@ const DebtListScreen: React.FC = () => {
     pagination,
     cancelDebt,
     setPagination,
+    activeTab,
+    setTab,
   } = useDebtStore();
-  const [activeTab, setActiveTab] = useState("created");
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => setModalVisible(true);
@@ -34,10 +35,10 @@ const DebtListScreen: React.FC = () => {
 
   useEffect(() => {
     fetchTableData();
-  }, [pagination.current, pagination.total]);
+  }, [pagination.current, pagination.total, activeTab]);
 
   const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
+    setTab(tab);
     setCategory(
       tab === "created"
         ? DebtCategory.CREATED_BY_ME

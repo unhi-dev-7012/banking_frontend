@@ -3,6 +3,7 @@ import { Debt } from "../debtType"; // Assuming Debt type is defined somewhere
 
 // Function to fetch debt details by ID
 export const getDebtDetail = async (debtId: string): Promise<Debt> => {
+  console.log("id", debtId);
   try {
     const { data } = await api.get(`/api/customer/v1/debt/${debtId}`, {
       params: { includeUser: true },
