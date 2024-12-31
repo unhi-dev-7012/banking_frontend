@@ -1,9 +1,12 @@
-import { Button, Flex, Form, Input, InputNumber, message, Spin } from "antd";
-import React from "react";
+import { Button, Flex, Form, Input, InputNumber, Spin } from "antd";
+import React, { useEffect, useState } from "react";
 import { useDebtStore } from "../stores/debtStore";
 import { CreateDebtFormValue } from "../debtType";
 import AccountInput from "@components/common/autocomplete/AccountInput";
 import { useDebtorForm } from "../hooks/useDebtorForm";
+import getBankAccountInfo, {
+  BankAccountInfo,
+} from "@features/customer/transfer_transaction/services/getBankAccountInfo";
 
 const initialValues: CreateDebtFormValue = {
   debtorId: "",
@@ -79,7 +82,7 @@ const CreateDebtForm: React.FC<DebtFormProps> = ({ closeModal }) => {
       <Form.Item label="Số tài khoản người nhận nợ" name="debtorAccountId">
         <AccountInput
           setError={setAccountError}
-          setDebtorId={handleDebtorChange}
+          setBankAccountId={handleDebtorChange}
           error={accountError}
         />
       </Form.Item>

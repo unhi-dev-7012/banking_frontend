@@ -22,7 +22,7 @@ const renderActionButtons = (
   // View Details button is always shown
   const buttons = [
     <Button
-      key="view-details"
+      key={`${record.id}-view-detail`}
       type="text"
       onClick={() => {
         onView(record.id);
@@ -38,6 +38,7 @@ const renderActionButtons = (
   // Add a horizontal line after the first button
   const hr = (
     <hr
+      key={`${record.id}-separator-hr`}
       style={{
         border: "none",
         borderTop: "1px solid #f0f0f0",
@@ -51,20 +52,7 @@ const renderActionButtons = (
       buttons.push(
         hr,
         <Button
-          key="pay"
-          icon={<DollarSign size={14} />}
-          type="text"
-          onClick={() => {
-            onPay(record.id);
-            setPopoverVisible(record.id, false); // Close Popover
-          }}
-          style={{ width: "100%", justifyContent: "flex-start" }}
-        >
-          Thanh toán
-        </Button>,
-        hr,
-        <Button
-          key="cancel"
+          key={`${record.id}-separator-cancel`}
           icon={<X size={14} />}
           type="text"
           onClick={() => {
@@ -84,7 +72,7 @@ const renderActionButtons = (
       buttons.push(
         hr,
         <Button
-          key="pay-received"
+          key={`${record.id}-separator-pay`}
           icon={<DollarSign size={14} />}
           type="text"
           onClick={() => {

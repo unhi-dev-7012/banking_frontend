@@ -31,7 +31,10 @@ const DebtList: React.FC<DebtListUIProps> = ({
   return (
     <TableComponent
       columns={columns}
-      datasource={debts}
+      datasource={debts.map((debt, index) => ({
+        ...debt,
+        id: debt.id || `temp-${index}`,
+      }))}
       rowKey="id"
       pagination={{
         current: pagination.current,

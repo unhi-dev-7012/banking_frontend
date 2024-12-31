@@ -9,18 +9,20 @@ import {
 import { create } from "zustand";
 import { fetchDebtData } from "../services/fetchDebtData";
 import { createDebt } from "../services/createDebt";
-import { message } from "antd";
 import { getAllDebtor } from "../services/getAllDebtor";
 import { cancelDebt } from "../services/cancelDebt";
+import { message } from "antd";
 
 interface DebtStore extends TableState<Debt> {
   category: DebtCategory;
   debtorList: Debtor[];
+  activeTab: string;
   setCategory: (category: DebtCategory) => void;
   fetchTableData: () => Promise<void>;
   fetchDebtorList: () => Promise<void>;
   createDebt: (values: CreateDebtFormValue) => Promise<void>;
   cancelDebt: (debtId: string) => Promise<void>;
+  setTab: (activeTab: string) => void;
 }
 
 export const useDebtStore = create<DebtStore>((set, get) => ({
@@ -28,6 +30,7 @@ export const useDebtStore = create<DebtStore>((set, get) => ({
   debtorList: [],
   loading: false,
   error: null,
+  activeTab: "created",
   pagination: {
     current: 1,
     pageSize: 10,
@@ -39,6 +42,7 @@ export const useDebtStore = create<DebtStore>((set, get) => ({
   },
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
+  setTab: (activeTab) => set({ activeTab: activeTab }),
   setPagination: (pagination) =>
     set((state) => ({
       pagination: { ...state.pagination, ...pagination },
@@ -93,7 +97,6 @@ export const useDebtStore = create<DebtStore>((set, get) => ({
       set({ loading: true });
 
       const newDebt = await createDebt(values);
-      console.log("mew deb", newDebt);
 
       set(() => ({
         data: [newDebt, ...data],
