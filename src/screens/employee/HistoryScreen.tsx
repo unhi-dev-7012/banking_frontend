@@ -38,6 +38,7 @@ const HistoryScreen: React.FC = () => {
       <Title level={2}>Lịch sử giao dịch</Title>
 
       <TableComponent<Record<string, any>>
+        rowKey="EmployeeHistoryTable"
         datasource={transactionHistory}
         pagination={pagination}
         columns={EmployeeTransactionHistoryColumnConfig(
