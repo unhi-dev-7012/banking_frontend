@@ -8,13 +8,10 @@ const verifyOtp = {
    */
   execute: async (payload: VerifyOtpPayload): Promise<VerifyOtpResponse> => {
     try {
-      const { data } = await api.post<VerifyOtpResponse>(
-        TransApiEndpoints.VERIFY_OPT,
-        payload
-      );
+      const { data } = await api.post(TransApiEndpoints.VERIFY_OPT, payload);
       return data; // Trả về dữ liệu xác minh OTP
     } catch (error: any) {
-      console.error("Lỗi khi xác minh OTP:", error);
+      console.log("error in api", error);
       throw new Error(error || "Xác minh OTP thất bại.");
     }
   },

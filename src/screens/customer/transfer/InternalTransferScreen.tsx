@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Button, message, Steps, theme, Typography } from "antd";
+import { Button, Flex, message, Steps, theme, Typography } from "antd";
 import CreateTransactionForm from "@features/customer/transfer_transaction/components/CreateTransactionForm";
+import ViewTransactionForm from "@features/customer/transfer_transaction/components/ViewTransactionDetails";
+import ViewTransactionResult from "@features/customer/transfer_transaction/components/ViewTransactionResult";
 
 interface IInternalTransferScreenProps {}
 
@@ -17,28 +19,25 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
   const steps = (next: () => void) => [
     {
       title: "Điền thông tin",
-      content: (
-        <CreateTransactionForm
-          onSubmitSuccess={next} // Trigger next step after success
-        />
-      ),
+      content: <CreateTransactionForm onSubmitSuccess={next} />,
     },
     {
       title: "Xác thực giao dịch",
-      content: "Second-content", // Placeholder, replace with OTP verification component
+      content: <ViewTransactionForm onSubmitSuccess={next} />,
     },
     {
       title: "Thông báo kết quả",
-      content: "Last-content", // Placeholder for result notification
+      content: <ViewTransactionResult onSubmitSuccess={next} />,
     },
   ];
 
   const next = () => {
-    setCurrent(current + 1); // Go to the next step
+    console.log("next", current + 1);
+    setCurrent(current + 1);
   };
 
   const prev = () => {
-    setCurrent(current - 1); // Go to the previous step
+    setCurrent(current - 1);
   };
 
   const items = steps(next).map((item) => ({
@@ -48,36 +47,24 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
 
   const contentStyle: React.CSSProperties = {
     lineHeight: "260px",
-    textAlign: "center",
     color: token.colorTextTertiary,
-    backgroundColor: token.colorFillAlter,
+    padding: "10px",
     borderRadius: token.borderRadiusLG,
-    border: `1px dashed ${token.colorBorder}`,
-    marginTop: 16,
+    marginTop: 10,
   };
 
   return (
     <div>
-      <Typography.Title level={3}>{messages.title}</Typography.Title>
-      <Typography.Paragraph>{messages.description}</Typography.Paragraph>
+      <Typography.Title level={3} style={{ margin: "0 0 5px 0" }}>
+        {messages.title}
+      </Typography.Title>
 
-      <Steps current={current} items={items} />
-      <div style={contentStyle}>{steps(next)[current].content}</div>
-      <div style={{ marginTop: 24 }}>
-        {current === steps(next).length - 1 && (
-          <Button
-            type="primary"
-            onClick={() => message.success("Processing complete!")}
-          >
-            Hoàn tất giao dịch
-          </Button>
-        )}
-        {current > 0 && (
-          <Button style={{ margin: "0 8px" }} onClick={prev}>
-            Hủy giao dịch
-          </Button>
-        )}
-      </div>
+      <Flex style={{ width: "100%" }} justify="center">
+        <Steps current={current} items={items} style={{ width: "50%" }} />
+      </Flex>
+      <Flex justify="center" style={contentStyle}>
+        {steps(next)[current].content}
+      </Flex>
     </div>
   );
 };
