@@ -7,12 +7,13 @@ import {
   Form,
   Input,
   InputNumber,
+  message,
   Radio,
   Space,
   theme,
   Typography,
 } from "antd";
-import { useTransactionForm } from "../hooks/useTransactionForm";
+import { useInternalTransactionForm } from "../hooks/useInternalTransactionForm";
 import getBankAccountInfo, {
   BankAccountInfo,
 } from "../services/getBankAccountInfo";
@@ -37,28 +38,32 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
     handleBeneficiaryChange,
     accountError,
     setAccountError,
-  } = useTransactionForm();
+  } = useInternalTransactionForm();
 
-  const { createLoading, createTransaction } = useTransactionStore();
-
-  const [userInfo, setUserInfo] = useState<BankAccountInfo | null>(null);
+  const {
+    createLoading,
+    createTransaction,
+    bankAccountInfo,
+    fetchBankAccountInfo,
+    fetchAllBank,
+  } = useTransactionStore();
 
   const handleSuggestedAmount = (amount: number) => {
     form.setFieldsValue({ amount });
   };
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const data = await getBankAccountInfo.execute();
-        setUserInfo(data);
-      } catch (error) {
-        console.error("Lỗi khi tải thông tin tài khoản:", error);
-      }
-    };
-
-    fetchUserInfo();
+    fetchBankAccountInfo();
+    fetchAllBank();
   }, []);
+
+  useEffect(() => {
+    if (bankAccountInfo) {
+      form.setFieldsValue({
+        message: `${bankAccountInfo.fullName} chuyển tiền`, // Set message when data is fetched
+      });
+    }
+  }, [bankAccountInfo]); // Dependency on bankAccountInfo
 
   const onFinish = async (values: CreateTransactionPayload) => {
     if (accountError) {
@@ -66,33 +71,23 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
     }
     try {
       if (beneficiaryId) values.beneficiaryId = beneficiaryId;
-      if (userInfo) {
-        values.remitterId = userInfo?.id;
-        values.beneficiaryBankId = userInfo?.bankId;
+      if (bankAccountInfo) {
+        values.remitterId = bankAccountInfo?.id;
+        values.beneficiaryBankId = bankAccountInfo?.bankId;
       }
       await createTransaction(values);
       onSubmitSuccess();
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      message.error(error.message);
     }
   };
 
   const contentStyle: React.CSSProperties = {
-    // lineHeight: "260px",
     color: token.colorTextTertiary,
     width: "55%",
     padding: "20px",
-    // backgroundColor: token.colorFillAlter,
-    // backgroundColor: token.colorFillAlter,
     borderRadius: token.borderRadiusLG,
     border: `1px dashed ${token.colorBorder}`,
-    // marginTop: 10,
-  };
-
-  const formatter = (value: string) => {
-    if (!value) return "";
-    // Thêm dấu phân cách cho nghìn và đơn vị "VND"
-    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " VND";
   };
 
   return (
@@ -127,11 +122,11 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
           >
             <Flex justify="space-between">
               <Typography.Text style={{ fontSize: 16 }}>
-                {userInfo?.id}
+                {bankAccountInfo?.id}
               </Typography.Text>
               <Typography.Text style={{ fontSize: 16 }}>-</Typography.Text>
               <Typography.Text style={{ fontSize: 16 }}>
-                {userInfo?.fullName}
+                {bankAccountInfo?.fullName}
               </Typography.Text>
             </Flex>
             <hr
@@ -144,7 +139,7 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
             <Flex justify="space-between">
               <Typography.Text>Số dư khả dụng</Typography.Text>
               <Typography.Text style={{ color: "#1677ff" }}>
-                {userInfo?.balance.toLocaleString("vi-VN", {
+                {bankAccountInfo?.balance.toLocaleString("vi-VN", {
                   style: "currency",
                   currency: "VND",
                 })}
@@ -246,9 +241,17 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
           <Form.Item
             label="Nội dung giao dịch"
             name="message"
-            rules={[{ required: false }]}
+            rules={[
+              {
+                required: true,
+                message: "Nội dung chuyển khoản không được để trống",
+              },
+            ]}
           >
-            <Input.TextArea placeholder="Nhập nội dung giao dịch (tùy chọn)" />
+            <Input.TextArea
+              placeholder="Nhập nội dung giao dịch (tùy chọn)"
+              defaultValue={`${bankAccountInfo?.fullName} chuyển tiền`}
+            />
           </Form.Item>
           <Form.Item>
             <Flex justify="flex-end" gap="middle">

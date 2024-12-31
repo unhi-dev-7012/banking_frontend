@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Flex, message, Steps, theme, Typography } from "antd";
 import CreateTransactionForm from "@features/customer/transfer_transaction/components/CreateTransactionForm";
 import ViewTransactionForm from "@features/customer/transfer_transaction/components/ViewTransactionDetails";
+import ViewTransactionResult from "@features/customer/transfer_transaction/components/ViewTransactionResult";
 
 interface IInternalTransferScreenProps {}
 
@@ -18,32 +19,25 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
   const steps = (next: () => void) => [
     {
       title: "Điền thông tin",
-      content: (
-        <CreateTransactionForm
-          onSubmitSuccess={next} // Trigger next step after success
-        />
-      ),
+      content: <CreateTransactionForm onSubmitSuccess={next} />,
     },
     {
       title: "Xác thực giao dịch",
-      content: (
-        <ViewTransactionForm
-          onSubmitSuccess={next} // Trigger next step after success
-        />
-      ),
+      content: <ViewTransactionForm onSubmitSuccess={next} />,
     },
     {
       title: "Thông báo kết quả",
-      content: "Last-content", // Placeholder for result notification
+      content: <ViewTransactionResult onSubmitSuccess={next} />,
     },
   ];
 
   const next = () => {
-    setCurrent(current + 1); // Go to the next step
+    console.log("next", current + 1);
+    setCurrent(current + 1);
   };
 
   const prev = () => {
-    setCurrent(current - 1); // Go to the previous step
+    setCurrent(current - 1);
   };
 
   const items = steps(next).map((item) => ({
@@ -55,10 +49,7 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
     lineHeight: "260px",
     color: token.colorTextTertiary,
     padding: "10px",
-    // backgroundColor: token.colorFillAlter,
-    // backgroundColor: token.colorFillAlter,
     borderRadius: token.borderRadiusLG,
-    // border: `1px dashed ${token.colorBorder}`,
     marginTop: 10,
   };
 

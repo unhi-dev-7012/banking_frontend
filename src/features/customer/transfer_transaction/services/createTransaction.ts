@@ -7,7 +7,6 @@ const createTransaction = {
    * Tạo giao dịch mới
    */
   execute: async (payload: CreateTransactionPayload): Promise<Transaction> => {
-    console.log("payload: ", payload);
     try {
       const { data } = await api.post(
         TransApiEndpoints.CREATE_TRANSACTION,

@@ -30,11 +30,14 @@ const BeneficiaryInput: React.FC<BeneficiaryInputProps> = ({
     fetchContacts();
   }, [fetchAllContact]);
 
-  const filteredContacts = contactList.filter((contact) =>
-    `${contact.beneficiaryId} - ${contact.beneficiaryName}`
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-  );
+  let filteredContacts: any[] = [];
+  if (contactList?.length > 0) {
+    filteredContacts = contactList.filter((contact) =>
+      `${contact.beneficiaryId} - ${contact.beneficiaryName}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    );
+  }
 
   const handleSelectFromDropdown: MenuProps["onClick"] = ({ key }) => {
     const selectedContact = contactList.find(
@@ -46,6 +49,9 @@ const BeneficiaryInput: React.FC<BeneficiaryInputProps> = ({
       setError(null);
     }
   };
+
+  // Fallback message if there are no contacts
+  const noContactsMessage = "Không có người thụ hưởng nào. Vui lòng thêm mới.";
 
   const handleAccountIdChange = (value: string) => {
     setAccountId(value);
@@ -73,27 +79,32 @@ const BeneficiaryInput: React.FC<BeneficiaryInputProps> = ({
       ),
       disabled: true,
     },
-    ...filteredContacts.map((contact) => {
-      return {
-        key: contact.beneficiaryId,
-        label: (
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <span>{`${contact.beneficiaryId} - ${contact.beneficiaryName}`}</span>
-            <span
-              style={{ fontSize: "12px", color: "gray" }}
-            >{`(${contact.bankShortName}_${contact.bankName} (${contact.bankCode}))`}</span>
-          </div>
-        ),
-        icon: <UserOutlined />,
-      };
-    }),
+    ...(filteredContacts?.length
+      ? filteredContacts.map((contact) => ({
+          key: contact.beneficiaryId,
+          label: (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span>{`${contact.beneficiaryId} - ${contact.beneficiaryName}`}</span>
+              <span
+                style={{ fontSize: "12px", color: "gray" }}
+              >{`(${contact.bankShortName}_${contact.bankName} (${contact.bankCode}))`}</span>
+            </div>
+          ),
+          icon: <UserOutlined />,
+        }))
+      : [
+          {
+            key: "no-contact",
+            label: <div>{noContactsMessage}</div>,
+            disabled: true,
+          },
+        ]),
   ];
 
   const menuProps = {
     items,
     onClick: handleSelectFromDropdown,
   };
-
   return (
     <>
       <div
