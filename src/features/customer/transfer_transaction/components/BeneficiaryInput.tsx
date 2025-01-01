@@ -14,7 +14,8 @@ const BeneficiaryInput: React.FC<BeneficiaryInputProps> = ({
   setError,
   error,
 }) => {
-  const { contactList, fetchAllContact } = useTransactionStore();
+  const { contactList, fetchAllContact, bankAccountInfo } =
+    useTransactionStore();
   const [accountId, setAccountId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -32,10 +33,12 @@ const BeneficiaryInput: React.FC<BeneficiaryInputProps> = ({
 
   let filteredContacts: any[] = [];
   if (contactList?.length > 0) {
-    filteredContacts = contactList.filter((contact) =>
-      `${contact.beneficiaryId} - ${contact.beneficiaryName}`
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
+    filteredContacts = contactList.filter(
+      (contact) =>
+        `${contact.beneficiaryId} - ${contact.beneficiaryName} - ${contact.nickname}`
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) &&
+        contact.bankId === bankAccountInfo?.bankId
     );
   }
 
@@ -84,7 +87,7 @@ const BeneficiaryInput: React.FC<BeneficiaryInputProps> = ({
           key: contact.beneficiaryId,
           label: (
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <span>{`${contact.beneficiaryId} - ${contact.beneficiaryName}`}</span>
+              <span>{`${contact.beneficiaryId} - ${contact.beneficiaryName} (${contact.nickname})`}</span>
               <span
                 style={{ fontSize: "12px", color: "gray" }}
               >{`(${contact.bankShortName}_${contact.bankName} (${contact.bankCode}))`}</span>
