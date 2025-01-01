@@ -102,4 +102,5 @@ export interface ContactUserInfo {
   bankCode: string;
   bankName: string;
   bankShortName: string;
+  bankId: string;
 }

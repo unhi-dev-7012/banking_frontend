@@ -2,7 +2,7 @@ import api from "@utils/api";
 import { TransApiEndpoints } from "../apiTransEndpoint";
 import { CreateTransactionPayload, Transaction } from "../transactionType";
 
-const createTransaction = {
+const createInternalTransaction = {
   /**
    * Tạo giao dịch mới
    */
@@ -20,4 +20,4 @@ const createTransaction = {
   },
 };
 
-export default createTransaction;
+export default createInternalTransaction;
