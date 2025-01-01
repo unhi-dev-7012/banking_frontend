@@ -8,7 +8,7 @@ export interface TableData<Entity> {
   };
 }
 
-type FetchTableDataParams = Record<string, any>;
+export type FetchTableDataParams = Record<string, any>;
 type TableResponse<T> = {
   data: T[];
   metadata: {
