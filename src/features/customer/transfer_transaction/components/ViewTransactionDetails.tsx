@@ -79,7 +79,6 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
         banks,
         transaction?.beneficiaryBankId
       );
-      // Only update if the beneficiartBank details have changed
       if (
         JSON.stringify(beneficiaryBank) !==
         JSON.stringify(beneficiaryBankDetails)

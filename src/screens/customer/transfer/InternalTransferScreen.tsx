@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Flex, message, Steps, theme, Typography } from "antd";
-import CreateTransactionForm from "@features/customer/transfer_transaction/components/CreateTransactionForm";
+import CreateInternalTransactionForm from "@features/customer/transfer_transaction/components/CreateInternalTransactionForm";
 import ViewTransactionForm from "@features/customer/transfer_transaction/components/ViewTransactionDetails";
 import ViewTransactionResult from "@features/customer/transfer_transaction/components/ViewTransactionResult";
 
@@ -19,7 +19,7 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
   const steps = (next: () => void) => [
     {
       title: "Điền thông tin",
-      content: <CreateTransactionForm onSubmitSuccess={next} />,
+      content: <CreateInternalTransactionForm onSubmitSuccess={next} />,
     },
     {
       title: "Xác thực giao dịch",

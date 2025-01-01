@@ -6,7 +6,7 @@ import {
   Transaction,
   VerifyOtpPayload,
 } from "../transactionType";
-import createTransaction from "../services/createTransaction";
+import createInternalTransaction from "../services/createInternalTransaction";
 import verifyOtp from "../services/verifyOtp";
 import getTransactionDetails from "../services/getTransactionDetails";
 import { getAllContact } from "../services/getAllContact";
@@ -14,7 +14,6 @@ import getBankAccountInfo, {
   BankAccountInfo,
 } from "../services/getBankAccountInfo";
 import { getAllBank } from "../services/getAllBank";
-import { message } from "antd";
 
 interface TransactionState {
   transaction: Transaction | null;
@@ -49,14 +48,14 @@ const useTransactionStore = create<TransactionState>((set) => ({
   createTransaction: async (payload) => {
     try {
       set({ createLoading: true, fetchError: null });
-      const response = await createTransaction.execute(payload);
+      const response = await createInternalTransaction.execute(payload);
       set({ transaction: response }); // Lưu giao dịch mới vào 'transaction'
     } catch (error: any) {
       console.log("Lỗi khi tạo giao dịch: ", error);
       set({
         fetchError: error?.message || "Không thể tạo giao dịch.",
       });
-      throw new Error(error?.message || "Không thể tạo giao dịch.");
+      throw new Error("Không thể tạo giao dịch.");
     } finally {
       set({ createLoading: false });
     }
@@ -73,7 +72,7 @@ const useTransactionStore = create<TransactionState>((set) => ({
       set({
         fetchError: error?.message || "Không thể lấy thông tin khách hàng.",
       });
-      throw new Error(error?.message || "Không thể lấy thông tin khách hàng.");
+      throw new Error("Không thể lấy thông tin khách hàng.");
     } finally {
       set({ fetchLoading: false });
     }
@@ -118,6 +117,10 @@ const useTransactionStore = create<TransactionState>((set) => ({
       set({
         fetchError: error?.message || "Không thể lấy thông tin danh bạ",
       });
+      if (error.response.data.code === 40002) {
+        set({ fetchLoading: false });
+        return;
+      }
       throw new Error("Không thể lấy thông tin danh bạ.");
     } finally {
       set({ fetchLoading: false });

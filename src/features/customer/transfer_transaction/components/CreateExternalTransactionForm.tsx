@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Button,
-  Card,
   ConfigProvider,
   Flex,
   Form,
@@ -9,36 +8,39 @@ import {
   InputNumber,
   message,
   Radio,
-  Space,
+  Select,
   theme,
   Typography,
 } from "antd";
-import { useInternalTransactionForm } from "../hooks/useInternalTransactionForm";
-import getBankAccountInfo, {
-  BankAccountInfo,
-} from "../services/getBankAccountInfo";
 import BeneficiaryInput from "./BeneficiaryInput";
 import useTransactionStore from "../stores/transactionStore";
 import { CreateTransactionPayload } from "../transactionType";
+import { useExternalTransactionForm } from "../hooks/useExternalTransactionForm";
+import { getBankAccountWithUser } from "@services/getBankAccountWithUser";
+import ExternalBeneficiaryInput from "./ExternalBeneficiaryInput";
 
-interface CreateTransactionFormProps {
+interface CreateExternalTransactionFormProps {
   onSubmitSuccess: () => void; // Function to trigger step change
 }
 
-const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
-  onSubmitSuccess,
-}) => {
+const CreateExternalTransactionForm: React.FC<
+  CreateExternalTransactionFormProps
+> = ({ onSubmitSuccess }) => {
   const [form] = Form.useForm();
   const { token } = theme.useToken();
 
   const {
     beneficiaryName,
+    setBeneficiaryName,
     beneficiaryId,
-    isBeneficiaryNameVisible,
     handleBeneficiaryChange,
     accountError,
     setAccountError,
-  } = useInternalTransactionForm();
+    setBankId,
+    bankId,
+    bankName,
+    setBankName,
+  } = useExternalTransactionForm();
 
   const {
     createLoading,
@@ -46,6 +48,7 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
     bankAccountInfo,
     fetchBankAccountInfo,
     fetchAllBank,
+    banks,
   } = useTransactionStore();
 
   const handleSuggestedAmount = (amount: number) => {
@@ -73,8 +76,9 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
       if (beneficiaryId) values.beneficiaryId = beneficiaryId;
       if (bankAccountInfo) {
         values.remitterId = bankAccountInfo?.id;
-        values.beneficiaryBankId = bankAccountInfo?.bankId;
       }
+      if (bankId) values.beneficiaryBankId = bankId;
+      console.log("value", values);
       await createTransaction(values);
       onSubmitSuccess();
     } catch (error: any) {
@@ -90,12 +94,45 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
     border: `1px dashed ${token.colorBorder}`,
   };
 
+  const handleBankChange = async (value: string) => {
+    // console.log("hanle", value);
+    setBankName(value);
+    setBankId(value);
+
+    // Fetch beneficiary info khi đã có beneficiaryId
+    if (beneficiaryId && value) {
+      try {
+        const selectedBank = banks.find((bank) => bank.id === value);
+        if (!selectedBank) {
+          setAccountError("Ngân hàng không hợp lệ.");
+          return;
+        }
+
+        const result = await getBankAccountWithUser(
+          beneficiaryId,
+          selectedBank.code
+        );
+
+        if (result) {
+          setBeneficiaryName(result.fullName);
+        } else {
+          setBeneficiaryName(null);
+          setAccountError("Không tìm thấy tài khoản.");
+        }
+      } catch (error: any) {
+        setBeneficiaryName(null);
+        message.error("Không tìm thấy tài khoản ngân hàng");
+        // setAccountError("Không tìm thấy tài khoản.");
+      }
+    }
+  };
+
   return (
     <ConfigProvider
       theme={{
         components: {
           Form: {
-            fontSize: 16,
+            labelFontSize: 16,
           },
         },
       }}
@@ -154,6 +191,11 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
           Đến tài khoản
         </Typography.Title>
         <Form
+          initialValues={{
+            message: bankAccountInfo?.fullName
+              ? `${bankAccountInfo.fullName} chuyển tiền`
+              : "",
+          }}
           layout="horizontal"
           form={form}
           onFinish={onFinish}
@@ -161,30 +203,51 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
           labelAlign="left"
           labelWrap
           wrapperCol={{ flex: 1 }}
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 10 }}
           requiredMark={false}
+          clearOnDestroy
         >
           <Form.Item label="Số tài khoản người nhận">
-            <BeneficiaryInput
+            <ExternalBeneficiaryInput
+              // setBankId={setBankId}
               setBankAccountId={handleBeneficiaryChange}
               setError={setAccountError}
               error={accountError}
+              // onSelectBank={handleBankChange}
             />
           </Form.Item>
 
-          {isBeneficiaryNameVisible && (
-            <Form.Item label="Tên người nhận">
-              <Input
-                value={beneficiaryName || ""}
-                style={{
-                  width: "100%",
-                  height: "42px",
-                  alignContent: "center",
-                }}
-                disabled
-              />
-            </Form.Item>
-          )}
+          <Form.Item label="Chọn ngân hàng nhận">
+            <Select
+              showSearch
+              style={{ height: 42 }}
+              placeholder="Search to Select"
+              optionFilterProp="label"
+              filterSort={(optionA, optionB) =>
+                (optionA?.label ?? "")
+                  .toLowerCase()
+                  .localeCompare((optionB?.label ?? "").toLowerCase())
+              }
+              value={bankName || ""}
+              onChange={handleBankChange}
+              options={banks.map((bank) => ({
+                value: bank.id,
+                label: `${bank.shortName}_${bank.name}_(${bank.code})`,
+              }))}
+            />
+          </Form.Item>
+
+          <Form.Item label="Tên người nhận">
+            <Input
+              value={beneficiaryName || ""}
+              style={{
+                width: "100%",
+                height: "42px",
+                alignContent: "center",
+              }}
+              disabled
+            />
+          </Form.Item>
 
           <Form.Item
             label="Số tiền giao dịch"
@@ -248,21 +311,18 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
               },
             ]}
           >
-            <Input.TextArea
-              placeholder="Nhập nội dung giao dịch (tùy chọn)"
-              defaultValue={`${bankAccountInfo?.fullName} chuyển tiền`}
-            />
+            <Input.TextArea placeholder="Nhập nội dung giao dịch (tùy chọn)" />
           </Form.Item>
           <Form.Item>
             <Flex justify="flex-end" gap="middle">
-              <Button
+              {/* <Button
                 type="text"
                 onClick={() => {
                   form.resetFields();
                 }}
               >
                 Làm lại
-              </Button>
+              </Button> */}
               <Button
                 type="primary"
                 htmlType="submit"
@@ -278,4 +338,4 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
   );
 };
 
-export default CreateTransactionForm;
+export default CreateExternalTransactionForm;
