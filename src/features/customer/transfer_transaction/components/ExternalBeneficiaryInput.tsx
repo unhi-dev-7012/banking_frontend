@@ -37,7 +37,7 @@ const ExternalBeneficiaryInput: React.FC<ExternalBeneficiaryInputProps> = ({
   let filteredContacts: any[] = [];
   if (contactList?.length > 0) {
     filteredContacts = contactList.filter((contact) =>
-      `${contact.beneficiaryId} - ${contact.beneficiaryName}`
+      `${contact.beneficiaryId} - ${contact.beneficiaryName} - ${contact.nickname}`
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
     );
@@ -90,7 +90,7 @@ const ExternalBeneficiaryInput: React.FC<ExternalBeneficiaryInputProps> = ({
           key: contact.beneficiaryId,
           label: (
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <span>{`${contact.beneficiaryId} - ${contact.beneficiaryName}`}</span>
+              <span>{`${contact.beneficiaryId} - ${contact.beneficiaryName} (${contact.nickname})`}</span>
               <span
                 style={{ fontSize: "12px", color: "gray" }}
               >{`(${contact.bankShortName}_${contact.bankName} (${contact.bankCode}))`}</span>
