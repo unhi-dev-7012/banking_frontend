@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { EROLE } from "../../../constants/authorization";
 import { requestForToken } from "../../../config/firebase";
+import { createFcm } from "../services/createFcm";
+import { deleteFcm } from "../services/deleteFcm";
 
 interface AuthState {
   accessToken?: string | null;
@@ -15,7 +17,7 @@ interface AuthState {
   handleLogout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   accessToken: localStorage.getItem("accessToken") || null,
   refreshToken: localStorage.getItem("refreshToken") || null,
   role: localStorage.getItem("role") || null,
@@ -29,7 +31,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       const permission = await Notification.requestPermission();
       if (permission === "granted" || !localStorage.getItem("fcm_token")) {
         const token = await requestForToken();
+
         if (token) {
+          await createFcm(token);
           localStorage.setItem("fcm_token", token);
         }
       }
@@ -41,12 +45,17 @@ export const useAuthStore = create<AuthState>((set) => ({
       isAuthenticated: true,
     });
   },
-  handleLogout: () => {
+  handleLogout: async () => {
+    const fcmToken = localStorage.getItem("fcm_token");
+    if (get().role === EROLE.CUSTOMER && fcmToken) {
+      await deleteFcm(fcmToken);
+      localStorage.removeItem("fcm_token");
+    }
+
     console.log("handle logout");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("role");
-    localStorage.removeItem("fcm_token");
     set({
       accessToken: null,
       refreshToken: null,
