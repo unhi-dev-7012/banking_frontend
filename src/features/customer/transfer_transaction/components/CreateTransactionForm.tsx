@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Button,
-  Card,
   ConfigProvider,
   Flex,
   Form,
@@ -9,23 +8,19 @@ import {
   InputNumber,
   message,
   Radio,
-  Space,
   theme,
   Typography,
 } from "antd";
 import { useInternalTransactionForm } from "../hooks/useInternalTransactionForm";
-import getBankAccountInfo, {
-  BankAccountInfo,
-} from "../services/getBankAccountInfo";
 import BeneficiaryInput from "./BeneficiaryInput";
 import useTransactionStore from "../stores/transactionStore";
 import { CreateTransactionPayload } from "../transactionType";
 
-interface CreateTransactionFormProps {
+interface CreateInternalTransactionFormProps {
   onSubmitSuccess: () => void; // Function to trigger step change
 }
 
-const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
+const CreateTransactionForm: React.FC<CreateInternalTransactionFormProps> = ({
   onSubmitSuccess,
 }) => {
   const [form] = Form.useForm();
@@ -95,7 +90,7 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
       theme={{
         components: {
           Form: {
-            fontSize: 16,
+            labelFontSize: 16,
           },
         },
       }}
@@ -154,6 +149,11 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
           Đến tài khoản
         </Typography.Title>
         <Form
+          initialValues={{
+            message: bankAccountInfo?.fullName
+              ? `${bankAccountInfo.fullName} chuyển tiền`
+              : "",
+          }}
           layout="horizontal"
           form={form}
           onFinish={onFinish}
@@ -161,8 +161,9 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
           labelAlign="left"
           labelWrap
           wrapperCol={{ flex: 1 }}
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 10 }}
           requiredMark={false}
+          clearOnDestroy
         >
           <Form.Item label="Số tài khoản người nhận">
             <BeneficiaryInput
@@ -248,21 +249,18 @@ const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
               },
             ]}
           >
-            <Input.TextArea
-              placeholder="Nhập nội dung giao dịch (tùy chọn)"
-              defaultValue={`${bankAccountInfo?.fullName} chuyển tiền`}
-            />
+            <Input.TextArea placeholder="Nhập nội dung giao dịch (tùy chọn)" />
           </Form.Item>
           <Form.Item>
             <Flex justify="flex-end" gap="middle">
-              <Button
+              {/* <Button
                 type="text"
                 onClick={() => {
                   form.resetFields();
                 }}
               >
                 Làm lại
-              </Button>
+              </Button> */}
               <Button
                 type="primary"
                 htmlType="submit"

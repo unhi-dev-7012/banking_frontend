@@ -56,7 +56,7 @@ const useTransactionStore = create<TransactionState>((set) => ({
       set({
         fetchError: error?.message || "Không thể tạo giao dịch.",
       });
-      throw new Error(error?.message || "Không thể tạo giao dịch.");
+      throw new Error("Không thể tạo giao dịch.");
     } finally {
       set({ createLoading: false });
     }
@@ -73,7 +73,7 @@ const useTransactionStore = create<TransactionState>((set) => ({
       set({
         fetchError: error?.message || "Không thể lấy thông tin khách hàng.",
       });
-      throw new Error(error?.message || "Không thể lấy thông tin khách hàng.");
+      throw new Error("Không thể lấy thông tin khách hàng.");
     } finally {
       set({ fetchLoading: false });
     }
