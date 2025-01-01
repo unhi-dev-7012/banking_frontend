@@ -89,7 +89,7 @@ const CreateExternalTransactionForm: React.FC<
   const contentStyle: React.CSSProperties = {
     color: token.colorTextTertiary,
     width: "55%",
-    padding: "20px",
+    padding: "20px 20px 0 20px",
     borderRadius: token.borderRadiusLG,
     border: `1px dashed ${token.colorBorder}`,
   };
@@ -138,10 +138,7 @@ const CreateExternalTransactionForm: React.FC<
       }}
     >
       <Flex vertical gap={10} style={contentStyle}>
-        <Typography.Title
-          level={4}
-          style={{ margin: "5px 0 5px 0px", textAlign: "left" }}
-        >
+        <Typography.Title level={4} style={{ margin: 0, textAlign: "left" }}>
           Từ tài khoản
         </Typography.Title>
         <Flex justify="space-between">
@@ -184,10 +181,7 @@ const CreateExternalTransactionForm: React.FC<
             </Flex>
           </Flex>
         </Flex>
-        <Typography.Title
-          level={4}
-          style={{ margin: "5px 0 5px 0px", textAlign: "left" }}
-        >
+        <Typography.Title level={4} style={{ margin: 0, textAlign: "left" }}>
           Đến tài khoản
         </Typography.Title>
         <Form
@@ -203,17 +197,15 @@ const CreateExternalTransactionForm: React.FC<
           labelAlign="left"
           labelWrap
           wrapperCol={{ flex: 1 }}
-          style={{ marginTop: 10 }}
+          style={{ marginTop: 5 }}
           requiredMark={false}
           clearOnDestroy
         >
           <Form.Item label="Số tài khoản người nhận">
             <ExternalBeneficiaryInput
-              // setBankId={setBankId}
               setBankAccountId={handleBeneficiaryChange}
               setError={setAccountError}
               error={accountError}
-              // onSelectBank={handleBankChange}
             />
           </Form.Item>
 
@@ -315,14 +307,6 @@ const CreateExternalTransactionForm: React.FC<
           </Form.Item>
           <Form.Item>
             <Flex justify="flex-end" gap="middle">
-              {/* <Button
-                type="text"
-                onClick={() => {
-                  form.resetFields();
-                }}
-              >
-                Làm lại
-              </Button> */}
               <Button
                 type="primary"
                 htmlType="submit"
