@@ -11,7 +11,7 @@ export const getNotification = async (
     const response = await api.get(API_ENDPOINT, {
       params: { page, type, limit },
     });
-    return response.data;
+    return response;
   } catch (error: any) {
     if (error.response && error.response.status === 422) {
       const errorMessage =

@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
-import { useNotification } from "../features/customer/notification/stores/useNotification";
 
 export const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -34,12 +33,15 @@ export const requestForToken = () => {
     });
 };
 
-onMessage(messaging, ({ notification }) => {
-  new Notification(notification?.title ?? "Unknown", {
-    body: notification?.body,
-    icon: notification?.icon,
-  });
+export const setupOnMessageHandler = (dispatchNotification: any) => {
+  onMessage(messaging, ({ notification }) => {
+    new Notification(notification?.title ?? "Unknown", {
+      body: notification?.body,
+      icon: notification?.icon,
+    });
 
-  const { fetchNotification } = useNotification();
-  fetchNotification();
-});
+    if (dispatchNotification) {
+      dispatchNotification();
+    }
+  });
+};

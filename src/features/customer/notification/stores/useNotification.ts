@@ -26,7 +26,7 @@ export const useNotification = create<NotificationState>((set, get) => ({
   error: undefined,
   pagination: {
     current: 1,
-    pageSize: 10,
+    pageSize: 9,
     total: 0,
   },
   type: undefined,
@@ -69,8 +69,6 @@ export const useNotification = create<NotificationState>((set, get) => ({
           loading: false,
         });
       }
-
-      console.log(response.data);
     } catch (error: any) {
       set({ loading: false, error: error.message });
     }
