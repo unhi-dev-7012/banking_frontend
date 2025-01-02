@@ -47,6 +47,11 @@ export interface Bank {
   // algorithm: "RS256";
 }
 
+export enum TransactionType {
+  DEBT = "debt",
+  NORMAL = "normal",
+}
+
 export enum TransactionStatus {
   CREATED = "created",
   PROCESSING = "processing",

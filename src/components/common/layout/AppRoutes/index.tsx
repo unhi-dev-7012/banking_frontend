@@ -31,6 +31,9 @@ const CustomerContacts = lazy(
 const CustomerDebts = lazy(
   () => import("@screens/customer/debt/DebtListScreen")
 );
+const CustomerSettleDebt = lazy(
+  () => import("@screens/customer/debt/DebtSettleScreen")
+);
 const CustomerHistory = lazy(
   () => import("@screens/customer/CustomerHistoryScreen")
 );
@@ -137,6 +140,11 @@ export const AppRoutes: React.FC = () => (
         ROUTES_PATH.CUSTOMER.DEBT_LIST,
         [EROLE.CUSTOMER],
         CustomerDebts
+      )}
+      {createProtectedRoute(
+        ROUTES_PATH.CUSTOMER.SETTLE_DEBT,
+        [EROLE.CUSTOMER],
+        CustomerSettleDebt
       )}
       {createProtectedRoute(
         ROUTES_PATH.CUSTOMER.HISTORY,

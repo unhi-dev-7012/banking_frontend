@@ -5,8 +5,6 @@ import { Bank, VerifyOtpPayload } from "../transactionType";
 
 import styles from "@screens/authentication/login/login.module.css";
 import Countdown from "antd/es/statistic/Countdown";
-import { Navigate } from "react-router-dom";
-import { ROUTES_PATH } from "@constants/path";
 
 interface ViewTransactionFormProps {
   onSubmitSuccess: () => void; // Function to trigger step change
@@ -44,14 +42,10 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
 
   const [otp, setOtp] = useState<string>("");
 
-  const {
-    verifyLoading,
-    transaction,
-    fetchError,
-    verifyOtp,
-    bankAccountInfo,
-    banks,
-  } = useTransactionStore();
+  const { verifyLoading, transaction, verifyOtp, bankAccountInfo, banks } =
+    useTransactionStore();
+
+  console.log("transation: ", transaction);
 
   const [beneficiaryBank, setBeneficiaryBank] = useState<BankInfoUI | null>(
     null
@@ -201,11 +195,22 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
 
       <Flex justify="space-between">
         <Typography.Text>Hình thức tính phí</Typography.Text>
-        <Typography.Text>
-          {transaction?.remitterPaidFee
-            ? "Người gửi trả phí"
-            : "Người nhận trả phi"}
-        </Typography.Text>
+        <Flex gap={10}>
+          <Typography.Text>
+            {transaction?.remitterPaidFee
+              ? "Người gửi trả phí"
+              : "Người nhận trả phí"}
+          </Typography.Text>
+          <Typography.Text>-</Typography.Text>
+          <Typography.Text>
+            {typeof transaction?.transactionFee === "number"
+              ? transaction?.transactionFee.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })
+              : "N/A"}{" "}
+          </Typography.Text>
+        </Flex>
       </Flex>
       <hr
         style={{
