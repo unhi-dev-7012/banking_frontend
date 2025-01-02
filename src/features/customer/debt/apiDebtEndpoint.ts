@@ -17,5 +17,5 @@ export const DebtApiEndpoints = {
   CANCEL_DEBT: (id: string) => `/api/customer/v1/debt/${id}`,
 
   // Endpoint thanh toán một khoản nợ
-  SETTLE_DEBT: "/api/customer/v1/debt/settle",
+  SETTLE_DEBT: (debtId: string) => `/api/customer/v1/debt/${debtId}/settle`,
 };

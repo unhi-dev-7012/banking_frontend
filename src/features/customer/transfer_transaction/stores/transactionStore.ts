@@ -14,6 +14,7 @@ import getBankAccountInfo, {
   BankAccountInfo,
 } from "../services/getBankAccountInfo";
 import { getAllBank } from "../services/getAllBank";
+import { settleDebt } from "@features/customer/debt/services/settleDebts";
 
 interface TransactionState {
   transaction: Transaction | null;
@@ -32,6 +33,7 @@ interface TransactionState {
   fetchAllContact: () => Promise<void>;
   fetchBankAccountInfo: () => Promise<void>;
   fetchAllBank: () => Promise<void>;
+  createDebtTransaction: (debtId: string) => Promise<void>;
 }
 
 const useTransactionStore = create<TransactionState>((set) => ({
@@ -141,6 +143,20 @@ const useTransactionStore = create<TransactionState>((set) => ({
       throw new Error("Không thể lấy thông tin ngân hàng.");
     } finally {
       set({ fetchLoading: false });
+    }
+  },
+
+  createDebtTransaction: async (debtId) => {
+    try {
+      set({ createLoading: true });
+      const response = await settleDebt(debtId);
+      console.log("debt transation response: ", response);
+      set({ transaction: response }); // Lưu giao dịch mới vào 'transaction'
+    } catch (error: any) {
+      console.log("Lỗi khi thanh toán nợ: ", error);
+      throw new Error("Không thể tạo giao dịch.");
+    } finally {
+      set({ createLoading: false });
     }
   },
 }));

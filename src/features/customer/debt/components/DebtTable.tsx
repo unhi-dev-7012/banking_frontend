@@ -3,9 +3,12 @@ import { Debt, DebtTabItem } from "../debtType";
 import { Spinner } from "@components/common/Spinner";
 import DebtList from "./DebtList";
 import { message, Modal } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DebtView } from "./ViewDebtForm";
 import { getDebtDetail } from "../services/getDebtDetail";
+import useTransactionStore from "@features/customer/transfer_transaction/stores/transactionStore";
+import { Navigate, useNavigate } from "react-router-dom";
+import { ROUTES_PATH } from "@constants/path";
 
 interface DebtTableProps {
   activeTab: string;
@@ -13,7 +16,6 @@ interface DebtTableProps {
   debts: Debt[];
   loading: boolean;
   onCancel: (debtId: string) => void;
-  onPay: (debtId: string) => void;
 }
 
 const DebtTable: React.FC<DebtTableProps> = ({
@@ -22,16 +24,27 @@ const DebtTable: React.FC<DebtTableProps> = ({
   debts,
   loading,
   onCancel,
-  onPay,
 }) => {
   const defaultActiveTab = DebtTabItem.find((item) => item.key === activeTab);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const {
+    createDebtTransaction,
+    transaction,
+    fetchBankAccountInfo,
+    fetchAllBank,
+  } = useTransactionStore();
 
   const [selectedDebt, setSelectedDebt] = useState<Debt | undefined>(); // State to store debt details
   const [loadingDebt, setLoadingDebt] = useState(false); // Loading state for debt details
 
   const openModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
+
+  useEffect(() => {
+    fetchBankAccountInfo();
+    fetchAllBank();
+  }, []);
 
   const handleCancelDebt = (debtId: string) => {
     Modal.confirm({
@@ -45,12 +58,20 @@ const DebtTable: React.FC<DebtTableProps> = ({
       },
     });
   };
+  const navigate = useNavigate();
   // Xử lý xác nhận hành động Thanh toán nợ
   const handlePayDebt = (debtId: string) => {
     Modal.confirm({
       title: "Bạn có chắc chắn muốn thanh toán nợ này?",
-      onOk: () => {
-        onPay(debtId); // Gọi handler thanh toán nợ
+      onOk: async () => {
+        try {
+          await createDebtTransaction(debtId);
+          navigate(ROUTES_PATH.CUSTOMER.SETTLE_DEBT, {
+            state: { transaction },
+          });
+        } catch (error) {
+          message.error("Thanh toán nợ thất bại.");
+        }
       },
     });
   };

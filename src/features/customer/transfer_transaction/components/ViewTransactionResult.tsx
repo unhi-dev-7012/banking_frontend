@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Flex, Spin, theme, Typography } from "antd";
 import useTransactionStore from "../stores/transactionStore";
-import { TransactionStatus } from "../transactionType";
+import { TransactionStatus, TransactionType } from "../transactionType";
 import { BankInfoUI, getBankDetails } from "./ViewTransactionDetails";
+import { replace, useNavigate } from "react-router-dom";
+import { ROUTES_PATH } from "@constants/path";
 
 interface ViewTransactionResultProps {
   onSubmitSuccess: () => void; // Function to trigger step change
@@ -15,6 +17,7 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
   const [beneficiaryBank, setBeneficiaryBank] = useState<BankInfoUI | null>(
     null
   );
+  const navigate = useNavigate();
 
   const {
     fetchLoading,
@@ -81,10 +84,21 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
         />
       </Flex>
       <Typography.Text
-        style={{ fontSize: 18, color: "green", fontWeight: "500" }}
+        style={{
+          fontSize: 18,
+          color:
+            transactionDetailsRespones?.status === TransactionStatus.SUCCESS
+              ? "green"
+              : "red",
+          fontWeight: "500",
+        }}
       >
         {transactionDetailsRespones?.status === TransactionStatus.SUCCESS
-          ? "Giao dịch thành công"
+          ? transactionDetailsRespones?.type === TransactionType.DEBT
+            ? "Thanh toán nợ thành công"
+            : "Giao dịch thành công"
+          : transactionDetailsRespones?.type === TransactionType.DEBT
+          ? "Thanh toán nợ thất bại"
           : "Giao dịch thất bại"}
       </Typography.Text>
       <Flex gap={5} style={{ marginBottom: "20px" }}>
@@ -215,7 +229,21 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
       />
 
       <Flex justify="flex-end" gap={10}>
-        <Button onClick={() => window.location.reload()}>Thêm giao dịch</Button>
+        <Button
+          onClick={() => {
+            if (transaction?.type === TransactionType.DEBT) {
+              navigate(ROUTES_PATH.CUSTOMER.DEBT_LIST, {
+                replace: true,
+              });
+            } else {
+              window.location.reload();
+            }
+          }}
+        >
+          {transaction?.type === TransactionType.DEBT
+            ? "Quay về danh sách nợ"
+            : "Thêm giao dịch"}
+        </Button>
         <Button>Lưu người thụ hưởng</Button>
       </Flex>
     </Flex>

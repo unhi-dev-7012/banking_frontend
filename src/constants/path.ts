@@ -10,6 +10,7 @@ export const ROUTES_PATH = {
     CONTACT: "/contact",
     CONTACT_LIST: "/contact/list",
     DEBT: "/debt",
+    SETTLE_DEBT: "/debt/settle",
     DEBT_LIST: "/debt/list",
     HISTORY: "/customer/history",
   },

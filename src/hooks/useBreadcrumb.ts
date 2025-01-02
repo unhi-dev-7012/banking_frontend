@@ -19,6 +19,7 @@ const routeTitles: Record<string, string> = {
   [ROUTES_PATH.CUSTOMER.CONTACT_LIST]: "Danh sách người nhận",
   [ROUTES_PATH.CUSTOMER.DEBT]: "Quản lý nợ",
   [ROUTES_PATH.CUSTOMER.DEBT_LIST]: "Danh sách nợ",
+  [ROUTES_PATH.CUSTOMER.SETTLE_DEBT]: "Thanh toán nợ",
   [ROUTES_PATH.CUSTOMER.HISTORY]: "Lịch sử giao dịch",
   [ROUTES_PATH.PROFILE]: "Thông tin",
 

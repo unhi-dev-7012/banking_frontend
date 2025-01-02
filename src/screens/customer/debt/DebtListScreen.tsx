@@ -47,12 +47,12 @@ const DebtListScreen: React.FC = () => {
     setPagination({
       current: 1,
     });
-    fetchTableData(); // Fetch lại dữ liệu khi đổi tab
+    fetchTableData();
   };
 
   // Handler hủy nợ
   const handleCancelDebt = (debtId: string) => {
-    cancelDebt(debtId); // Gọi phương thức hủy nợ từ store
+    cancelDebt(debtId);
   };
 
   // Handler thanh toán nợ
@@ -91,7 +91,6 @@ const DebtListScreen: React.FC = () => {
         debts={data}
         loading={loading}
         onCancel={handleCancelDebt} // Truyền handler hủy nợ
-        onPay={handlePayDebt} // Truyền handler thanh toán nợ
       />
     </div>
   );
