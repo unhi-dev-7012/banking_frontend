@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Flex, Form, Input, message, theme, Typography } from "antd";
 import useTransactionStore from "../stores/transactionStore";
-import { Bank, VerifyOtpPayload } from "../transactionType";
+import { Bank, TransactionType, VerifyOtpPayload } from "../transactionType";
 
 import styles from "@screens/authentication/login/login.module.css";
 import Countdown from "antd/es/statistic/Countdown";
+import { ROUTES_PATH } from "@constants/path";
+import { useNavigate } from "react-router-dom";
 
 interface ViewTransactionFormProps {
   onSubmitSuccess: () => void; // Function to trigger step change
@@ -39,6 +41,7 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
 }) => {
   const [form] = Form.useForm();
   const { token } = theme.useToken();
+  const navigate = useNavigate();
 
   const [otp, setOtp] = useState<string>("");
 
@@ -83,6 +86,10 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
   }, [transaction, banks, beneficiaryBank]);
 
   const handleCountdownFinish = () => {
+    if (transaction?.type === TransactionType.DEBT)
+      navigate(ROUTES_PATH.CUSTOMER.DEBT_LIST, {
+        replace: true,
+      });
     window.location.reload();
   };
 
