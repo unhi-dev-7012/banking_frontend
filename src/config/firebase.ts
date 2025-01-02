@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { useNotification } from "../features/customer/notification/stores/useNotification";
 
 export const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -38,4 +39,7 @@ onMessage(messaging, ({ notification }) => {
     body: notification?.body,
     icon: notification?.icon,
   });
+
+  const { fetchNotification } = useNotification();
+  fetchNotification();
 });
