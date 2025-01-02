@@ -15,6 +15,8 @@ export const DebtView: React.FC<DebtViewProps> = ({
   closeModal,
 }) => {
   const {
+    reminderId,
+    debtorId,
     reminderFullName,
     debtorFullName,
     amount,
@@ -39,8 +41,16 @@ export const DebtView: React.FC<DebtViewProps> = ({
 
   // Data structure for the table
   const data = [
-    { key: "reminder", label: "Người nhắc", value: reminderFullName },
-    { key: "debtor", label: "Người nợ", value: debtorFullName },
+    {
+      key: "reminder",
+      label: "Người nhắc",
+      value: `${reminderId} - ${reminderFullName}`,
+    },
+    {
+      key: "debtor",
+      label: "Người nợ",
+      value: `${debtorId} - ${debtorFullName}`,
+    },
     {
       key: "amount",
       label: "Số tiền",

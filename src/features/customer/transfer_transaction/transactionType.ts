@@ -34,6 +34,7 @@ export interface Transaction {
 }
 
 export interface Bank {
+  id: string;
   code: string;
   name: string;
   shortName: string;
@@ -46,6 +47,11 @@ export interface Bank {
   // algorithm: "RS256";
 }
 
+export enum TransactionType {
+  DEBT = "debt",
+  NORMAL = "normal",
+}
+
 export enum TransactionStatus {
   CREATED = "created",
   PROCESSING = "processing",
@@ -53,14 +59,14 @@ export enum TransactionStatus {
   FAILED = "failed",
 }
 
-export interface GetTransactionResponse {
-  id: string;
-  date: string;
-  status: string;
-  category: string;
-  amount: number;
-  message: string;
-}
+// export interface GetTransactionResponse {
+//   id: string;
+//   date: string;
+//   status: string;
+//   category: string;
+//   amount: number;
+//   message: string;
+// }
 
 export interface VerifyOtpPayload {
   id: string;
@@ -88,7 +94,7 @@ export interface CreateTransactionPayload {
 }
 
 export interface ContactUserInfo {
-  // beneficiaryId: "21120002";
+  // beneficiaryId: "21120002";a
   // beneficiaryName: "Uyển Nhi Hehe";
   // nickname: "Tui la uyen nhi ne";
   // bankCode: "NHB";
@@ -101,4 +107,5 @@ export interface ContactUserInfo {
   bankCode: string;
   bankName: string;
   bankShortName: string;
+  bankId: string;
 }

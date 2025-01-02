@@ -57,7 +57,7 @@ const renderActionButtons = (
           type="text"
           onClick={() => {
             onCancel(record.id);
-            setPopoverVisible(record.id, false); // Close Popover
+            setPopoverVisible(record.id, false);
           }}
           style={{ width: "100%", justifyContent: "flex-start" }}
           danger
@@ -77,7 +77,7 @@ const renderActionButtons = (
           type="text"
           onClick={() => {
             onPay(record.id);
-            setPopoverVisible(record.id, false); // Close Popover
+            setPopoverVisible(record.id, false);
           }}
           style={{ width: "100%", justifyContent: "flex-start" }}
         >

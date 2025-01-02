@@ -14,6 +14,6 @@ export const TransApiEndpoints = {
   // Endpoint lấy thông tin giao dịch
   GET_TRANSACTION: (id: string) => `/api/customer/v1/transactions/${id}`,
 
-  // Endpoint hủy giao dịch
-  // CANCEL_TRANSACTION: (id: string) => `/api/customer/v1/debt/${id}`,
+  GET_ALL_BANK:
+    "/api/customer/v1/banks?page=1&limit=50&sort=createdAt&direction=desc",
 };

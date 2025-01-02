@@ -3,19 +3,22 @@ import useTransactionStore from "../stores/transactionStore";
 import { Button, Dropdown, Input, MenuProps, message } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 
-interface BeneficiaryInputProps {
+interface ExternalBeneficiaryInputProps {
   setBankAccountId: (id: string) => void;
+  // setBankId: (id: string) => void;
   setError: (error: string | null) => void;
   error: string | null;
+  // onSelectBank: (bankId: string) => void;
 }
 
-const BeneficiaryInput: React.FC<BeneficiaryInputProps> = ({
+const ExternalBeneficiaryInput: React.FC<ExternalBeneficiaryInputProps> = ({
+  // setBankId,
   setBankAccountId,
   setError,
   error,
+  // onSelectBank,
 }) => {
-  const { contactList, fetchAllContact, bankAccountInfo } =
-    useTransactionStore();
+  const { contactList, fetchAllContact } = useTransactionStore();
   const [accountId, setAccountId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -33,12 +36,10 @@ const BeneficiaryInput: React.FC<BeneficiaryInputProps> = ({
 
   let filteredContacts: any[] = [];
   if (contactList?.length > 0) {
-    filteredContacts = contactList.filter(
-      (contact) =>
-        `${contact.beneficiaryId} - ${contact.beneficiaryName} - ${contact.nickname}`
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) &&
-        contact.bankId === bankAccountInfo?.bankId
+    filteredContacts = contactList.filter((contact) =>
+      `${contact.beneficiaryId} - ${contact.beneficiaryName} - ${contact.nickname}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
     );
   }
 
@@ -48,7 +49,9 @@ const BeneficiaryInput: React.FC<BeneficiaryInputProps> = ({
     );
     if (selectedContact) {
       setBankAccountId(selectedContact.beneficiaryId);
+      // setBankId(selectedContact.bankId);
       setAccountId(`${selectedContact.beneficiaryId}`);
+      // onSelectBank(selectedContact.bankId);
       setError(null);
     }
   };
@@ -147,4 +150,4 @@ const BeneficiaryInput: React.FC<BeneficiaryInputProps> = ({
   );
 };
 
-export default BeneficiaryInput;
+export default ExternalBeneficiaryInput;

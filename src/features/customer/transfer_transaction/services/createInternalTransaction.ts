@@ -2,12 +2,11 @@ import api from "@utils/api";
 import { TransApiEndpoints } from "../apiTransEndpoint";
 import { CreateTransactionPayload, Transaction } from "../transactionType";
 
-const createTransaction = {
+const createInternalTransaction = {
   /**
    * Tạo giao dịch mới
    */
   execute: async (payload: CreateTransactionPayload): Promise<Transaction> => {
-    console.log("payload: ", payload);
     try {
       const { data } = await api.post(
         TransApiEndpoints.CREATE_TRANSACTION,
@@ -21,4 +20,4 @@ const createTransaction = {
   },
 };
 
-export default createTransaction;
+export default createInternalTransaction;
