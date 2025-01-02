@@ -1,7 +1,7 @@
 import { message, TablePaginationConfig, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import EmployeeDetailTransactionModal from "../../features/transactions/components/DetailTransaction/EmployeeDetailTransactionModal";
-import { useHistory } from "../../features/transactions/stores/useTransactionHistory";
+import { useTransactionHistory } from "../../features/transactions/stores/useTransactionHistory";
 import TableComponent from "../../components/common/Table/TableComponent";
 import { EmployeeTransactionHistoryColumnConfig } from "../../features/transactions/components/TableTransactionColumnConfig/EmployeeTransactionColumnConfig";
 
@@ -18,7 +18,7 @@ const HistoryScreen: React.FC = () => {
     errorMessage,
     pagination,
     setPagination,
-  } = useHistory();
+  } = useTransactionHistory();
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
     setPagination({

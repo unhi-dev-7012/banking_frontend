@@ -17,14 +17,15 @@ export enum TransactionStatus {
 
 export const getTransactions = async (
   page: number,
+  pageSize: number,
   status: TransactionStatus | undefined,
   category: TransactionCategory | undefined,
   bankId: string | undefined
-): Promise<Record<string, any> | null | undefined> => {
+): Promise<Record<string, any>> => {
   const { role } = useAuthStore.getState();
 
   if (!role) {
-    return null;
+    return {};
   }
 
   let url = "";
@@ -40,11 +41,12 @@ export const getTransactions = async (
       url = "/api/customer/v1/transactions";
       break;
     default:
-      return null;
+      return {};
   }
   const response = await api.get(url, {
     params: {
       page,
+      limit: pageSize,
       status,
       category,
       bankId,

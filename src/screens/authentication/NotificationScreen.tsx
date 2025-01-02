@@ -22,7 +22,7 @@ const NotificationScreen: React.FC = () => {
 
   useEffect(() => {
     fetchNotification();
-  }, []);
+  }, [pagination.current]);
 
   useEffect(() => {
     setupOnMessageHandler(fetchNotification);
@@ -56,16 +56,20 @@ const NotificationScreen: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: 24 }}>
+    <div style={{ padding: 24, alignItems: "center" }}>
       <Typography.Title level={2}>Thông báo</Typography.Title>
 
       <List
         dataSource={notifications}
         renderItem={(notification) => (
           <List.Item
-            style={{ padding: "16px 0", borderBottom: "1px solid #f0f0f0" }}
+            style={{
+              padding: "32px 0",
+              borderBottom: "1px solid #f0f0f0",
+              alignItems: "center",
+            }}
           >
-            <Space size="large" style={{ width: "100%" }}>
+            <Space size="large" style={{ width: "90%" }}>
               <div style={{ flex: 1 }}>
                 <Typography.Text strong>{notification.title}</Typography.Text>
                 <Row gutter={8} style={{ marginTop: 8, alignItems: "center" }}>
