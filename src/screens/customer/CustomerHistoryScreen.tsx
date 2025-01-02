@@ -3,7 +3,7 @@ import { TablePaginationConfig, Typography, message } from "antd";
 import TabComponent from "../../components/common/Tab/TabComponent";
 import CustomerDetailTransactionModal from "../../features/transactions/components/DetailTransaction/CustomerDetailTransactionModal";
 import { TransactionHistoryTabs } from "../../features/transactions/transactionType";
-import { useHistory } from "../../features/transactions/stores/useTransactionHistory";
+import { useTransactionHistory } from "../../features/transactions/stores/useTransactionHistory";
 import { TransactionCategory } from "../../features/transactions/services/transactionHistory";
 import TableComponent from "../../components/common/Table/TableComponent";
 import { CustomerTransactionHistoryColumnConfig } from "../../features/transactions/components/TableTransactionColumnConfig/CustomerTransactionColumnConfig";
@@ -21,7 +21,7 @@ const CustomerHistoryScreen: React.FC = () => {
     errorMessage,
     pagination,
     setPagination,
-  } = useHistory();
+  } = useTransactionHistory();
 
   const handleTabChange = (key: string) => {
     if (key === "all") {
@@ -47,7 +47,7 @@ const CustomerHistoryScreen: React.FC = () => {
     if (errorMessage) {
       message.error(errorMessage);
     }
-  }, []);
+  }, [pagination.current]);
 
   return (
     <div style={{ padding: 12, maxHeight: "100vh", overflow: "auto" }}>

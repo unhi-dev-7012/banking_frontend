@@ -22,44 +22,57 @@ interface TransactionHistoryState {
   setPagination: (pagination: any) => void;
 }
 
-export const useHistory = create<TransactionHistoryState>((set, get) => ({
-  transactionHistory: [],
-  pagination: {
-    current: 1,
-    pageSize: 8,
-    total: 0,
-  },
-  loading: false,
-  setPagination: (pagination) =>
-    set((state) => ({
-      pagination: { ...state.pagination, ...pagination },
-    })),
-  fetchTransactionHistory: async (
-    status: TransactionStatus | undefined,
-    category: TransactionCategory | undefined,
-    bankId: string | undefined
-  ) => {
-    set({
-      loading: true,
-      errorMessage: undefined,
-    });
-    const { current, pageSize } = get().pagination;
-    const response = await getTransactions(current, status, category, bankId);
+export const useTransactionHistory = create<TransactionHistoryState>(
+  (set, get) => ({
+    transactionHistory: [],
+    pagination: {
+      current: 1,
+      pageSize: 8,
+      total: 0,
+    },
+    loading: false,
+    setPagination: (pagination) =>
+      set((state) => ({
+        pagination: { ...state.pagination, ...pagination },
+      })),
+    fetchTransactionHistory: async (
+      status: TransactionStatus | undefined,
+      category: TransactionCategory | undefined,
+      bankId: string | undefined
+    ) => {
+      set({
+        loading: true,
+        errorMessage: undefined,
+      });
+      const { pagination } = get();
 
-    response && !response.errorMessage
-      ? set({
-          transactionHistory: response.data,
-          loading: false,
-          pagination: {
-            current: current,
-            pageSize: pageSize,
-            total: response.metadata.totalCount,
-          },
-        })
-      : set({
-          transactionHistory: [],
-          errorMessage: "Failed to fetch transaction history",
-          loading: false,
-        });
-  },
-}));
+      try {
+        const response = await getTransactions(
+          pagination.current,
+          pagination.pageSize,
+          status,
+          category,
+          bankId
+        );
+
+        if (response && response.errorMessage) {
+          set({
+            loading: false,
+            errorMessage: response.errorMessage,
+          });
+        } else {
+          set({
+            transactionHistory: response.data,
+            pagination: {
+              ...pagination,
+              total: response.metadata.totalCount,
+            },
+            loading: false,
+          });
+        }
+      } catch (error: any) {
+        set({ loading: false, errorMessage: error.message });
+      }
+    },
+  })
+);

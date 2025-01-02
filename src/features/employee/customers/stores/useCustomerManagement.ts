@@ -26,7 +26,7 @@ export const useCustomerManagement = create<CustomerManagementState>(
   (set, get) => ({
     customers: [],
     success: undefined,
-    loading: false,
+    loading: true,
     error: undefined,
     pagination: {
       current: 1,

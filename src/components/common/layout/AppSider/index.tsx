@@ -268,6 +268,7 @@ export const AppSider: React.FC = () => {
             </Flex>
           ),
           path: ROUTES_PATH.NOTIFICATION,
+          requiredRoles: [EROLE.CUSTOMER],
         }),
         getItem({
           key: "Setting",
