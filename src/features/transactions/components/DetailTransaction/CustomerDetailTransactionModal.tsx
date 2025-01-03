@@ -32,7 +32,11 @@ const CustomerDetailTransactionModal: React.FC<
     >
       <Descriptions bordered column={1}>
         <Descriptions.Item label="Ngày giao dịch">
-          {new Date(transaction.date).toLocaleString()}
+          {new Date(transaction.date).toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
         </Descriptions.Item>
         <Descriptions.Item label={affectedUser}>
           <span style={{ fontWeight: "bold" }}>

@@ -5,7 +5,7 @@ import { useTransactionHistory } from "../../features/transactions/stores/useTra
 import TableComponent from "../../components/common/Table/TableComponent";
 import { EmployeeTransactionHistoryColumnConfig } from "../../features/transactions/components/TableTransactionColumnConfig/EmployeeTransactionColumnConfig";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const HistoryScreen: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,11 +31,23 @@ const HistoryScreen: React.FC = () => {
     if (errorMessage) {
       message.error(errorMessage);
     }
-  }, []);
+  }, [pagination.current]);
 
   return (
-    <div style={{ padding: 12, maxHeight: "100vh", overflow: "auto" }}>
+    <div style={{ paddingLeft: 12, maxHeight: "100vh", overflow: "auto" }}>
       <Title level={2}>Lịch sử giao dịch</Title>
+      <Text style={{ color: "gray" }}>
+        Lịch sử giao dịch được tính từ ngày{" "}
+        {new Date(
+          new Date().getTime() - 30 * 24 * 60 * 60 * 1000
+        ).toLocaleDateString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })}
+      </Text>
+
+      <div style={{ marginBottom: 20 }}></div>
 
       <TableComponent<Record<string, any>>
         rowKey="EmployeeHistoryTable"

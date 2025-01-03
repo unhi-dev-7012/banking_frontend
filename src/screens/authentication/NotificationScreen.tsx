@@ -76,7 +76,14 @@ const NotificationScreen: React.FC = () => {
                   <Col>{renderTag(notification.type)}</Col>
                   <Col>
                     <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                      {new Date(notification.createdAt).toLocaleString()}
+                      {new Date(notification.createdAt).toLocaleDateString(
+                        "vi-VN",
+                        {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        }
+                      )}
                     </Typography.Text>
                   </Col>
                 </Row>

@@ -8,7 +8,7 @@ import { TransactionCategory } from "../../features/transactions/services/transa
 import TableComponent from "../../components/common/Table/TableComponent";
 import { CustomerTransactionHistoryColumnConfig } from "../../features/transactions/components/TableTransactionColumnConfig/CustomerTransactionColumnConfig";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const CustomerHistoryScreen: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -44,6 +44,8 @@ const CustomerHistoryScreen: React.FC = () => {
 
   useEffect(() => {
     fetchTransactionHistory(undefined, undefined, undefined);
+
+    setPagination({ pageSize: 8 });
     if (errorMessage) {
       message.error(errorMessage);
     }
@@ -53,6 +55,18 @@ const CustomerHistoryScreen: React.FC = () => {
     <div style={{ padding: 12, maxHeight: "100vh", overflow: "auto" }}>
       <Title level={2}>Lịch sử giao dịch</Title>
 
+      <Text style={{ color: "gray" }}>
+        Lịch sử giao dịch được tính từ ngày{" "}
+        {new Date(
+          new Date().getTime() - 30 * 24 * 60 * 60 * 1000
+        ).toLocaleDateString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })}
+      </Text>
+
+      <div style={{ marginBottom: 20 }}></div>
       <TabComponent
         defaultActiveKey={TransactionHistoryTabs[0]}
         onTabChange={handleTabChange}
