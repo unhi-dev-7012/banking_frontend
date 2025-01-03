@@ -241,9 +241,15 @@ export const AppSider: React.FC = () => {
       key: "Profile",
       label: (
         <Flex align="center" style={{ padding: "12px 0px 10px" }}>
-          <Badge count={2} size="small" color="blue">
+          {localStorage.getItem("role") &&
+          localStorage.getItem("role") === EROLE.CUSTOMER ? (
+            <Badge count={2} size="small" color="blue">
+              <Avatar shape="square" size={40} icon={<UserRound size={20} />} />
+            </Badge>
+          ) : (
             <Avatar shape="square" size={40} icon={<UserRound size={20} />} />
-          </Badge>
+          )}
+
           <Flex vertical style={{ flex: 1, marginLeft: 10 }}>
             <Typography.Text strong>{userData.fullName}</Typography.Text>
             <Typography.Text type="secondary">{userData.email}</Typography.Text>
