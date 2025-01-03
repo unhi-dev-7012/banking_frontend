@@ -21,7 +21,7 @@ interface NotificationState {
   setPagination: (pagination: Partial<Pagination>) => void;
   setType: (type: NotificationType | undefined) => boolean | undefined;
   markAsRead: () => void;
-  setUnread: (count: number) => Promise<boolean>;
+  setUnread: () => Promise<boolean>;
 }
 
 export const useNotification = create<NotificationState>((set, get) => ({
@@ -40,7 +40,7 @@ export const useNotification = create<NotificationState>((set, get) => ({
     await markAsReadNotifications();
   },
   setUnread: async () => {
-    let count = Number((await countUnreadNotifications()).data) ?? 0;
+    let count = Number(await countUnreadNotifications()) ?? 0;
     set({ unreads: count });
     return true;
   },

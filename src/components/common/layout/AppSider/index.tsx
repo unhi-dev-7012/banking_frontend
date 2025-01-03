@@ -30,6 +30,7 @@ import "./index.css";
 import { useAppStore } from "@stores/app";
 import { useAuthStore } from "@features/auth/stores/authStore";
 import { getUserData, UserData } from "@features/auth/services/getUserData";
+import { useNotification } from "../../../../features/customer/notification/stores/useNotification";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -39,6 +40,7 @@ export const AppSider: React.FC = () => {
   const selectedKey = location.pathname || "/";
   const { isSiderCollapsed } = useAppStore();
   const { role, handleLogout } = useAuthStore();
+  const { unreads, setUnread } = useNotification();
 
   const [userData, setUserData] = useState<UserData>({
     fullName: "Unknown User",
@@ -54,6 +56,7 @@ export const AppSider: React.FC = () => {
       }
     };
     fetchData();
+    setUnread();
   }, []);
 
   const checkRole = (requiredRoles: EROLE[]) => {
@@ -243,14 +246,14 @@ export const AppSider: React.FC = () => {
         <Flex align="center" style={{ padding: "12px 0px 10px" }}>
           {localStorage.getItem("role") &&
           localStorage.getItem("role") === EROLE.CUSTOMER ? (
-            <Badge count={2} size="small" color="blue">
+            <Badge count={unreads} size="default" color="blue">
               <Avatar shape="square" size={40} icon={<UserRound size={20} />} />
             </Badge>
           ) : (
             <Avatar shape="square" size={40} icon={<UserRound size={20} />} />
           )}
 
-          <Flex vertical style={{ flex: 1, marginLeft: 10 }}>
+          <Flex vertical style={{ flex: 1, marginLeft: 16 }}>
             <Typography.Text strong>{userData.fullName}</Typography.Text>
             <Typography.Text type="secondary">{userData.email}</Typography.Text>
           </Flex>
@@ -265,8 +268,7 @@ export const AppSider: React.FC = () => {
               <Flex align="center">
                 Thông báo
                 <Badge
-                  count={2}
-                  size="small"
+                  count={unreads}
                   style={{ marginLeft: 10 }}
                   color="blue"
                 />
