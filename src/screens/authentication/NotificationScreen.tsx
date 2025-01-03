@@ -8,6 +8,7 @@ import {
   Row,
   Col,
   message,
+  Button,
 } from "antd";
 import { BellOutlined } from "@ant-design/icons";
 import { useNotification } from "../../features/customer/notification/stores/useNotification";
@@ -28,25 +29,21 @@ const NotificationScreen: React.FC = () => {
     setType,
     loading,
     setPagination,
-    markAsRead,
-    unreads,
     setUnread,
+    unreads,
+    markAsRead,
   } = useNotification();
 
   useEffect(() => {
-    if (unreads !== 0) {
-      markAsRead();
-      setUnread();
-    }
-  });
+    setType(undefined);
+  }, []);
 
   useEffect(() => {
     fetchNotification();
-  }, [pagination.current, type]);
+  }, [pagination.current, type, unreads]);
 
   useEffect(() => {
-    setupOnMessageHandler(fetchNotification);
-    setupOnMessageHandler(setUnread);
+    setupOnMessageHandler([fetchNotification, setUnread]);
   }, [fetchNotification]);
 
   const handleTabChange = (key: string) => {
@@ -98,6 +95,11 @@ const NotificationScreen: React.FC = () => {
     }
   };
 
+  const handleMarkAllAsRead = () => {
+    markAsRead();
+    setUnread();
+  };
+
   return (
     <div style={{ paddingLeft: 24, alignItems: "center" }}>
       <Typography.Title level={2}>Thông báo</Typography.Title>
@@ -107,6 +109,16 @@ const NotificationScreen: React.FC = () => {
         items={NotificationTabs}
         onTabChange={handleTabChange}
       />
+
+      <Button
+        type="primary"
+        disabled={unreads !== 0 ? false : true}
+        onClick={handleMarkAllAsRead}
+        style={{ marginBottom: 16 }}
+      >
+        Đánh dấu tất cả là đã đọc
+      </Button>
+
       <List
         dataSource={notifications}
         loading={loading}

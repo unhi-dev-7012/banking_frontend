@@ -67,15 +67,17 @@ export const requestForToken = () => {
   }
 };
 
-export const setupOnMessageHandler = (dispatchNotification: any) => {
+export const setupOnMessageHandler = (dispatchNotification: any[]) => {
   onMessage(messaging, ({ notification }) => {
     new Notification(notification?.title ?? "Unknown", {
       body: notification?.body,
       icon: notification?.icon,
     });
 
-    if (dispatchNotification) {
-      dispatchNotification();
+    if (dispatchNotification && dispatchNotification.length > 0) {
+      dispatchNotification.forEach((dispatch) => {
+        dispatch();
+      });
     }
   });
 };

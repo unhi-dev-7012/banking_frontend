@@ -44,6 +44,7 @@ export const useTransactionHistory = create<TransactionHistoryState>(
         loading: true,
         errorMessage: undefined,
       });
+
       const { pagination } = get();
 
       try {
