@@ -26,8 +26,19 @@ const NotificationScreen: React.FC = () => {
     error,
     type,
     setType,
+    loading,
     setPagination,
+    markAsRead,
+    unreads,
+    setUnread,
   } = useNotification();
+
+  useEffect(() => {
+    if (unreads !== 0) {
+      markAsRead();
+      setUnread();
+    }
+  });
 
   useEffect(() => {
     fetchNotification();
@@ -35,6 +46,7 @@ const NotificationScreen: React.FC = () => {
 
   useEffect(() => {
     setupOnMessageHandler(fetchNotification);
+    setupOnMessageHandler(setUnread);
   }, [fetchNotification]);
 
   const handleTabChange = (key: string) => {
@@ -97,13 +109,14 @@ const NotificationScreen: React.FC = () => {
       />
       <List
         dataSource={notifications}
+        loading={loading}
         renderItem={(notification) => (
           <List.Item
             style={{
               padding: "24px",
               borderBottom: "1px solid #f0f0f0",
               borderRadius: "8px",
-              backgroundColor: "#fff",
+              backgroundColor: notification.readAt ? "#f5f5f5" : "#e8f4fc",
               marginBottom: "12px",
               boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
               alignItems: "center",

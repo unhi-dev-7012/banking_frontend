@@ -269,6 +269,7 @@ export const AppSider: React.FC = () => {
                 Thông báo
                 <Badge
                   count={unreads}
+                  size="default"
                   style={{ marginLeft: 10 }}
                   color="blue"
                 />
