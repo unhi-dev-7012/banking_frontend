@@ -60,14 +60,8 @@ const DetailCustomerInfoModal: React.FC<DetailCustomerInfoModalProps> = ({
               <Descriptions.Item label="Người tạo">
                 {customer.createdByEmployee?.fullName}
               </Descriptions.Item>
-              <Descriptions.Item label="Chức vụ người tạo">
-                {customer.createdByEmployee?.role}
-              </Descriptions.Item>
               <Descriptions.Item label="Ngày tạo">
                 {new Date(customer.createdAt).toLocaleString()}
-              </Descriptions.Item>
-              <Descriptions.Item label="Ngày cập nhật">
-                {new Date(customer.updatedAt).toLocaleString()}
               </Descriptions.Item>
             </Descriptions>
           </>

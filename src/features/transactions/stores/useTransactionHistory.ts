@@ -11,7 +11,7 @@ interface TransactionHistoryState {
   errorMessage?: string;
   pagination: {
     current: 1;
-    pageSize: 8;
+    pageSize: 6;
     total: 0;
   };
   fetchTransactionHistory: (
@@ -27,7 +27,7 @@ export const useTransactionHistory = create<TransactionHistoryState>(
     transactionHistory: [],
     pagination: {
       current: 1,
-      pageSize: 8,
+      pageSize: 6,
       total: 0,
     },
     loading: false,
@@ -44,6 +44,7 @@ export const useTransactionHistory = create<TransactionHistoryState>(
         loading: true,
         errorMessage: undefined,
       });
+
       const { pagination } = get();
 
       try {

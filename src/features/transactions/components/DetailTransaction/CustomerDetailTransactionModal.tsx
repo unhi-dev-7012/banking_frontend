@@ -14,6 +14,8 @@ interface CustomerDetailTransactionModalProps {
 const CustomerDetailTransactionModal: React.FC<
   CustomerDetailTransactionModalProps
 > = ({ visible, setVisible, transaction }) => {
+  const affectedUser =
+    transaction.category === "incoming" ? "Người gửi" : "Người  nhận";
   return (
     <Modal
       title="Chi tiết giao dịch"
@@ -30,7 +32,24 @@ const CustomerDetailTransactionModal: React.FC<
     >
       <Descriptions bordered column={1}>
         <Descriptions.Item label="Ngày giao dịch">
-          {new Date(transaction.date).toLocaleString()}
+          {new Date(transaction.date).toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </Descriptions.Item>
+        <Descriptions.Item label={affectedUser}>
+          <span style={{ fontWeight: "bold" }}>
+            {transaction.relatedUser.name}
+          </span>
+          <br />
+          <span style={{ color: "#888" }}>
+            {transaction.relatedUser.bankAccountId}
+          </span>
+          <br />
+          <span style={{ color: "#888" }}>
+            {transaction.relatedUser.bankName}
+          </span>
         </Descriptions.Item>
         <Descriptions.Item label="Trạng thái">
           <Tag color={transaction.status === "success" ? "green" : "orange"}>

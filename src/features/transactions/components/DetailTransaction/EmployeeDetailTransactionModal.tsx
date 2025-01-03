@@ -79,7 +79,11 @@ const EmployeeDetailTransactionModal: React.FC<
             </Tag>
           </Descriptions.Item>
           <Descriptions.Item label="Ngày giao dịch">
-            {new Date(transaction.completedAt).toLocaleString()}
+            {new Date(transaction.completedAt).toLocaleDateString("vi-VN", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
           </Descriptions.Item>
         </Descriptions>
       )}
