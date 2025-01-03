@@ -16,7 +16,7 @@ interface NotificationState {
   pagination: Pagination;
   fetchNotification: () => Promise<void>;
   setPagination: (pagination: Partial<Pagination>) => void;
-  setType: (type: NotificationType) => boolean;
+  setType: (type: NotificationType | undefined) => boolean | undefined;
 }
 
 export const useNotification = create<NotificationState>((set, get) => ({
@@ -26,7 +26,7 @@ export const useNotification = create<NotificationState>((set, get) => ({
   error: undefined,
   pagination: {
     current: 1,
-    pageSize: 9,
+    pageSize: 6,
     total: 0,
   },
   type: undefined,
@@ -39,7 +39,7 @@ export const useNotification = create<NotificationState>((set, get) => ({
       set({ type: undefined });
     }
   },
-  setType: (type: NotificationType) => {
+  setType: (type: NotificationType | undefined) => {
     set({ type: type });
     return true;
   },
