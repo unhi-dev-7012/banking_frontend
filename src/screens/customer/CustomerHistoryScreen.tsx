@@ -45,11 +45,14 @@ const CustomerHistoryScreen: React.FC = () => {
   useEffect(() => {
     fetchTransactionHistory(undefined, undefined, undefined);
 
-    setPagination({ pageSize: 8 });
     if (errorMessage) {
       message.error(errorMessage);
     }
   }, [pagination.current]);
+
+  useEffect(() => {
+    setPagination({ pageSize: 8 });
+  }, []);
 
   return (
     <div style={{ padding: 12, maxHeight: "100vh", overflow: "auto" }}>

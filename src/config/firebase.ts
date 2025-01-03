@@ -16,21 +16,55 @@ const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
 export const requestForToken = () => {
-  return getToken(messaging, { vapidKey: FIREBASE_VAPID_KEY })
-    .then((currentToken) => {
-      if (currentToken) {
-        return currentToken;
+  // Check for notification permission
+  if (Notification.permission === "granted") {
+    // If already granted, request the token
+    return getToken(messaging, { vapidKey: FIREBASE_VAPID_KEY })
+      .then((currentToken) => {
+        if (currentToken) {
+          return currentToken;
+        } else {
+          alert(
+            "No registration token available. Request permission to generate one."
+          );
+          return null;
+        }
+      })
+      .catch((err) => {
+        alert("An error occurred while retrieving token - " + err);
+        return null;
+      });
+  } else if (Notification.permission === "default") {
+    // If permission has not been asked, request it
+    return Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        return getToken(messaging, { vapidKey: FIREBASE_VAPID_KEY })
+          .then((currentToken) => {
+            if (currentToken) {
+              return currentToken;
+            } else {
+              alert(
+                "No registration token available. Request permission to generate one."
+              );
+              return null;
+            }
+          })
+          .catch((err) => {
+            alert("An error occurred while retrieving token - " + err);
+            return null;
+          });
       } else {
-        alert(
-          "No registration token available. Request permission to generate one."
-        );
+        alert("Notification permission denied.");
         return null;
       }
-    })
-    .catch((err) => {
-      alert("An error occurred while retrieving token - " + err);
-      return null;
     });
+  } else {
+    // If permission is denied, alert the user
+    alert(
+      "You have denied notifications. Enable them in your browser settings."
+    );
+    return Promise.resolve(null);
+  }
 };
 
 export const setupOnMessageHandler = (dispatchNotification: any) => {
