@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { getNotification } from "../services/fetchNotification";
 import { NotificationType } from "../notificationType";
+import { markAsReadNotifications } from "../services/markAsReadNotification";
+import { countUnreadNotifications } from "../services/countUnreadNotification";
 
 interface Pagination {
   current: number;
@@ -14,13 +16,17 @@ interface NotificationState {
   success?: string;
   error?: string;
   pagination: Pagination;
+  unreads?: number;
   fetchNotification: () => Promise<void>;
   setPagination: (pagination: Partial<Pagination>) => void;
   setType: (type: NotificationType | undefined) => boolean | undefined;
+  markAsRead: () => void;
+  setUnread: (count: number) => Promise<boolean>;
 }
 
 export const useNotification = create<NotificationState>((set, get) => ({
   notifications: [],
+  unreads: 0,
   success: undefined,
   loading: true,
   error: undefined,
@@ -30,6 +36,14 @@ export const useNotification = create<NotificationState>((set, get) => ({
     total: 0,
   },
   type: undefined,
+  markAsRead: async () => {
+    await markAsReadNotifications();
+  },
+  setUnread: async () => {
+    let count = Number((await countUnreadNotifications()).data) ?? 0;
+    set({ unreads: count });
+    return true;
+  },
   setPagination: (pagination) => {
     set((state) => ({
       pagination: { ...state.pagination, ...pagination },

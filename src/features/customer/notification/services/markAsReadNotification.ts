@@ -7,7 +7,7 @@ export const markAsReadNotifications = async (): Promise<
 > => {
   try {
     const response = await api.post(API_ENDPOINT);
-    return response;
+    return response.data;
   } catch (error: any) {
     if (error.response && error.response.status === 422) {
       const errorMessage =
