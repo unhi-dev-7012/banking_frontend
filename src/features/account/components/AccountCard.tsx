@@ -42,7 +42,6 @@ const AccountCard: React.FC = () => {
   return (
     <Card
       style={{
-        margin: 30,
         width: 400,
         borderRadius: 16,
         border: "1px solid #d9d9d9",
