@@ -231,13 +231,13 @@ const CreateExternalTransactionForm: React.FC<
 
           <Form.Item label="Tên người nhận">
             <Input
+              readOnly={true}
               value={beneficiaryName || ""}
               style={{
                 width: "100%",
                 height: "42px",
                 alignContent: "center",
               }}
-              disabled
             />
           </Form.Item>
 

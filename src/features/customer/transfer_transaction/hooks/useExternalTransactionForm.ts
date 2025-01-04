@@ -13,6 +13,36 @@ export const useExternalTransactionForm = () => {
   const [bankName, setBankName] = useState<string | null>(null);
   const [bankId, setBankId] = useState<string | undefined>(undefined);
 
+  const getBeneficiaryAccount = async (beneficiaryId: string) => {
+    try {
+      if (bankId && beneficiaryId) {
+        if (banks?.length > 0) {
+          const matchingBank = banks.find((bank) => bank.id === bankId);
+
+          const result = await getBankAccountWithUser(
+            beneficiaryId,
+            matchingBank?.code
+          );
+
+          if (result) {
+            setBeneficiaryName(result.fullName);
+            setBankId(matchingBank?.id);
+          } else {
+            setBeneficiaryName(null);
+            setBankId(undefined);
+            setAccountError("Không tìm thấy tài khoản.");
+          }
+        } else {
+          setAccountError("Không tìm thấy tài khoản ngân hàng.");
+        }
+      }
+    } catch (error: any) {
+      setBeneficiaryName(null);
+      setBankId(undefined);
+      message.error("Không tìm thấy tài khoản ngân hàng");
+    }
+  };
+
   const handleBeneficiaryChange = async (beneficiaryId: string) => {
     setBeneficiaryLoading(true);
     setBeneficiaryId(beneficiaryId);
@@ -30,40 +60,10 @@ export const useExternalTransactionForm = () => {
         setBankId(beneficiary.bankId);
       } else {
         setBeneficiaryName(null);
-        try {
-          if (bankId && beneficiaryId) {
-            if (banks?.length > 0) {
-              const matchingBank = banks.find((bank) => bank.id === bankId);
-
-              const result = await getBankAccountWithUser(
-                beneficiaryId,
-                matchingBank?.code
-              );
-
-              if (result) {
-                setBeneficiaryName(result.fullName);
-                // setBankName(
-                //   `${matchingBank?.shortName}_${matchingBank?.name}_(${matchingBank?.code})`
-                // );
-                setBankId(matchingBank?.id);
-              } else {
-                setBeneficiaryName(null);
-                setBankId(undefined);
-                setAccountError("Không tìm thấy tài khoản.");
-              }
-            } else {
-              setAccountError("Không tìm thấy tài khoản ngân hàng.");
-            }
-          }
-        } catch (error: any) {
-          // setAccountError("Không tìm thấy tài khoản.");
-          console.log("bank id: ", bankId);
-
-          setBeneficiaryName(null);
-          setBankId(undefined);
-          message.error("Không tìm thấy tài khoản ngân hàng");
-        }
+        await getBeneficiaryAccount(beneficiaryId);
       }
+    } else {
+      await getBeneficiaryAccount(beneficiaryId);
     }
 
     setBeneficiaryLoading(false);
