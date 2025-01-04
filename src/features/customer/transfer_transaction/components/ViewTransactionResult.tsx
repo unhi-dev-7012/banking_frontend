@@ -5,6 +5,8 @@ import { TransactionStatus, TransactionType } from "../transactionType";
 import { BankInfoUI, getBankDetails } from "./ViewTransactionDetails";
 import { replace, useNavigate } from "react-router-dom";
 import { ROUTES_PATH } from "@constants/path";
+import { onMessage } from "firebase/messaging";
+import { messaging } from "../../../../config/firebase";
 
 interface ViewTransactionResultProps {
   onSubmitSuccess: () => void; // Function to trigger step change
@@ -41,13 +43,16 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
         if (transaction?.id) {
           fetchTransaction(transaction?.id);
         }
-        // await fetchTransaction("39d9cf4b-1c3d-4bf9-b5ba-9de991225355");
       } catch (error) {
         console.error("Có lỗi khi lấy thông tin giao dịch", error);
       }
     };
 
-    fetchData();
+    onMessage(messaging, (payload) => {
+      console.log(payload);
+      fetchData();
+      console.log(transaction);
+    });
   }, []);
 
   useEffect(() => {
@@ -89,17 +94,23 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
           color:
             transactionDetailsRespones?.status === TransactionStatus.SUCCESS
               ? "green"
-              : "red",
+              : transactionDetailsRespones?.status === TransactionStatus.FAILED
+              ? "red"
+              : "blue",
           fontWeight: "500",
         }}
       >
-        {transactionDetailsRespones?.status === TransactionStatus.SUCCESS
-          ? transactionDetailsRespones?.type === TransactionType.DEBT
-            ? "Thanh toán nợ thành công"
-            : "Giao dịch thành công"
-          : transactionDetailsRespones?.type === TransactionType.DEBT
-          ? "Thanh toán nợ thất bại"
-          : "Giao dịch thất bại"}
+        {`${
+          transactionDetailsRespones?.type === TransactionType.DEBT
+            ? "Thanh toán nợ"
+            : "Giao dịch"
+        } ${
+          transactionDetailsRespones?.status === TransactionStatus.SUCCESS
+            ? "thành công"
+            : transactionDetailsRespones?.status === TransactionStatus.FAILED
+            ? "thất bại"
+            : "đang xử lý"
+        }`}
       </Typography.Text>
       <Flex gap={5} style={{ marginBottom: "20px" }}>
         <Typography.Text style={{ fontSize: 14 }}>

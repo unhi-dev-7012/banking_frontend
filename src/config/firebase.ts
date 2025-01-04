@@ -13,7 +13,7 @@ export const firebaseConfig = {
 export const FIREBASE_VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
 
 const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+export const messaging = getMessaging(app);
 
 export const requestForToken = () => {
   // Check for notification permission
