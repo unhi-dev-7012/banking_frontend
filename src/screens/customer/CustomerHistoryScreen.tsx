@@ -21,18 +21,19 @@ const CustomerHistoryScreen: React.FC = () => {
     errorMessage,
     pagination,
     setPagination,
+    category,
+    setCategory,
   } = useTransactionHistory();
 
   const handleTabChange = (key: string) => {
+    setPagination({ current: 1 });
     if (key === "all") {
-      setPagination({ current: 1 });
-      fetchTransactionHistory(undefined, undefined, undefined);
+      setCategory(undefined);
       if (errorMessage) {
         message.error(errorMessage);
       }
     } else {
-      setPagination({ current: 1 });
-      fetchTransactionHistory(undefined, key as TransactionCategory, undefined);
+      setCategory(key as TransactionCategory);
     }
   };
 
@@ -43,12 +44,12 @@ const CustomerHistoryScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchTransactionHistory(undefined, undefined, undefined);
+    fetchTransactionHistory(undefined, undefined);
 
     if (errorMessage) {
       message.error(errorMessage);
     }
-  }, [pagination.current]);
+  }, [pagination.current, category]);
 
   useEffect(() => {
     setPagination({ pageSize: 8 });

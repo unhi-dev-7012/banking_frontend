@@ -75,8 +75,8 @@ export const setupOnMessageHandler = (dispatchNotification: any[]) => {
     });
 
     if (dispatchNotification && dispatchNotification.length > 0) {
-      dispatchNotification.forEach((dispatch) => {
-        dispatch();
+      dispatchNotification.forEach(async (dispatch) => {
+        await dispatch();
       });
     }
   });
