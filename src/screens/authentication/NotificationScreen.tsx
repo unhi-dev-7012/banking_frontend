@@ -95,9 +95,9 @@ const NotificationScreen: React.FC = () => {
     }
   };
 
-  const handleMarkAllAsRead = () => {
-    markAsRead();
-    setUnread();
+  const handleMarkAllAsRead = async () => {
+    await markAsRead();
+    await setUnread();
   };
 
   return (
@@ -128,7 +128,7 @@ const NotificationScreen: React.FC = () => {
               padding: "24px",
               borderBottom: "1px solid #f0f0f0",
               borderRadius: "8px",
-              backgroundColor: notification.readAt ? "#f5f5f5" : "#e8f4fc",
+              backgroundColor: notification.readAt ? "#fafafa" : "#f4f8fb",
               marginBottom: "12px",
               boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
               alignItems: "center",

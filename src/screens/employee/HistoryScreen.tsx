@@ -27,7 +27,11 @@ const HistoryScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchTransactionHistory(undefined, undefined, undefined);
+    setPagination({ current: 1 });
+  }, []);
+
+  useEffect(() => {
+    fetchTransactionHistory(undefined, undefined);
     if (errorMessage) {
       message.error(errorMessage);
     }

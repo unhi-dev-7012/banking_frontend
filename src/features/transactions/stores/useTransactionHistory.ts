@@ -9,6 +9,7 @@ interface TransactionHistoryState {
   transactionHistory: Record<string, any>[];
   loading: boolean;
   errorMessage?: string;
+  category?: TransactionCategory;
   pagination: {
     current: 1;
     pageSize: 6;
@@ -16,10 +17,10 @@ interface TransactionHistoryState {
   };
   fetchTransactionHistory: (
     status: TransactionStatus | undefined,
-    category: TransactionCategory | undefined,
     bankId: string | undefined
   ) => Promise<void>;
   setPagination: (pagination: any) => void;
+  setCategory: (category: TransactionCategory | undefined) => void;
 }
 
 export const useTransactionHistory = create<TransactionHistoryState>(
@@ -31,13 +32,14 @@ export const useTransactionHistory = create<TransactionHistoryState>(
       total: 0,
     },
     loading: false,
+    category: undefined,
     setPagination: (pagination) =>
       set((state) => ({
         pagination: { ...state.pagination, ...pagination },
       })),
+    setCategory: (category) => set({ category }),
     fetchTransactionHistory: async (
       status: TransactionStatus | undefined,
-      category: TransactionCategory | undefined,
       bankId: string | undefined
     ) => {
       set({
@@ -45,7 +47,7 @@ export const useTransactionHistory = create<TransactionHistoryState>(
         errorMessage: undefined,
       });
 
-      const { pagination } = get();
+      const { pagination, category } = get();
 
       try {
         const response = await getTransactions(
