@@ -11,6 +11,37 @@ export const useInternalTransactionForm = () => {
   const [beneficiaryLoading, setBeneficiaryLoading] = useState(false);
   const [accountError, setAccountError] = useState<string | null>(null);
 
+  const getBeneficiaryAccount = async (beneficiaryId: string) => {
+    try {
+      if (bankAccountInfo?.bankId && banks?.length > 0) {
+        const matchingBank = banks.find(
+          (bank) => bank.id === bankAccountInfo?.bankId
+        );
+
+        const result = await getBankAccountWithUser(
+          beneficiaryId,
+          matchingBank?.code
+        );
+
+        if (result) {
+          setBeneficiaryName(result.fullName);
+          setIsBeneficiaryNameVisible(true);
+        } else {
+          setBeneficiaryName(null);
+          setIsBeneficiaryNameVisible(false);
+          setAccountError("Không tìm thấy tài khoản.");
+        }
+      } else {
+        setIsBeneficiaryNameVisible(false);
+
+        setAccountError("Thông tin ngân hàng không hợp lệ.");
+      }
+    } catch (error) {
+      setIsBeneficiaryNameVisible(false);
+      setAccountError("Có lỗi xảy ra khi kiểm tra tài khoản.");
+    }
+  };
+
   const handleBeneficiaryChange = async (beneficiaryId: string) => {
     setBeneficiaryLoading(true);
     setBeneficiaryId(beneficiaryId);
@@ -25,40 +56,15 @@ export const useInternalTransactionForm = () => {
         setIsBeneficiaryNameVisible(true);
       } else {
         setBeneficiaryName(null);
-        setIsBeneficiaryNameVisible(false);
-        setAccountError("Không tìm thấy người thụ hưởng trong danh sách.");
+        // setIsBeneficiaryNameVisible(false);
+        await getBeneficiaryAccount(beneficiaryId);
       }
     } else {
+      // setBeneficiaryName(null);
+      // setIsBeneficiaryNameVisible(false);s
+
       // Fallback to bank account info if no contact is found
-      try {
-        if (bankAccountInfo?.bankId && banks?.length > 0) {
-          const matchingBank = banks.find(
-            (bank) => bank.id === bankAccountInfo?.bankId
-          );
-
-          const result = await getBankAccountWithUser(
-            beneficiaryId,
-            matchingBank?.code
-          );
-
-          if (result) {
-            setBeneficiaryName(result.fullName);
-            setIsBeneficiaryNameVisible(true);
-          } else {
-            setBeneficiaryName(null);
-            setIsBeneficiaryNameVisible(false);
-            setAccountError("Không tìm thấy tài khoản.");
-          }
-        } else {
-          setIsBeneficiaryNameVisible(false);
-
-          setAccountError("Thông tin ngân hàng không hợp lệ.");
-        }
-      } catch (error) {
-        setIsBeneficiaryNameVisible(false);
-
-        setAccountError("Có lỗi xảy ra khi kiểm tra tài khoản.");
-      }
+      await getBeneficiaryAccount(beneficiaryId);
     }
 
     setBeneficiaryLoading(false);
