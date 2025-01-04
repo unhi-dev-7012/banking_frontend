@@ -36,6 +36,10 @@ const AccountListScreen: React.FC = () => {
   };
 
   useEffect(() => {
+    setPagination({ current: 1 });
+  }, []);
+
+  useEffect(() => {
     fetchCustomers();
     if (error) {
       message.error(error);
@@ -63,6 +67,7 @@ const AccountListScreen: React.FC = () => {
         )}
         handleTableChange={handleTableChange}
         loading={loading}
+        rowKey={"id"}
       />
 
       <AddCustomerModal
