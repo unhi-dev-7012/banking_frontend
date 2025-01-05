@@ -1,40 +1,155 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { DualAxes } from "@ant-design/plots";
+import { Transaction } from "../stores/dashboardStore";
 
-const MoneyFlowChart: React.FC = () => {
-  const [transactionData, setTransactionData] = useState<any[]>([]);
-  const [totalTransactionData, setTotalTransactionData] = useState<any[]>([]);
+interface MoneyFlowChartProps {
+  mode: string;
+  transactions: Transaction[];
+}
 
-  useEffect(() => {
-    // Giả lập dữ liệu được lấy từ API hoặc từ một nguồn bên ngoài
-    const fetchedTransactionData = [
-      { time: "2019-03", value: 350, type: "income" },
-      { time: "2019-04", value: 900, type: "income" },
-      { time: "2019-05", value: 300, type: "income" },
-      { time: "2019-06", value: 450, type: "income" },
-      { time: "2019-07", value: 470, type: "income" },
-      { time: "2019-03", value: 220, type: "outcome" },
-      { time: "2019-04", value: 300, type: "outcome" },
-      { time: "2019-05", value: 250, type: "outcome" },
-      { time: "2019-06", value: 220, type: "outcome" },
-      { time: "2019-07", value: 362, type: "outcome" },
-    ];
+const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
+  mode,
+  transactions,
+}) => {
+  const processData = () => {
+    const groupedData: any[] = [];
+    const totalTransactionData: any[] = [];
 
-    const fetchedTotalTransactionData = [
-      { time: "2019-03", value: 87, name: "transactions" },
-      { time: "2019-04", value: 100, name: "transactions" },
-      { time: "2019-05", value: 200, name: "transactions" },
-      { time: "2019-06", value: 50, name: "transactions" },
-      { time: "2019-07", value: 10, name: "transactions" },
-    ];
+    const xAxisLabels: (string | number)[] =
+      mode === "monthly"
+        ? Array.from({ length: 31 }, (_, index) => index + 1) // Days 1-31 for the month
+        : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // Days of the week for weekly mode
 
-    // Set dữ liệu vào state
-    setTransactionData(fetchedTransactionData);
-    setTotalTransactionData(fetchedTotalTransactionData);
-  }, []); // Chỉ chạy khi component được mount lần đầu tiên
+    if (mode === "monthly") {
+      // Group transactions by day of the month
+      transactions.forEach((transaction) => {
+        if (transaction.status !== "success") return; // Skip if status is not 'success'
+
+        const transactionDate = new Date(transaction.date);
+        const dayOfMonth = transactionDate.getDate(); // getDate() gives the day of the month (1-31)
+
+        // Find existing entries for incoming and outcoming categories
+        const existingIncoming = groupedData.find(
+          (data) => data.time === dayOfMonth && data.type === "incoming"
+        );
+        const existingOutcoming = groupedData.find(
+          (data) => data.time === dayOfMonth && data.type === "outcoming"
+        );
+        const existingTotal = totalTransactionData.find(
+          (data) => data.time === dayOfMonth
+        );
+
+        const amount =
+          transaction.category === "outcoming"
+            ? Math.abs(transaction.amount)
+            : transaction.amount;
+
+        // Update incoming or outcoming amounts
+        if (transaction.category === "incoming") {
+          if (existingIncoming) {
+            existingIncoming.value += amount;
+          } else {
+            groupedData.push({
+              time: dayOfMonth,
+              value: amount,
+              type: "incoming",
+            });
+          }
+        } else if (transaction.category === "outcoming") {
+          if (existingOutcoming) {
+            existingOutcoming.value += amount;
+          } else {
+            groupedData.push({
+              time: dayOfMonth,
+              value: amount,
+              type: "outcoming",
+            });
+          }
+        }
+
+        // Count total transactions
+        if (existingTotal) {
+          existingTotal.count += 1;
+        } else {
+          totalTransactionData.push({
+            time: dayOfMonth,
+            count: 1,
+            type: "Tổng số giao dịch",
+          });
+        }
+      });
+    } else if (mode === "weekly") {
+      // Group transactions by the day of the week
+      transactions.forEach((transaction) => {
+        if (transaction.status !== "success") return;
+
+        const transactionDate = new Date(transaction.date);
+        const dayOfWeek = transactionDate.getDay();
+
+        // Find existing entries for incoming and outcoming categories
+        const existingIncoming = groupedData.find(
+          (data) =>
+            data.time === xAxisLabels[dayOfWeek] && data.type === "incoming"
+        );
+        const existingOutcoming = groupedData.find(
+          (data) =>
+            data.time === xAxisLabels[dayOfWeek] && data.type === "outcoming"
+        );
+        const existingTotal = totalTransactionData.find(
+          (data) => data.time === xAxisLabels[dayOfWeek]
+        );
+
+        const amount =
+          transaction.category === "outcoming"
+            ? Math.abs(transaction.amount)
+            : transaction.amount;
+
+        // Update incoming or outcoming amounts
+        if (transaction.category === "incoming") {
+          if (existingIncoming) {
+            existingIncoming.value += amount;
+          } else {
+            groupedData.push({
+              time: xAxisLabels[dayOfWeek],
+              value: amount,
+              type: "incoming",
+            });
+          }
+        } else if (transaction.category === "outcoming") {
+          if (existingOutcoming) {
+            existingOutcoming.value += amount;
+          } else {
+            groupedData.push({
+              time: xAxisLabels[dayOfWeek],
+              value: amount,
+              type: "outcoming",
+            });
+          }
+        }
+
+        // Count total transactions
+        if (existingTotal) {
+          existingTotal.count += 1;
+        } else {
+          totalTransactionData.push({
+            time: xAxisLabels[dayOfWeek],
+            count: 1,
+            type: "Tổng số giao dịch",
+          });
+        }
+      });
+    }
+
+    return { groupedData, totalTransactionData };
+  };
+
+  const { groupedData, totalTransactionData } = processData();
+  console.log("group", groupedData);
+  console.log("total", totalTransactionData);
 
   const config = {
     xField: "time",
+
     legend: {
       color: {
         itemMarker: "round",
@@ -54,7 +169,7 @@ const MoneyFlowChart: React.FC = () => {
         data: totalTransactionData,
         type: "area",
         shapeField: "smooth",
-        yField: "value",
+        yField: "count",
         colorField: "type",
         scale: { y: { domainMin: 0 } },
         style: {
@@ -65,7 +180,7 @@ const MoneyFlowChart: React.FC = () => {
         tooltip: false,
       },
       {
-        data: transactionData,
+        data: groupedData,
         type: "interval",
         yField: "value",
         colorField: "type",
@@ -77,7 +192,7 @@ const MoneyFlowChart: React.FC = () => {
       {
         data: totalTransactionData,
         type: "line",
-        yField: "value",
+        yField: "count",
         scale: { y: { domainMin: 0 } },
         axis: { y: false },
         colorField: "type",
@@ -93,7 +208,7 @@ const MoneyFlowChart: React.FC = () => {
       {
         data: totalTransactionData,
         type: "point",
-        yField: "value",
+        yField: "count",
         colorField: "type",
         shapeField: "point",
         sizeField: 5,

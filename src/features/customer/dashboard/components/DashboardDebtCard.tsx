@@ -1,11 +1,21 @@
 import { Card, Flex, Typography } from "antd";
-import { ArrowUpNarrowWide } from "lucide-react";
+import { ArrowDownNarrowWide, ArrowUpNarrowWide } from "lucide-react";
 
 interface IDashboardDebtCardProps {
   title: string;
+  value: number | string;
+  percentage: number;
+  month: string;
 }
 
-const DashboardDebtCard: React.FC<IDashboardDebtCardProps> = ({ title }) => {
+const DashboardDebtCard: React.FC<IDashboardDebtCardProps> = ({
+  title,
+  value,
+  percentage,
+  month,
+}) => {
+  const isPositive = percentage >= 0;
+
   return (
     <Card
       style={{
@@ -16,17 +26,27 @@ const DashboardDebtCard: React.FC<IDashboardDebtCardProps> = ({ title }) => {
     >
       <Typography.Title level={4}>{title}</Typography.Title>
 
-      <Typography.Text>Tháng 01 - 2025</Typography.Text>
+      <Typography.Text>{month}</Typography.Text>
       <Flex
         style={{ marginTop: "20px" }}
         align="center"
         justify="space-between"
       >
-        <Typography.Text style={{ fontSize: "28px" }}>20.000đ</Typography.Text>
+        <Typography.Text style={{ fontSize: "28px" }}>
+          {value.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          })}
+        </Typography.Text>
         <Flex gap={10} align="center">
-          {<ArrowUpNarrowWide />}
-          <Typography.Text style={{ fontSize: "16px", color: "blue" }}>
-            20%
+          {isPositive ? <ArrowUpNarrowWide /> : <ArrowDownNarrowWide />}
+          <Typography.Text
+            style={{
+              fontSize: "16px",
+              color: isPositive ? "blue" : "red",
+            }}
+          >
+            {Math.abs(percentage).toFixed(2)}%
           </Typography.Text>
         </Flex>
       </Flex>
