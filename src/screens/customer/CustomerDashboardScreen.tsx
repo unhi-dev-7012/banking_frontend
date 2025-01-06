@@ -9,15 +9,27 @@ import useDashboardStore from "@features/customer/dashboard/stores/dashboardStor
 interface ICustomerDashboardScreenProps {}
 
 const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
-  const { data, loading, error, fetchDashboardData } = useDashboardStore();
-  const [chartMode, setChartMode] = useState("weekly");
+  const {
+    data,
+    loading,
+    error,
+    fetchDashboardDataCard: fetchDashboardData,
+    moneyFlow,
+    fetchMoneyFlowData,
+    mode,
+    setMode,
+  } = useDashboardStore();
 
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
+  useEffect(() => {
+    fetchMoneyFlowData();
+  }, [mode, fetchMoneyFlowData]);
+
   const handleChange = (value: string) => {
-    setChartMode(value);
+    setMode(value);
   };
 
   if (loading) {
@@ -54,19 +66,19 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
           <AccountCard />
           <DashboardDebtCard
             title="Tổng nợ đã tạo"
-            value={`${debtData?.totalDebtCreatedCurrentMonth || 0}đ`}
+            value={`${debtData?.totalDebtCreatedCurrentMonth || 0}`}
             percentage={debtData?.debtCreationRate || 0}
             month={currentMonthYear}
           />
           <DashboardDebtCard
             title="Tổng tiền nợ đã trả"
-            value={`${debtData?.totalPaidCurrentMonth || 0}đ`}
+            value={`${debtData?.totalPaidCurrentMonth || 0}`}
             percentage={debtData?.paidRate || 0}
             month={currentMonthYear}
           />
           <DashboardDebtCard
             title="Tổng tiền nợ được trả"
-            value={`${debtData?.totalBePaidCurrentMonth || 0}đ`}
+            value={`${debtData?.totalBePaidCurrentMonth || 0}`}
             percentage={debtData?.bePaidRate || 0}
             month={currentMonthYear}
           />
@@ -102,10 +114,7 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
             <Flex
               style={{ width: "100%", height: "100%", padding: "20px 10px" }}
             >
-              <MoneyFlowChart
-                mode={chartMode}
-                transactions={data?.recentTransactions || []}
-              />
+              <MoneyFlowChart mode={mode} data={moneyFlow || undefined} />
             </Flex>
           </Flex>
           <DashboardHistoryCard data={data?.recentTransactions} />

@@ -1,4 +1,4 @@
-import { Card, Flex, Tag, Typography } from "antd";
+import { Flex, Tag, Typography } from "antd";
 import {
   ChevronsDown,
   ChevronsUp,
@@ -20,6 +20,13 @@ const DashboardDebtCard: React.FC<IDashboardDebtCardProps> = ({
   month,
 }) => {
   const isPositive = percentage >= 0;
+  const formattedValue =
+    title === "Tổng nợ đã tạo"
+      ? value
+      : (value as number).toLocaleString("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        });
 
   return (
     <Flex
@@ -48,10 +55,7 @@ const DashboardDebtCard: React.FC<IDashboardDebtCardProps> = ({
 
       <Flex align="center" style={{ height: "50%" }}>
         <Typography.Text style={{ fontSize: "28px" }}>
-          {value.toLocaleString("vi-VN", {
-            style: "currency",
-            currency: "VND",
-          })}
+          {formattedValue}
         </Typography.Text>
       </Flex>
 

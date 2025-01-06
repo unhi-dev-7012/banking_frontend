@@ -1,100 +1,71 @@
 import { useMemo } from "react";
-import { Transaction } from "../stores/dashboardStore";
+import { MoneyFlowData, MoneyFlowItem } from "../stores/dashboardStore";
 
 interface ProcessedData {
-  groupedData: any[];
   totalTransactionData: any[];
+  groupedData: any[];
+  // xAxisLabels: (string | number)[];
 }
 
-const useMoneyFlowData = (
-  mode: string,
-  transactions: Transaction[]
-): ProcessedData => {
-  return useMemo(() => {
-    const groupedData: any[] = [];
-    const totalTransactionData: any[] = [];
+const useMoneyFlowData = (mode: string, data: MoneyFlowData): ProcessedData => {
+  console.log("here", data);
+  const getWeekdayLabel = (dateString: string) => {
+    const dateParts = dateString.split("/");
+    const date = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
+    const dayIndex = date.getDay();
+    const dayLabels = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+    return dayLabels[dayIndex];
+  };
 
-    const xAxisLabels: (string | number)[] =
-      mode === "monthly"
-        ? Array.from({ length: 31 }, (_, index) => index + 1)
-        : ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+  const getDayOfMonth = (dateString: string) => {
+    const dateParts = dateString.split("/");
+    return parseInt(dateParts[0], 10);
+  };
 
-    const updateData = (
-      key: string | number,
-      amount: number,
-      type: string,
-      isTotal?: boolean
-    ) => {
-      const targetArray = isTotal ? totalTransactionData : groupedData;
-      const existingEntry = targetArray.find(
-        (data) => data.time === key && data.type === type
-      );
+  const groupedData = useMemo(() => {
+    const incoming = data?.byCategory.totalIncoming || [];
+    const outgoing = data?.byCategory.totalOutcoming || [];
+    const result: MoneyFlowItem[] = [];
 
-      if (existingEntry) {
-        existingEntry.value = (existingEntry.value || 0) + amount;
-        if (isTotal) existingEntry.count += 1;
-      } else {
-        targetArray.push(
-          isTotal
-            ? { time: key, count: 1, type }
-            : { time: key, value: amount, type }
-        );
-      }
-    };
-
-    transactions.forEach((transaction) => {
-      if (transaction.status !== "success") return;
-
-      const transactionDate = new Date(transaction.date);
-      const key =
+    incoming.forEach((entry, index) => {
+      const timeLabel =
         mode === "monthly"
-          ? transactionDate.getDate()
-          : xAxisLabels[transactionDate.getDay()];
-      // const amount =
-      //   transaction.category === "outcoming" || transaction.category === "debt"
-      //     ? Math.abs(transaction.amount)
-      //     : transaction.amount;
+          ? getDayOfMonth(entry.time)
+          : getWeekdayLabel(entry.time);
 
-      let amount = transaction.amount;
-
-      //   if (transaction.category === "incoming") {
-      //     updateData(key, amount, "Tiền vào");
-      //   } else if (
-      //     transaction.category === "outcoming" ||
-      //     transaction.category === "debt"
-      //   ) {
-      //     updateData(key, amount, "Tiền ra");
-      //   }
-
-      //   updateData(key, 0, "Tổng số giao dịch", true); // Increment transaction count
-      // });
-
-      // Kiểm tra giao dịch "debt" trước khi quyết định incoming hay outgoing
-      if (transaction.category === "debt") {
-        if (transaction.amount > 0) {
-          // Nếu nợ > 0 thì tính là Tiền vào (incoming)
-          updateData(key, transaction.amount, "Tiền vào");
-        } else {
-          // Nếu nợ < 0 thì tính là Tiền ra (outcoming)
-          updateData(key, Math.abs(transaction.amount), "Tiền ra");
-        }
-      } else if (transaction.category === "incoming") {
-        updateData(key, amount, "Tiền vào");
-      } else if (transaction.category === "outcoming") {
-        updateData(key, Math.abs(amount), "Tiền ra");
-      }
-      updateData(key, 0, "Tổng số giao dịch", true);
+      result.push({
+        time: timeLabel.toString(),
+        value: entry.value,
+        type: "Tiền vào",
+      });
+      result.push({
+        time: timeLabel.toString(),
+        value: outgoing[index]?.value || 0, // Ensure no undefined value
+        type: "Tiền ra",
+      });
     });
 
-    // Sort data
-    const sortData = (a: any, b: any) =>
-      xAxisLabels.indexOf(a.time) - xAxisLabels.indexOf(b.time);
+    return result;
+  }, [mode, data]);
 
-    return {
-      groupedData: groupedData.sort(sortData),
-      totalTransactionData: totalTransactionData.sort(sortData),
-    };
-  }, [mode, transactions]);
+  const totalTransactionData = useMemo(() => {
+    return (
+      data?.totalTransactionData?.map((entry) => {
+        const timeLabel =
+          mode === "monthly"
+            ? getDayOfMonth(entry.time)
+            : getWeekdayLabel(entry.time);
+
+        return {
+          time: timeLabel.toString(),
+          count: entry.value,
+          type: "Tổng số giao dịch",
+        };
+      }) || []
+    );
+  }, [mode, data]);
+
+  return { groupedData, totalTransactionData };
 };
 
 export default useMoneyFlowData;
