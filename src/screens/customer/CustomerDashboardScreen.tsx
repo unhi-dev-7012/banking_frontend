@@ -59,13 +59,13 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
             month={currentMonthYear}
           />
           <DashboardDebtCard
-            title="Tổng nợ đã trả"
+            title="Tổng tiền nợ đã trả"
             value={`${debtData?.totalPaidCurrentMonth || 0}đ`}
             percentage={debtData?.paidRate || 0}
             month={currentMonthYear}
           />
           <DashboardDebtCard
-            title="Tổng nợ được trả"
+            title="Tổng tiền nợ được trả"
             value={`${debtData?.totalBePaidCurrentMonth || 0}đ`}
             percentage={debtData?.bePaidRate || 0}
             month={currentMonthYear}
