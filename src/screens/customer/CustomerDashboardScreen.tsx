@@ -25,6 +25,7 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
   }, [fetchDashboardData]);
 
   useEffect(() => {
+    console.log("mode", mode);
     fetchMoneyFlowData();
   }, [mode, fetchMoneyFlowData]);
 
@@ -102,7 +103,7 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
                 Thống kê chuyển khoản
               </Typography.Title>
               <Select
-                defaultValue="Trong tuần"
+                value={mode}
                 style={{ width: 120 }}
                 onChange={handleChange}
                 options={[
