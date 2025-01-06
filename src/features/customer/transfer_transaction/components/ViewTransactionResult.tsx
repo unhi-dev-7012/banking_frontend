@@ -187,18 +187,6 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
       />
 
       <Flex justify="space-between">
-        <Typography.Text>Ngân hàng nhận</Typography.Text>
-        <Typography.Text>Ngân hàng nhận</Typography.Text>
-      </Flex>
-      <hr
-        style={{
-          border: "none",
-          borderTop: "1px solid #f0f0f0",
-          margin: "5px 0",
-        }}
-      />
-
-      <Flex justify="space-between">
         <Typography.Text>Hình thức tính phí</Typography.Text>
         <Typography.Text>
           {transactionDetailsRespones?.remitterPaidFee
