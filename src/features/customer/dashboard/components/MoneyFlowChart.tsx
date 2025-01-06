@@ -1,37 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { DualAxes } from "@ant-design/plots";
+import { Transaction } from "../stores/dashboardStore";
+import useMoneyFlowData from "../hooks/useMoneyFlowData";
 
-const MoneyFlowChart: React.FC = () => {
-  const [transactionData, setTransactionData] = useState<any[]>([]);
-  const [totalTransactionData, setTotalTransactionData] = useState<any[]>([]);
+interface MoneyFlowChartProps {
+  mode: string;
+  transactions: Transaction[];
+}
 
-  useEffect(() => {
-    // Giả lập dữ liệu được lấy từ API hoặc từ một nguồn bên ngoài
-    const fetchedTransactionData = [
-      { time: "2019-03", value: 350, type: "income" },
-      { time: "2019-04", value: 900, type: "income" },
-      { time: "2019-05", value: 300, type: "income" },
-      { time: "2019-06", value: 450, type: "income" },
-      { time: "2019-07", value: 470, type: "income" },
-      { time: "2019-03", value: 220, type: "outcome" },
-      { time: "2019-04", value: 300, type: "outcome" },
-      { time: "2019-05", value: 250, type: "outcome" },
-      { time: "2019-06", value: 220, type: "outcome" },
-      { time: "2019-07", value: 362, type: "outcome" },
-    ];
-
-    const fetchedTotalTransactionData = [
-      { time: "2019-03", value: 87, name: "transactions" },
-      { time: "2019-04", value: 100, name: "transactions" },
-      { time: "2019-05", value: 200, name: "transactions" },
-      { time: "2019-06", value: 50, name: "transactions" },
-      { time: "2019-07", value: 10, name: "transactions" },
-    ];
-
-    // Set dữ liệu vào state
-    setTransactionData(fetchedTransactionData);
-    setTotalTransactionData(fetchedTotalTransactionData);
-  }, []); // Chỉ chạy khi component được mount lần đầu tiên
+const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
+  mode,
+  transactions,
+}) => {
+  console.log("mode", mode);
+  const { groupedData, totalTransactionData } = useMoneyFlowData(
+    mode,
+    transactions
+  );
 
   const config = {
     xField: "time",
@@ -54,7 +39,7 @@ const MoneyFlowChart: React.FC = () => {
         data: totalTransactionData,
         type: "area",
         shapeField: "smooth",
-        yField: "value",
+        yField: "count",
         colorField: "type",
         scale: { y: { domainMin: 0 } },
         style: {
@@ -65,19 +50,41 @@ const MoneyFlowChart: React.FC = () => {
         tooltip: false,
       },
       {
-        data: transactionData,
+        data: groupedData,
         type: "interval",
         yField: "value",
         colorField: "type",
         group: true,
-        axis: { y: false },
+        axis: {
+          y: {
+            position: "right",
+            style: { titleFill: "#052bec" },
+            labelFormatter: (d: number) =>
+              d.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }),
+          },
+        },
         style: { maxWidth: 50, radiusTopLeft: 10, radiusTopRight: 10 },
         interaction: { elementHighlight: { background: true } },
+        tooltip: {
+          items: [
+            {
+              channel: "y",
+              valueFormatter: (d: number) =>
+                d.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }),
+            },
+          ],
+        },
       },
       {
         data: totalTransactionData,
         type: "line",
-        yField: "value",
+        yField: "count",
         scale: { y: { domainMin: 0 } },
         axis: { y: false },
         colorField: "type",
@@ -93,13 +100,28 @@ const MoneyFlowChart: React.FC = () => {
       {
         data: totalTransactionData,
         type: "point",
-        yField: "value",
+        yField: "count",
         colorField: "type",
         shapeField: "point",
         sizeField: 5,
         style: {
           stroke: "#fff",
           fill: "#5e90f9",
+        },
+        axis: {
+          y: {
+            position: "left",
+            title: "Tổng giao dịch",
+            style: { titleFill: "#052bec" },
+            tickMethod: (min: number, max: number) => {
+              // Tạo mảng các giá trị nguyên giữa min và max
+              const ticks = [];
+              for (let i = Math.ceil(min); i <= Math.floor(max); i++) {
+                ticks.push(i);
+              }
+              return ticks;
+            },
+          },
         },
         scale: { y: { domainMin: 0 } },
         tooltip: false,

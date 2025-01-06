@@ -1,36 +1,101 @@
-import { Card, Flex, Typography } from "antd";
-import { ArrowUpNarrowWide } from "lucide-react";
+import { Card, Flex, Tag, Typography } from "antd";
+import {
+  ChevronsDown,
+  ChevronsUp,
+  CircleArrowOutDownLeft,
+  CircleArrowOutUpRight,
+} from "lucide-react";
 
 interface IDashboardDebtCardProps {
   title: string;
+  value: number | string;
+  percentage: number;
+  month: string;
 }
 
-const DashboardDebtCard: React.FC<IDashboardDebtCardProps> = ({ title }) => {
+const DashboardDebtCard: React.FC<IDashboardDebtCardProps> = ({
+  title,
+  value,
+  percentage,
+  month,
+}) => {
+  const isPositive = percentage >= 0;
+
   return (
-    <Card
+    <Flex
+      vertical
       style={{
+        padding: "20px",
         width: "23%",
         borderRadius: 16,
         border: "1px solid #d9d9d9",
       }}
     >
-      <Typography.Title level={4}>{title}</Typography.Title>
+      <Flex justify="space-between" style={{ height: "25%" }}>
+        <Flex vertical>
+          <Typography.Title level={4} style={{ margin: 0 }}>
+            {title}
+          </Typography.Title>
+          <Typography.Text>{month}</Typography.Text>
+        </Flex>
 
-      <Typography.Text>Tháng 01 - 2025</Typography.Text>
+        {isPositive ? (
+          <CircleArrowOutUpRight color="blue" />
+        ) : (
+          <CircleArrowOutDownLeft color="red" />
+        )}
+      </Flex>
+
+      <Flex align="center" style={{ height: "50%" }}>
+        <Typography.Text style={{ fontSize: "28px" }}>
+          {value.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          })}
+        </Typography.Text>
+      </Flex>
+
       <Flex
-        style={{ marginTop: "20px" }}
+        gap={10}
         align="center"
         justify="space-between"
+        style={{ height: "20%" }}
       >
-        <Typography.Text style={{ fontSize: "28px" }}>20.000đ</Typography.Text>
-        <Flex gap={10} align="center">
-          {<ArrowUpNarrowWide />}
-          <Typography.Text style={{ fontSize: "16px", color: "blue" }}>
-            20%
+        <Typography.Text
+          style={{
+            fontSize: "16px",
+            color: "#979993",
+          }}
+        >
+          So với tháng trước
+        </Typography.Text>
+        <Tag
+          style={{
+            padding: "5px 10px",
+            borderRadius: "16px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          color={isPositive ? "processing" : "error"}
+          bordered={false}
+        >
+          {isPositive ? (
+            <ChevronsUp color="blue" />
+          ) : (
+            <ChevronsDown color="red" />
+          )}
+          <Typography.Text
+            style={{
+              fontSize: "16px",
+              color: isPositive ? "blue" : "red",
+            }}
+          >
+            {Math.abs(percentage).toFixed(2)}%
           </Typography.Text>
-        </Flex>
+        </Tag>
       </Flex>
-    </Card>
+    </Flex>
   );
 };
 
