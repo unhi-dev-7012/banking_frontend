@@ -1,6 +1,7 @@
 import React from "react";
 import { DualAxes } from "@ant-design/plots";
 import { Transaction } from "../stores/dashboardStore";
+import useMoneyFlowData from "../hooks/useMoneyFlowData";
 
 interface MoneyFlowChartProps {
   mode: string;
@@ -11,162 +12,10 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
   mode,
   transactions,
 }) => {
-  const processData = () => {
-    console.log("group", transactions);
-    const groupedData: any[] = [];
-    const totalTransactionData: any[] = [];
-
-    const xAxisLabels: (string | number)[] =
-      mode === "monthly"
-        ? Array.from({ length: 31 }, (_, index) => index + 1)
-        : ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
-    if (mode === "monthly") {
-      // Group transactions by day of the month
-      transactions.forEach((transaction) => {
-        if (transaction.status !== "success") return; // Skip if status is not 'success'
-
-        const transactionDate = new Date(transaction.date);
-        const dayOfMonth = transactionDate.getDate(); // getDate() gives the day of the month (1-31)
-
-        // Find existing entries for incoming and outcoming categories
-        const existingIncoming = groupedData.find(
-          (data) =>
-            data.time === xAxisLabels[dayOfMonth - 1] &&
-            data.type === "incoming"
-        );
-        const existingOutcoming = groupedData.find(
-          (data) =>
-            data.time === xAxisLabels[dayOfMonth - 1] &&
-            (data.type === "outcoming" || data.type === "debt")
-        );
-        const existingTotal = totalTransactionData.find(
-          (data) => data.time === xAxisLabels[dayOfMonth - 1]
-        );
-
-        const amount =
-          transaction.category === "outcoming" ||
-          transaction.category === "debt"
-            ? Math.abs(transaction.amount)
-            : transaction.amount;
-
-        // Update incoming or outcoming amounts
-        if (transaction.category === "incoming") {
-          if (existingIncoming) {
-            existingIncoming.value += amount;
-          } else {
-            groupedData.push({
-              time: xAxisLabels[dayOfMonth - 1],
-              value: amount,
-              type: "Tiền vào",
-            });
-          }
-        } else if (
-          transaction.category === "outcoming" ||
-          transaction.category === "debt"
-        ) {
-          if (existingOutcoming) {
-            existingOutcoming.value += amount;
-          } else {
-            console.log("here", transaction);
-            groupedData.push({
-              time: xAxisLabels[dayOfMonth - 1],
-              value: amount,
-              type: "Tiền ra",
-            });
-          }
-        }
-
-        // Count total transactions
-        if (existingTotal) {
-          existingTotal.count += 1;
-        } else {
-          totalTransactionData.push({
-            time: xAxisLabels[dayOfMonth - 1],
-            count: 1,
-            type: "Tổng số giao dịch",
-          });
-        }
-      });
-    } else if (mode === "weekly") {
-      // Group transactions by the day of the week
-      transactions.forEach((transaction) => {
-        if (transaction.status !== "success") return;
-
-        const transactionDate = new Date(transaction.date);
-        const dayOfWeek = transactionDate.getDay();
-
-        // Find existing entries for incoming and outcoming categories
-        const existingIncoming = groupedData.find(
-          (data) =>
-            data.time === xAxisLabels[dayOfWeek] && data.type === "incoming"
-        );
-        const existingOutcoming = groupedData.find(
-          (data) =>
-            data.time === xAxisLabels[dayOfWeek] &&
-            (data.type === "outcoming" || data.type === "debt")
-        );
-        const existingTotal = totalTransactionData.find(
-          (data) => data.time === xAxisLabels[dayOfWeek]
-        );
-
-        const amount =
-          transaction.category === "outcoming" ||
-          transaction.category === "debt"
-            ? Math.abs(transaction.amount)
-            : transaction.amount;
-
-        // Update incoming or outcoming amounts
-        if (transaction.category === "incoming") {
-          if (existingIncoming) {
-            existingIncoming.value += amount;
-          } else {
-            groupedData.push({
-              time: xAxisLabels[dayOfWeek],
-              value: amount,
-              type: "Tiền vào",
-            });
-          }
-        } else if (
-          transaction.category === "outcoming" ||
-          transaction.category === "debt"
-        ) {
-          if (existingOutcoming) {
-            existingOutcoming.value += amount;
-          } else {
-            groupedData.push({
-              time: xAxisLabels[dayOfWeek],
-              value: amount,
-              type: "Tiền ra",
-            });
-          }
-        }
-
-        // Count total transactions
-        if (existingTotal) {
-          existingTotal.count += 1;
-        } else {
-          totalTransactionData.push({
-            time: xAxisLabels[dayOfWeek],
-            count: 1,
-            type: "Tổng số giao dịch",
-          });
-        }
-      });
-    }
-
-    // Sort data by `time` in ascending order
-    groupedData.sort(
-      (a, b) => xAxisLabels.indexOf(a.time) - xAxisLabels.indexOf(b.time)
-    );
-    totalTransactionData.sort(
-      (a, b) => xAxisLabels.indexOf(a.time) - xAxisLabels.indexOf(b.time)
-    );
-
-    return { groupedData, totalTransactionData };
-  };
-
-  const { groupedData, totalTransactionData } = processData();
-  console.log("group", groupedData);
+  const { groupedData, totalTransactionData } = useMoneyFlowData(
+    mode,
+    transactions
+  );
 
   const config = {
     xField: "time",
