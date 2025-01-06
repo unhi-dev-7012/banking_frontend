@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { getDataDashboard } from "../services/getDataDashboard";
+import { getMoneyFlowData } from "../services/getMoneyFlowData";
 
 interface DashboardState {
   loading: boolean;
@@ -8,20 +9,41 @@ interface DashboardState {
     recentTransactions: Transaction[];
     debtCount: DebtCount;
   } | null;
-  fetchDashboardData: () => Promise<void>;
+  moneyFlow: MoneyFlowData | undefined;
+  mode: string; // Add mode to state
+  setMode: (mode: string) => void; // Action to update mode
+  fetchDashboardDataCard: () => Promise<void>;
+  fetchMoneyFlowData: () => Promise<void>;
 }
 
-const useDashboardStore = create<DashboardState>((set) => ({
+const useDashboardStore = create<DashboardState>((set, get) => ({
   loading: false,
   error: null,
   data: null,
-  fetchDashboardData: async () => {
+  moneyFlow: undefined,
+  mode: "weekly",
+  setMode: (mode: string) => set({ mode }),
+
+  fetchDashboardDataCard: async () => {
     set({ loading: true, error: null });
     try {
       const data = await getDataDashboard();
       set({ data, loading: false });
     } catch (error: any) {
       set({ error: error.message || "Lỗi không xác định", loading: false });
+    }
+  },
+  fetchMoneyFlowData: async () => {
+    set({ error: null });
+    try {
+      const currentMode = get().mode;
+      const moneyFlow = await getMoneyFlowData(currentMode); // Pass mode as a parameter
+      set({ moneyFlow });
+    } catch (error: any) {
+      set({
+        error: error.message || "An unknown error occurred",
+        loading: false,
+      });
     }
   },
 }));
@@ -39,6 +61,20 @@ export interface Transaction {
     name: string;
     bankAccountId: string;
     bankName: string;
+  };
+}
+
+export interface MoneyFlowItem {
+  time: string;
+  value: number;
+  type: string;
+}
+
+export interface MoneyFlowData {
+  totalTransactionData: MoneyFlowItem[];
+  byCategory: {
+    totalIncoming: MoneyFlowItem[];
+    totalOutcoming: MoneyFlowItem[];
   };
 }
 

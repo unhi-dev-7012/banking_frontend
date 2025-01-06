@@ -1,4 +1,4 @@
-import { Button, Card, Flex, List, Tag, Typography } from "antd";
+import { Button, Flex, List, Tag, Typography } from "antd";
 import { Transaction } from "../stores/dashboardStore";
 import {
   ArrowDownToDot,
@@ -24,7 +24,6 @@ const DashboardHistoryCard: React.FC<DataType> = ({ data }) => {
   const handleSeeMore = () => {
     navigate(ROUTES_PATH.CUSTOMER.HISTORY);
   };
-  console.log("recent: ", recentTransactions);
 
   return (
     <Flex

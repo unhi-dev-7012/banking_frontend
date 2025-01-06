@@ -1,23 +1,21 @@
 import React from "react";
 import { DualAxes } from "@ant-design/plots";
-import { Transaction } from "../stores/dashboardStore";
+import { MoneyFlowData } from "../stores/dashboardStore";
 import useMoneyFlowData from "../hooks/useMoneyFlowData";
 
 interface MoneyFlowChartProps {
   mode: string;
-  transactions: Transaction[];
+  data: MoneyFlowData | undefined;
 }
 
-const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
-  mode,
-  transactions,
-}) => {
-  console.log("mode", mode);
-  const { groupedData, totalTransactionData } = useMoneyFlowData(
-    mode,
-    transactions
-  );
+const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({ mode, data }) => {
+  if (!data) {
+    return <div>Loading...</div>; // Or return null, or a placeholder
+  }
 
+  const { groupedData, totalTransactionData } = useMoneyFlowData(mode, data);
+
+  console.log("group", groupedData);
   const config = {
     xField: "time",
     legend: {
