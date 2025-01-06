@@ -12,14 +12,14 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
   transactions,
 }) => {
   const processData = () => {
+    console.log("group", transactions);
     const groupedData: any[] = [];
     const totalTransactionData: any[] = [];
 
     const xAxisLabels: (string | number)[] =
       mode === "monthly"
-        ? Array.from({ length: 31 }, (_, index) => index + 1) // Days 1-31 for the month
-        : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // Days of the week for weekly mode
-
+        ? Array.from({ length: 31 }, (_, index) => index + 1)
+        : ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
     if (mode === "monthly") {
       // Group transactions by day of the month
       transactions.forEach((transaction) => {
@@ -30,17 +30,22 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
 
         // Find existing entries for incoming and outcoming categories
         const existingIncoming = groupedData.find(
-          (data) => data.time === dayOfMonth && data.type === "incoming"
+          (data) =>
+            data.time === xAxisLabels[dayOfMonth - 1] &&
+            data.type === "incoming"
         );
         const existingOutcoming = groupedData.find(
-          (data) => data.time === dayOfMonth && data.type === "outcoming"
+          (data) =>
+            data.time === xAxisLabels[dayOfMonth - 1] &&
+            (data.type === "outcoming" || data.type === "debt")
         );
         const existingTotal = totalTransactionData.find(
-          (data) => data.time === dayOfMonth
+          (data) => data.time === xAxisLabels[dayOfMonth - 1]
         );
 
         const amount =
-          transaction.category === "outcoming"
+          transaction.category === "outcoming" ||
+          transaction.category === "debt"
             ? Math.abs(transaction.amount)
             : transaction.amount;
 
@@ -50,19 +55,23 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
             existingIncoming.value += amount;
           } else {
             groupedData.push({
-              time: dayOfMonth,
+              time: xAxisLabels[dayOfMonth - 1],
               value: amount,
-              type: "incoming",
+              type: "Tiền vào",
             });
           }
-        } else if (transaction.category === "outcoming") {
+        } else if (
+          transaction.category === "outcoming" ||
+          transaction.category === "debt"
+        ) {
           if (existingOutcoming) {
             existingOutcoming.value += amount;
           } else {
+            console.log("here", transaction);
             groupedData.push({
-              time: dayOfMonth,
+              time: xAxisLabels[dayOfMonth - 1],
               value: amount,
-              type: "outcoming",
+              type: "Tiền ra",
             });
           }
         }
@@ -72,7 +81,7 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
           existingTotal.count += 1;
         } else {
           totalTransactionData.push({
-            time: dayOfMonth,
+            time: xAxisLabels[dayOfMonth - 1],
             count: 1,
             type: "Tổng số giao dịch",
           });
@@ -93,14 +102,16 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
         );
         const existingOutcoming = groupedData.find(
           (data) =>
-            data.time === xAxisLabels[dayOfWeek] && data.type === "outcoming"
+            data.time === xAxisLabels[dayOfWeek] &&
+            (data.type === "outcoming" || data.type === "debt")
         );
         const existingTotal = totalTransactionData.find(
           (data) => data.time === xAxisLabels[dayOfWeek]
         );
 
         const amount =
-          transaction.category === "outcoming"
+          transaction.category === "outcoming" ||
+          transaction.category === "debt"
             ? Math.abs(transaction.amount)
             : transaction.amount;
 
@@ -112,17 +123,20 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
             groupedData.push({
               time: xAxisLabels[dayOfWeek],
               value: amount,
-              type: "incoming",
+              type: "Tiền vào",
             });
           }
-        } else if (transaction.category === "outcoming") {
+        } else if (
+          transaction.category === "outcoming" ||
+          transaction.category === "debt"
+        ) {
           if (existingOutcoming) {
             existingOutcoming.value += amount;
           } else {
             groupedData.push({
               time: xAxisLabels[dayOfWeek],
               value: amount,
-              type: "outcoming",
+              type: "Tiền ra",
             });
           }
         }
@@ -140,16 +154,22 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
       });
     }
 
+    // Sort data by `time` in ascending order
+    groupedData.sort(
+      (a, b) => xAxisLabels.indexOf(a.time) - xAxisLabels.indexOf(b.time)
+    );
+    totalTransactionData.sort(
+      (a, b) => xAxisLabels.indexOf(a.time) - xAxisLabels.indexOf(b.time)
+    );
+
     return { groupedData, totalTransactionData };
   };
 
   const { groupedData, totalTransactionData } = processData();
   console.log("group", groupedData);
-  console.log("total", totalTransactionData);
 
   const config = {
     xField: "time",
-
     legend: {
       color: {
         itemMarker: "round",
@@ -185,7 +205,7 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
         yField: "value",
         colorField: "type",
         group: true,
-        axis: { y: false },
+        axis: { y: { position: "right" } },
         style: { maxWidth: 50, radiusTopLeft: 10, radiusTopRight: 10 },
         interaction: { elementHighlight: { background: true } },
       },

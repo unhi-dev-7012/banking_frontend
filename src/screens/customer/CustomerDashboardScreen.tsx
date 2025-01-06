@@ -90,7 +90,7 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
                 Thống kê chuyển khoản
               </Typography.Title>
               <Select
-                defaultValue="monthly"
+                defaultValue="Theo tháng"
                 style={{ width: 120 }}
                 onChange={handleChange}
                 options={[
