@@ -32,7 +32,7 @@ const data: DataType[] = [
 const DashboardHistoryCard: React.FC = () => (
   <Card
     style={{
-      width: "40%",
+      width: "32%",
       borderRadius: 16,
       border: "1px solid #d9d9d9",
     }}

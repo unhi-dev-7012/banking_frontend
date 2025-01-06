@@ -74,7 +74,7 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
         <Flex gap={20}>
           <Flex
             style={{
-              width: "60%",
+              width: "68%",
               padding: "10px",
               border: "1px solid #d9d9d9",
               borderRadius: "8px",

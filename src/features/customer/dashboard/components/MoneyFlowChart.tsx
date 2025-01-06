@@ -205,9 +205,31 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
         yField: "value",
         colorField: "type",
         group: true,
-        axis: { y: { position: "right" } },
+        axis: {
+          y: {
+            position: "right",
+            style: { titleFill: "#052bec" },
+            labelFormatter: (d: number) =>
+              d.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }),
+          },
+        },
         style: { maxWidth: 50, radiusTopLeft: 10, radiusTopRight: 10 },
         interaction: { elementHighlight: { background: true } },
+        tooltip: {
+          items: [
+            {
+              channel: "y",
+              valueFormatter: (d: number) =>
+                d.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }),
+            },
+          ],
+        },
       },
       {
         data: totalTransactionData,
@@ -235,6 +257,21 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
         style: {
           stroke: "#fff",
           fill: "#5e90f9",
+        },
+        axis: {
+          y: {
+            position: "left",
+            title: "Tổng giao dịch",
+            style: { titleFill: "#052bec" },
+            tickMethod: (min: number, max: number) => {
+              // Tạo mảng các giá trị nguyên giữa min và max
+              const ticks = [];
+              for (let i = Math.ceil(min); i <= Math.floor(max); i++) {
+                ticks.push(i);
+              }
+              return ticks;
+            },
+          },
         },
         scale: { y: { domainMin: 0 } },
         tooltip: false,
