@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Flex, Spin, theme, Typography } from "antd";
+import { Button, Flex, message, Spin, theme, Typography } from "antd";
 import useTransactionStore from "../stores/transactionStore";
 import { TransactionStatus, TransactionType } from "../transactionType";
 import { BankInfoUI, getBankDetails } from "./ViewTransactionDetails";
@@ -7,6 +7,7 @@ import { replace, useNavigate } from "react-router-dom";
 import { ROUTES_PATH } from "@constants/path";
 import { onMessage } from "firebase/messaging";
 import { messaging } from "../../../../config/firebase";
+import { createContact } from "@features/customer/contact/services/createContact";
 
 interface ViewTransactionResultProps {
   onSubmitSuccess: () => void; // Function to trigger step change
@@ -20,6 +21,7 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
     null
   );
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     fetchLoading,
@@ -35,6 +37,46 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
     padding: "20px 40px",
     borderRadius: token.borderRadiusLG,
     border: `1px dashed ${token.colorBorder}`,
+  };
+
+  const handleSaveBeneficiary = async () => {
+    setLoading(true);
+    try {
+      if (!transactionDetailsRespones) return;
+
+      await createContact(
+        transactionDetailsRespones.beneficiaryBankId,
+        transactionDetailsRespones.beneficiaryId,
+        transactionDetailsRespones.beneficiaryName
+      );
+
+      message.success("Lưu người thụ hưởng thành công!");
+    } catch (error: any) {
+      if (error.response) {
+        const { status } = error.response;
+
+        switch (status) {
+          case 404:
+            message.error("Không tìm thấy tài nguyên yêu cầu.");
+            break;
+          case 400:
+            message.error("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.");
+            break;
+          case 409:
+            message.error(
+              "Tài khoản này trùng với tài khoản của bạn hoặc đã được thêm."
+            );
+            break;
+          default:
+            message.error("Thêm tài khoản thất bại");
+            break;
+        }
+      } else {
+        message.error("Đã xảy ra lỗi. Vui lòng thử lại.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -243,7 +285,9 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
             ? "Quay về danh sách nợ"
             : "Thêm giao dịch"}
         </Button>
-        <Button>Lưu người thụ hưởng</Button>
+        <Button loading={loading} onClick={handleSaveBeneficiary}>
+          Lưu người thụ hưởng
+        </Button>
       </Flex>
     </Flex>
   );
