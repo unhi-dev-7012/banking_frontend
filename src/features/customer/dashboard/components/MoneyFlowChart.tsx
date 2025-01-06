@@ -12,6 +12,7 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({
   mode,
   transactions,
 }) => {
+  console.log("mode", mode);
   const { groupedData, totalTransactionData } = useMoneyFlowData(
     mode,
     transactions

@@ -17,7 +17,7 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
   }, [fetchDashboardData]);
 
   const handleChange = (value: string) => {
-    setChartMode(value); // Cập nhật trạng thái chế độ khi người dùng chọn
+    setChartMode(value);
   };
 
   if (loading) {
@@ -45,7 +45,7 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
   const debtData = data?.debtCount;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "0px 20px 20px 20px" }}>
       <Typography.Title level={2} style={{ margin: "0 0 10px 0" }}>
         Trang chủ
       </Typography.Title>
@@ -71,14 +71,14 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
             month={currentMonthYear}
           />
         </Flex>
-        <Flex gap={20}>
+        <Flex gap={20} style={{ height: "calc(100% - 225px)" }}>
           <Flex
             style={{
               width: "68%",
               padding: "10px",
               border: "1px solid #d9d9d9",
-              borderRadius: "8px",
-              height: "calc(100% - 225px)",
+              borderRadius: "16px",
+              height: "100%",
             }}
             vertical
           >
@@ -86,27 +86,29 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
               justify="space-between"
               style={{ marginBottom: 10, marginTop: 10 }}
             >
-              <Typography.Title level={5} style={{ margin: 0 }}>
+              <Typography.Title level={4} style={{ margin: 0 }}>
                 Thống kê chuyển khoản
               </Typography.Title>
               <Select
-                defaultValue="Theo tháng"
+                defaultValue="Trong tuần"
                 style={{ width: 120 }}
                 onChange={handleChange}
                 options={[
-                  { value: "weekly", label: "Theo ngày" },
-                  { value: "monthly", label: "Theo tháng" },
+                  { value: "weekly", label: "Trong tuần" },
+                  { value: "monthly", label: "Trong tháng" },
                 ]}
               />
             </Flex>
-            <div style={{ width: "100%" }}>
+            <Flex
+              style={{ width: "100%", height: "100%", padding: "20px 10px" }}
+            >
               <MoneyFlowChart
                 mode={chartMode}
                 transactions={data?.recentTransactions || []}
               />
-            </div>
+            </Flex>
           </Flex>
-          <DashboardHistoryCard />
+          <DashboardHistoryCard data={data?.recentTransactions} />
         </Flex>
       </Flex>
     </div>

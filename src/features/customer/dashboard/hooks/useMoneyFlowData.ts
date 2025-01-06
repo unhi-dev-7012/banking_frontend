@@ -50,21 +50,40 @@ const useMoneyFlowData = (
         mode === "monthly"
           ? transactionDate.getDate()
           : xAxisLabels[transactionDate.getDay()];
-      const amount =
-        transaction.category === "outcoming" || transaction.category === "debt"
-          ? Math.abs(transaction.amount)
-          : transaction.amount;
+      // const amount =
+      //   transaction.category === "outcoming" || transaction.category === "debt"
+      //     ? Math.abs(transaction.amount)
+      //     : transaction.amount;
 
-      if (transaction.category === "incoming") {
+      let amount = transaction.amount;
+
+      //   if (transaction.category === "incoming") {
+      //     updateData(key, amount, "Tiền vào");
+      //   } else if (
+      //     transaction.category === "outcoming" ||
+      //     transaction.category === "debt"
+      //   ) {
+      //     updateData(key, amount, "Tiền ra");
+      //   }
+
+      //   updateData(key, 0, "Tổng số giao dịch", true); // Increment transaction count
+      // });
+
+      // Kiểm tra giao dịch "debt" trước khi quyết định incoming hay outgoing
+      if (transaction.category === "debt") {
+        if (transaction.amount > 0) {
+          // Nếu nợ > 0 thì tính là Tiền vào (incoming)
+          updateData(key, transaction.amount, "Tiền vào");
+        } else {
+          // Nếu nợ < 0 thì tính là Tiền ra (outcoming)
+          updateData(key, Math.abs(transaction.amount), "Tiền ra");
+        }
+      } else if (transaction.category === "incoming") {
         updateData(key, amount, "Tiền vào");
-      } else if (
-        transaction.category === "outcoming" ||
-        transaction.category === "debt"
-      ) {
-        updateData(key, amount, "Tiền ra");
+      } else if (transaction.category === "outcoming") {
+        updateData(key, Math.abs(amount), "Tiền ra");
       }
-
-      updateData(key, 0, "Tổng số giao dịch", true); // Increment transaction count
+      updateData(key, 0, "Tổng số giao dịch", true);
     });
 
     // Sort data
