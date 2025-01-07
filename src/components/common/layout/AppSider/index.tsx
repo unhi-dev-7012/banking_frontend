@@ -73,7 +73,9 @@ export const AppSider: React.FC = () => {
       }
     };
     fetchData();
-    setUnread();
+    if (role === EROLE.CUSTOMER) {
+      setUnread();
+    }
   }, []);
 
   const checkRole = (requiredRoles: EROLE[]) => {

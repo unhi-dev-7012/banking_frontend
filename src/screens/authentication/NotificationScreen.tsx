@@ -36,6 +36,7 @@ const NotificationScreen: React.FC = () => {
 
   useEffect(() => {
     setType(undefined);
+    setUnread();
   }, []);
 
   useEffect(() => {
