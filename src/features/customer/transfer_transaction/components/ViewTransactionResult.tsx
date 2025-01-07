@@ -3,7 +3,7 @@ import { Button, Flex, message, Spin, theme, Typography } from "antd";
 import useTransactionStore from "../stores/transactionStore";
 import { TransactionStatus, TransactionType } from "../transactionType";
 import { BankInfoUI, getBankDetails } from "./ViewTransactionDetails";
-import { replace, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ROUTES_PATH } from "@constants/path";
 import { onMessage } from "firebase/messaging";
 import { setupOnMessageHandler } from "../../../../config/firebase";
