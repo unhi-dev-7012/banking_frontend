@@ -32,7 +32,9 @@ const ProfileScreen: React.FC<IProfileScreenProps> = () => {
 
   return (
     <div>
-      <Typography.Title level={2}>{messages.title}</Typography.Title>
+      <Typography.Title level={2} className="titleTypography">
+        {messages.title}
+      </Typography.Title>
       <Typography.Paragraph>{messages.descriptions}</Typography.Paragraph>
 
       <Row

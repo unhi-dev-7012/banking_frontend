@@ -57,7 +57,9 @@ const DebtListScreen: React.FC = () => {
 
   return (
     <div>
-      <Typography.Title level={2}>{messages.title}</Typography.Title>
+      <Typography.Title level={2} className="titleTypography">
+        {messages.title}
+      </Typography.Title>
       <Flex justify="space-between">
         <Typography.Text>{messages.description}</Typography.Text>
 

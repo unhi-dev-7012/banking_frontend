@@ -50,7 +50,9 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
 
   return (
     <div>
-      <Typography.Title level={2}>{messages.title}</Typography.Title>
+      <Typography.Title className="titleTypography" level={2}>
+        {messages.title}
+      </Typography.Title>
       <Typography.Text>{messages.description}</Typography.Text>
 
       <Flex style={{ width: "100%", marginTop: "10px" }} justify="center">

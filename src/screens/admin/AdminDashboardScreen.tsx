@@ -37,7 +37,9 @@ const AdminDashboardScreen: React.FC<IAdminDashboardScreenProps> = () => {
   return (
     <div>
       <Flex gap="middle" justify="space-between" align="center">
-        <Typography.Title level={2}>Đối soát</Typography.Title>
+        <Typography.Title level={2} className="titleTypography">
+          Đối soát
+        </Typography.Title>
         <Flex gap="middle">
           <ConfigProvider locale={viVN}>
             <DatePicker picker="month" onChange={handleChange} />

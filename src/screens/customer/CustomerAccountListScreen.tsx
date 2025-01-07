@@ -10,7 +10,9 @@ const messages = {
 const CustomerAccountListScreen: React.FC = () => {
   return (
     <>
-      <Typography.Title level={2}>{messages.title}</Typography.Title>
+      <Typography.Title level={2} className="titleTypography">
+        {messages.title}
+      </Typography.Title>
       <Typography.Text>{messages.description}</Typography.Text>
       <div style={{ marginTop: 10 }}>
         <AccountCard />

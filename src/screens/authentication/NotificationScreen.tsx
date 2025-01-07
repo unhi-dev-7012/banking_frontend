@@ -102,7 +102,9 @@ const NotificationScreen: React.FC = () => {
 
   return (
     <div>
-      <Typography.Title level={2}>Thông báo</Typography.Title>
+      <Typography.Title level={2} className="titleTypography">
+        Thông báo
+      </Typography.Title>
 
       <TabComponent
         defaultActiveKey={NotificationTabs[0]}
