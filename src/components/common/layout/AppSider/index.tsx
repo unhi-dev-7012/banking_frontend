@@ -43,6 +43,8 @@ export const AppSider: React.FC = () => {
   const { role, handleLogout } = useAuthStore();
   const { unreads, setUnread } = useNotification();
 
+  const [bottomSelectedKey, setBottomSelectedKey] = useState<string>("");
+
   const [userData, setUserData] = useState<UserData>({
     fullName: "Unknown User",
     email: "unknown@example.com",
@@ -90,6 +92,7 @@ export const AppSider: React.FC = () => {
       onClick: () => {
         if (!props.path) return;
         navigate(props.path);
+        setBottomSelectedKey(props.path);
       },
     } as MenuItem;
   };
@@ -355,13 +358,6 @@ export const AppSider: React.FC = () => {
         >
           <Menu
             selectedKeys={[selectedKey]}
-            // defaultOpenKeys={[
-            //   ROUTES_PATH.STUDENT,
-            //   ROUTES_PATH.STUDENT_AFFAIRS,
-            //   ROUTES_PATH.ACTIVITY,
-            //   ROUTES_PATH.BLACKLIST,
-            //   ROUTES_PATH.TRAINING_POINT,
-            // ]}
             mode="inline"
             items={topMenuItems}
             className={isSiderCollapsed ? "appSider_TopMenuCollapsed" : ""}
@@ -369,7 +365,11 @@ export const AppSider: React.FC = () => {
 
           <Menu
             mode="vertical"
+            selectedKeys={[bottomSelectedKey || ""]}
             items={bottomMenuItems}
+            onClick={(e) => {
+              setBottomSelectedKey(e.key);
+            }}
             className={
               isSiderCollapsed
                 ? "appSider_BottomMenuCollapsed"
