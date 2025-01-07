@@ -59,10 +59,8 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
   const debtData = data?.debtCount;
 
   return (
-    <div style={{ padding: "0px 20px 20px 20px" }}>
-      <Typography.Title level={2} style={{ margin: "0 0 10px 0" }}>
-        Trang chủ
-      </Typography.Title>
+    <>
+      <Typography.Title level={2}>Trang chủ</Typography.Title>
       <Flex gap={20} vertical>
         <Flex style={{ height: "225px" }} justify="space-between">
           <AccountCard />
@@ -134,7 +132,7 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
           <DashboardHistoryCard data={data?.recentTransactions} />
         </Flex>
       </Flex>
-    </div>
+    </>
   );
 };
 

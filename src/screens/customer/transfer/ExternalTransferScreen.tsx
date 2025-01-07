@@ -51,11 +51,10 @@ const ExternalTransferScreen: React.FC<IExrernalTransferScreenProps> = () => {
 
   return (
     <div>
-      <Typography.Title level={3} style={{ margin: "0 0 5px 0" }}>
-        {messages.title}
-      </Typography.Title>
+      <Typography.Title level={2}>{messages.title}</Typography.Title>
+      <Typography.Text>{messages.description}</Typography.Text>
 
-      <Flex style={{ width: "100%" }} justify="center">
+      <Flex style={{ width: "100%", marginTop: "10px" }} justify="center">
         <Steps current={current} items={items} style={{ width: "50%" }} />
       </Flex>
       <Flex justify="center" style={contentStyle}>

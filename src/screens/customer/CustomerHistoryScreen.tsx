@@ -56,7 +56,7 @@ const CustomerHistoryScreen: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ padding: 12, maxHeight: "100vh", overflow: "auto" }}>
+    <div>
       <Title level={2}>Lịch sử giao dịch</Title>
 
       <Text style={{ color: "gray" }}>

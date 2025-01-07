@@ -101,7 +101,7 @@ const NotificationScreen: React.FC = () => {
   };
 
   return (
-    <div style={{ paddingLeft: 24, alignItems: "center" }}>
+    <div>
       <Typography.Title level={2}>Thông báo</Typography.Title>
 
       <TabComponent

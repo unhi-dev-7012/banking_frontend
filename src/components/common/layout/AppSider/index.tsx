@@ -244,7 +244,11 @@ export const AppSider: React.FC = () => {
             <Avatar shape="square" size={40} icon={<UserRound size={20} />} />
           )}
 
-          <Flex vertical style={{ flex: 1, marginLeft: 16 }}>
+          <Flex
+            vertical
+            style={{ flex: 1, marginLeft: 16 }}
+            className="userProfileContainer"
+          >
             <Typography.Text strong>{userData.fullName}</Typography.Text>
             <Typography.Text type="secondary">{userData.email}</Typography.Text>
           </Flex>
