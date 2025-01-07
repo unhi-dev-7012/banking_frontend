@@ -32,7 +32,6 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
   ];
 
   const next = () => {
-    console.log("next", current + 1);
     setCurrent(current + 1);
   };
 

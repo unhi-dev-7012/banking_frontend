@@ -32,7 +32,6 @@ const ExternalTransferScreen: React.FC<IExrernalTransferScreenProps> = () => {
   ];
 
   const next = () => {
-    console.log("next", current + 1);
     setCurrent(current + 1);
   };
 

@@ -27,7 +27,6 @@ const DebtSettleScreen: React.FC<IDebtSettleScreenProps> = () => {
   ];
 
   const next = () => {
-    console.log("next", current + 1);
     setCurrent(current + 1);
   };
 

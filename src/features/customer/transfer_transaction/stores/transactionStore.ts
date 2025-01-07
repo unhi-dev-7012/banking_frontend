@@ -53,7 +53,6 @@ const useTransactionStore = create<TransactionState>((set) => ({
       const response = await createInternalTransaction.execute(payload);
       set({ transaction: response }); // Lưu giao dịch mới vào 'transaction'
     } catch (error: any) {
-      console.log("Lỗi khi tạo giao dịch: ", error);
       set({
         fetchError: error?.message || "Không thể tạo giao dịch.",
       });
@@ -67,10 +66,8 @@ const useTransactionStore = create<TransactionState>((set) => ({
     try {
       set({ fetchLoading: true, fetchError: null });
       const response = await getBankAccountInfo.execute();
-      console.log(response);
       set({ bankAccountInfo: response }); // Cập nhật thông tin giao dịch
     } catch (error: any) {
-      console.log("Lỗi khi lấy thông tin khách hàng: ", error);
       set({
         fetchError: error?.message || "Không thể lấy thông tin khách hàng.",
       });
@@ -85,7 +82,6 @@ const useTransactionStore = create<TransactionState>((set) => ({
       set({ verifyLoading: true, fetchError: null });
       await verifyOtp.execute(payload);
     } catch (error: any) {
-      // console.log("Lỗi khi xác thực OTP: ", error);
       set({ fetchError: error.message });
       throw new Error("Lỗi khi xác thực OTP.");
     } finally {
@@ -100,7 +96,6 @@ const useTransactionStore = create<TransactionState>((set) => ({
       const response = await getTransactionDetails.execute(id);
       set({ transactionDetailsRespones: response }); // Cập nhật thông tin giao dịch
     } catch (error: any) {
-      console.log("Lỗi khi lấy thông tin giao dịch: ", error);
       set({
         fetchError: error?.message || "Không thể lấy thông tin giao dịch.",
       });
@@ -116,7 +111,6 @@ const useTransactionStore = create<TransactionState>((set) => ({
       const response = await getAllContact();
       set({ contactList: response });
     } catch (error: any) {
-      console.log("Lỗi khi lấy thông tin danh bạ: ", error);
       set({
         fetchError: error?.message || "Không thể lấy thông tin danh bạ",
       });
@@ -134,10 +128,8 @@ const useTransactionStore = create<TransactionState>((set) => ({
     try {
       set({ fetchLoading: true, fetchError: null });
       const response = await getAllBank();
-      console.log("banks: ", response);
       set({ banks: response });
     } catch (error: any) {
-      console.log("Lỗi khi lấy thông tin danh bạ: ", error.message);
       set({
         fetchError: error?.message || "Không thể lấy thông tin danh bạ",
       });
@@ -151,10 +143,8 @@ const useTransactionStore = create<TransactionState>((set) => ({
     try {
       set({ createLoading: true });
       const response = await settleDebt(debtId);
-      console.log("debt transation response: ", response);
       set({ transaction: response }); // Lưu giao dịch mới vào 'transaction'
     } catch (error: any) {
-      console.log("Lỗi khi thanh toán nợ: ", error);
       throw new Error("Không thể tạo giao dịch.");
     } finally {
       set({ createLoading: false });

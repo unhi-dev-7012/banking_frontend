@@ -35,12 +35,7 @@ const AdminDashboardScreen: React.FC<IAdminDashboardScreenProps> = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        height: "100%",
-        padding: "0px 14px 0px 14px",
-      }}
-    >
+    <div>
       <Flex gap="middle" justify="space-between" align="center">
         <Typography.Title level={2}>Đối soát</Typography.Title>
         <Flex gap="middle">

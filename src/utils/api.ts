@@ -22,7 +22,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    console.log(response.request.responseURL);
+    // console.log(response.request.responseURL);
     return response.data;
   },
   async (error) => {
@@ -45,14 +45,12 @@ api.interceptors.response.use(
             },
           }
         );
-        console.log("handle log out in refreshTry:", data.data);
         const { accessToken: newAccessToken } = data.data;
         localStorage.setItem("accessToken", newAccessToken);
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return api(originalRequest);
       } catch (refreshError) {
-        console.log("handle log out in refreshError");
         useAuthStore.getState().handleLogout();
         window.location.href = "/";
         return Promise.reject(refreshError);

@@ -8,7 +8,6 @@ interface ProcessedData {
 }
 
 const useMoneyFlowData = (mode: string, data: MoneyFlowData): ProcessedData => {
-  console.log("here", data);
   const getWeekdayLabel = (dateString: string) => {
     const dateParts = dateString.split("/");
     const date = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);

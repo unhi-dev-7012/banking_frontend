@@ -73,7 +73,7 @@ export const AppRoutes: React.FC = () => (
       {/* Common */}
       {createProtectedRoute(
         ROUTES_PATH.NOTIFICATION,
-        [EROLE.CUSTOMER, EROLE.ADMIN, EROLE.EMPLOYEE],
+        [EROLE.CUSTOMER],
         NotificationScreen
       )}
       {createProtectedRoute(

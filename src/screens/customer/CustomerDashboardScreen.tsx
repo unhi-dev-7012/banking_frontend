@@ -26,7 +26,6 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
   }, [fetchDashboardData]);
 
   useEffect(() => {
-    console.log("mode", mode);
     fetchMoneyFlowData();
   }, [mode, fetchMoneyFlowData]);
 

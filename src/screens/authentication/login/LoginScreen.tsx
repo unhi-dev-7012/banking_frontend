@@ -76,7 +76,6 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
   const handleBackToLogin = () => setCurrentForm(FormState.LOGIN);
   const handleToOtpForm = async (email: string) => {
     setEmail(email);
-    console.log(email);
     try {
       const { userId } = await requestResetPassword(email);
       setUserId(userId);

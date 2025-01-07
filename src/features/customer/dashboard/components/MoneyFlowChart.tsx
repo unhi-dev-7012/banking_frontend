@@ -15,7 +15,6 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({ mode, data }) => {
 
   const { groupedData, totalTransactionData } = useMoneyFlowData(mode, data);
 
-  console.log("group", groupedData);
   const config = {
     xField: "time",
     legend: {

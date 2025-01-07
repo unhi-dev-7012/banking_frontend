@@ -59,12 +59,12 @@ export const AppSider: React.FC = () => {
       }
     };
     fetchData();
-    setUnread();
+    if (localStorage.getItem("role") === EROLE.CUSTOMER) setUnread();
   }, []);
 
   const checkRole = (requiredRoles: EROLE[]) => {
     if (requiredRoles.length === 0) return true;
-    return requiredRoles.includes(role as EROLE); // Check if the user's role is in the required roles
+    return requiredRoles.includes(role as EROLE);
   };
 
   // Generate menu item

@@ -25,17 +25,10 @@ const EmployeeListScreen: React.FC<IEmployeeListScreenProps> = () => {
   const closeModal = () => setModalVisible(false);
 
   return (
-    <Flex
-      vertical
-      style={{
-        height: "100%",
-        padding: "0px 14px 0px 14px",
-      }}
-      gap="middle"
-    >
+    <div>
       <Typography.Title level={3}>{messages.title}</Typography.Title>
 
-      <Flex justify="space-between">
+      <Flex justify="space-between" style={{ marginBottom: "20px" }}>
         <Typography.Text>{messages.description}</Typography.Text>
         <Button type="primary" onClick={openModal}>
           {messages.buttons.create}
@@ -67,7 +60,7 @@ const EmployeeListScreen: React.FC<IEmployeeListScreenProps> = () => {
       >
         <EmployeeTable />
       </Flex> */}
-    </Flex>
+    </div>
   );
 };
 

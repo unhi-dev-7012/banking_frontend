@@ -27,7 +27,6 @@ const AccountCard: React.FC = () => {
         message.success("Sao chép số tài khoản thành công");
       })
       .catch((error) => {
-        console.log(error);
         message.error("Sao chép số tài khoản thất bại");
       });
   };

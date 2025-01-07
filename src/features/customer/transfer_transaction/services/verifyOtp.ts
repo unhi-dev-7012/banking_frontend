@@ -11,7 +11,6 @@ const verifyOtp = {
       const { data } = await api.post(TransApiEndpoints.VERIFY_OPT, payload);
       return data; // Trả về dữ liệu xác minh OTP
     } catch (error: any) {
-      console.log("error in api", error);
       throw new Error(error || "Xác minh OTP thất bại.");
     }
   },
