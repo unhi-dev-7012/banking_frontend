@@ -20,9 +20,9 @@ export const EmployeeTransactionHistoryColumnConfig = (
     key: "remitter",
     render: (remitter: Record<string, any>) => (
       <div>
-        <Text strong>{remitter.name}</Text> <br />
-        <Text type="secondary">Số tài khoản: {remitter.id}</Text> <br />
-        <Text type="secondary">{remitter.bankName}</Text>
+        <Text strong>{remitter.name ?? "Unknown"}</Text> <br />
+        <Text type="secondary">Số tài khoản: {remitter?.id}</Text> <br />
+        <Text type="secondary">{remitter.bankName ?? "Unknown"}</Text>
       </div>
     ),
   },
@@ -32,8 +32,8 @@ export const EmployeeTransactionHistoryColumnConfig = (
     key: "beneficiary",
     render: (beneficiary: Record<string, any>) => (
       <div>
-        <Text strong>{beneficiary.name}</Text> <br />
-        <Text type="secondary">Số tài khoản: {beneficiary.id}</Text> <br />
+        <Text strong>{beneficiary.name ?? "Unknown"}</Text> <br />
+        <Text type="secondary">Số tài khoản: {beneficiary?.id}</Text> <br />
         <Text type="secondary">{beneficiary.bankName}</Text>
       </div>
     ),
