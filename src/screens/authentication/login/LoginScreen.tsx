@@ -116,10 +116,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
   return (
     <Flex className={styles.loginScreen}>
       <Flex className={styles.leftContainer} align="center" justify="center">
-        <img
-          src="https://img.freepik.com/free-vector/abstract-digital-landscape-background_52683-96754.jpg?t=st=1734947456~exp=1734951056~hmac=86f4ef3b5ec54ee0acd21477e6fe51c536bf5957d3b1589b758d26d21433a7ee&w=1380"
-          alt=""
-        />
+        <img src="src/assets/images/bg.jpg" alt="" />
       </Flex>
       <Flex
         className={styles.rightContainer}
