@@ -38,7 +38,7 @@ const HistoryScreen: React.FC = () => {
   }, [pagination.current]);
 
   return (
-    <div style={{ paddingLeft: 12, maxHeight: "100vh", overflow: "auto" }}>
+    <div>
       <Title level={2}>Lịch sử giao dịch</Title>
       <Text style={{ color: "gray" }}>
         Lịch sử giao dịch được tính từ ngày{" "}
@@ -51,10 +51,10 @@ const HistoryScreen: React.FC = () => {
         })}
       </Text>
 
-      <div style={{ marginBottom: 20 }}></div>
+      <div style={{ marginBottom: 5 }}></div>
 
       <TableComponent<Record<string, any>>
-        rowKey="EmployeeHistoryTable"
+        rowKey="id"
         datasource={transactionHistory}
         pagination={pagination}
         columns={EmployeeTransactionHistoryColumnConfig(

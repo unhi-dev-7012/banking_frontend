@@ -31,20 +31,13 @@ const ProfileScreen: React.FC<IProfileScreenProps> = () => {
   }, []);
 
   return (
-    <Flex
-      vertical
-      style={{
-        height: "100%",
-        padding: "0px 14px 0px 14px",
-      }}
-      gap="middle"
-    >
+    <div>
       <Typography.Title level={2}>{messages.title}</Typography.Title>
       <Typography.Paragraph>{messages.descriptions}</Typography.Paragraph>
 
       <Row
         style={{
-          marginTop: "14px",
+          marginTop: "30px",
         }}
         gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
       >
@@ -73,7 +66,7 @@ const ProfileScreen: React.FC<IProfileScreenProps> = () => {
           hasDivder
         />
       </Row>
-    </Flex>
+    </div>
   );
 };
 

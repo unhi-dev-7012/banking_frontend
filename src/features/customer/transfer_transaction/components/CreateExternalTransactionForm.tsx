@@ -78,7 +78,6 @@ const CreateExternalTransactionForm: React.FC<
         values.remitterId = bankAccountInfo?.id;
       }
       if (bankId) values.beneficiaryBankId = bankId;
-      console.log("value", values);
       await createTransaction(values);
       onSubmitSuccess();
     } catch (error: any) {
@@ -95,11 +94,9 @@ const CreateExternalTransactionForm: React.FC<
   };
 
   const handleBankChange = async (value: string) => {
-    // console.log("hanle", value);
     setBankName(value);
     setBankId(value);
 
-    // Fetch beneficiary info khi đã có beneficiaryId
     if (beneficiaryId && value) {
       try {
         const selectedBank = banks.find((bank) => bank.id === value);
@@ -122,7 +119,6 @@ const CreateExternalTransactionForm: React.FC<
       } catch (error: any) {
         setBeneficiaryName(null);
         message.error("Không tìm thấy tài khoản ngân hàng");
-        // setAccountError("Không tìm thấy tài khoản.");
       }
     }
   };

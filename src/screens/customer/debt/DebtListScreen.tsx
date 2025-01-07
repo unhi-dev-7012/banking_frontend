@@ -55,12 +55,6 @@ const DebtListScreen: React.FC = () => {
     cancelDebt(debtId);
   };
 
-  // Handler thanh toán nợ
-  const handlePayDebt = (debtId: string) => {
-    console.log("Thanh toán nợ với ID:", debtId);
-    // fetchTableData();
-  };
-
   return (
     <div>
       <Typography.Title level={2}>{messages.title}</Typography.Title>

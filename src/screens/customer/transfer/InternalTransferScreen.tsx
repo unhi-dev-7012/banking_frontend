@@ -32,7 +32,6 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
   ];
 
   const next = () => {
-    console.log("next", current + 1);
     setCurrent(current + 1);
   };
 
@@ -51,11 +50,10 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
 
   return (
     <div>
-      <Typography.Title level={3} style={{ margin: "0 0 5px 0" }}>
-        {messages.title}
-      </Typography.Title>
+      <Typography.Title level={2}>{messages.title}</Typography.Title>
+      <Typography.Text>{messages.description}</Typography.Text>
 
-      <Flex style={{ width: "100%" }} justify="center">
+      <Flex style={{ width: "100%", marginTop: "10px" }} justify="center">
         <Steps current={current} items={items} style={{ width: "50%" }} />
       </Flex>
       <Flex justify="center" style={contentStyle}>

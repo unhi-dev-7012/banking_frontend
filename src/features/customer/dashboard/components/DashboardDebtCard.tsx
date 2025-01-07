@@ -20,13 +20,6 @@ const DashboardDebtCard: React.FC<IDashboardDebtCardProps> = ({
   month,
 }) => {
   const isPositive = percentage >= 0;
-  const formattedValue =
-    title === "Tổng nợ đã tạo"
-      ? value
-      : (value as number).toLocaleString("vi-VN", {
-          style: "currency",
-          currency: "VND",
-        });
 
   return (
     <Flex
@@ -54,9 +47,7 @@ const DashboardDebtCard: React.FC<IDashboardDebtCardProps> = ({
       </Flex>
 
       <Flex align="center" style={{ height: "50%" }}>
-        <Typography.Text style={{ fontSize: "28px" }}>
-          {formattedValue}
-        </Typography.Text>
+        <Typography.Text style={{ fontSize: "28px" }}>{value}</Typography.Text>
       </Flex>
 
       <Flex

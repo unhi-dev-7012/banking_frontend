@@ -42,10 +42,7 @@ const Profile = lazy(() => import("@screens/authentication/ProfileScreen"));
 const EmployeeCustomerList = lazy(
   () => import("@screens/employee/accounts/AccountListScreen")
 );
-const EmployeeCustomerCreate = lazy(
-  () => import("@screens/employee/accounts/AccountCreateScreen")
-);
-const EmployeeDeposit = lazy(() => import("@screens/employee/DepositScreen"));
+
 const EmployeeHistory = lazy(() => import("@screens/employee/HistoryScreen"));
 
 const AdminDashboard = lazy(
@@ -76,7 +73,7 @@ export const AppRoutes: React.FC = () => (
       {/* Common */}
       {createProtectedRoute(
         ROUTES_PATH.NOTIFICATION,
-        [EROLE.CUSTOMER, EROLE.ADMIN, EROLE.EMPLOYEE],
+        [EROLE.CUSTOMER],
         NotificationScreen
       )}
       {createProtectedRoute(
@@ -163,16 +160,6 @@ export const AppRoutes: React.FC = () => (
         ROUTES_PATH.EMPLOYEE.CUSTOMER_LIST,
         [EROLE.EMPLOYEE],
         EmployeeCustomerList
-      )}
-      {createProtectedRoute(
-        ROUTES_PATH.EMPLOYEE.CUSTOMER_CREATE,
-        [EROLE.EMPLOYEE],
-        EmployeeCustomerCreate
-      )}
-      {createProtectedRoute(
-        ROUTES_PATH.EMPLOYEE.DEPOSIT,
-        [EROLE.EMPLOYEE],
-        EmployeeDeposit
       )}
       {createProtectedRoute(
         ROUTES_PATH.EMPLOYEE.HISTORY,

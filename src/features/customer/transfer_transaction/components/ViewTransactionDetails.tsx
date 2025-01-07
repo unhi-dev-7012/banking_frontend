@@ -48,8 +48,6 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
   const { verifyLoading, transaction, verifyOtp, bankAccountInfo, banks } =
     useTransactionStore();
 
-  console.log("transation: ", transaction);
-
   const [beneficiaryBank, setBeneficiaryBank] = useState<BankInfoUI | null>(
     null
   );
@@ -62,7 +60,6 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
     try {
       if (transaction) values.id = transaction.id;
       values.otp = otp;
-      console.log("values", values);
       await verifyOtp(values);
       onSubmitSuccess();
     } catch (error: any) {

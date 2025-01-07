@@ -13,7 +13,10 @@ import { CustomerManagementColumnConfig } from "../../../features/employee/custo
 import DetailCustomerInfoModal from "../../../features/employee/customers/components/Modal/DetailCustomerInfoModal";
 import AddCustomerModal from "../../../features/employee/customers/components/Modal/AddCustomerModal";
 
-const { Title } = Typography;
+const messages = {
+  title: "Quản lý khách hàng",
+  description: "Bạn có thể quản lý tài khoản của khách hàng trang này.",
+};
 
 const AccountListScreen: React.FC = () => {
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
@@ -47,8 +50,9 @@ const AccountListScreen: React.FC = () => {
   }, [pagination.current, pagination.total]);
 
   return (
-    <div style={{ padding: 12, maxHeight: "100vh", overflow: "auto" }}>
-      <Title level={2}>Quản lý khách hàng</Title>
+    <div>
+      <Typography.Title level={2}>{messages.title}</Typography.Title>
+      <Typography.Text>{messages.description}</Typography.Text>
 
       <Row justify="end" style={{ marginBottom: 16 }}>
         <Col>

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Alert, Flex, Select, Spin, Typography } from "antd";
 import MoneyFlowChart from "@features/customer/dashboard/components/MoneyFlowChart";
 import AccountCard from "@features/account/components/AccountCard";
 import DashboardDebtCard from "@features/customer/dashboard/components/DashboardDebtCard";
 import DashboardHistoryCard from "@features/customer/dashboard/components/DashboardHistoryCard";
 import useDashboardStore from "@features/customer/dashboard/stores/dashboardStore";
+import { DebtCardTitle } from "@features/customer/dashboard/dashboardType";
 
 interface ICustomerDashboardScreenProps {}
 
@@ -25,7 +26,6 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
   }, [fetchDashboardData]);
 
   useEffect(() => {
-    console.log("mode", mode);
     fetchMoneyFlowData();
   }, [mode, fetchMoneyFlowData]);
 
@@ -58,28 +58,38 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
   const debtData = data?.debtCount;
 
   return (
-    <div style={{ padding: "0px 20px 20px 20px" }}>
-      <Typography.Title level={2} style={{ margin: "0 0 10px 0" }}>
-        Trang chủ
-      </Typography.Title>
+    <>
+      <Typography.Title level={2}>Trang chủ</Typography.Title>
       <Flex gap={20} vertical>
         <Flex style={{ height: "225px" }} justify="space-between">
           <AccountCard />
           <DashboardDebtCard
-            title="Tổng nợ đã tạo"
+            title={DebtCardTitle.CREATED}
             value={`${debtData?.totalDebtCreatedCurrentMonth || 0}`}
             percentage={debtData?.debtCreationRate || 0}
             month={currentMonthYear}
           />
           <DashboardDebtCard
-            title="Tổng tiền nợ đã trả"
-            value={`${debtData?.totalPaidCurrentMonth || 0}`}
+            title={DebtCardTitle.PAID}
+            value={(debtData?.totalPaidCurrentMonth || 0).toLocaleString(
+              "vi-VN",
+              {
+                style: "currency",
+                currency: "VND",
+              }
+            )}
             percentage={debtData?.paidRate || 0}
             month={currentMonthYear}
           />
           <DashboardDebtCard
-            title="Tổng tiền nợ được trả"
-            value={`${debtData?.totalBePaidCurrentMonth || 0}`}
+            title={DebtCardTitle.BE_PAID}
+            value={(debtData?.totalBePaidCurrentMonth || 0).toLocaleString(
+              "vi-VN",
+              {
+                style: "currency",
+                currency: "VND",
+              }
+            )}
             percentage={debtData?.bePaidRate || 0}
             month={currentMonthYear}
           />
@@ -104,7 +114,7 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
               </Typography.Title>
               <Select
                 value={mode}
-                style={{ width: 120 }}
+                style={{ width: 125 }}
                 onChange={handleChange}
                 options={[
                   { value: "weekly", label: "Trong tuần" },
@@ -121,7 +131,7 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
           <DashboardHistoryCard data={data?.recentTransactions} />
         </Flex>
       </Flex>
-    </div>
+    </>
   );
 };
 

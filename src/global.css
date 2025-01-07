@@ -25,3 +25,13 @@ body {
   height: 100%;
   overflow-y: hidden;
 }
+
+.ant-typography {
+  margin: 0 !important;
+  margin-bottom: 10px !important;
+}
+
+
+.userProfileContainer .ant-typography{
+  margin: 0 !important;
+}

@@ -93,7 +93,6 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
     onMessage(messaging, (payload) => {
       console.log(payload);
       fetchData();
-      console.log(transaction);
     });
   }, []);
 

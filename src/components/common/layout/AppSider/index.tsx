@@ -17,14 +17,15 @@ import {
   Bell,
   Clock,
   CreditCard,
-  DollarSign,
   FileText,
+  History,
   Home,
   LogOut,
   UserPlus,
   UserRound,
   UserRoundCog,
   Users,
+  UsersRound,
 } from "lucide-react";
 import "./index.css";
 import { useAppStore } from "@stores/app";
@@ -42,6 +43,8 @@ export const AppSider: React.FC = () => {
   const { role, handleLogout } = useAuthStore();
   const { unreads, setUnread } = useNotification();
 
+  const [bottomSelectedKey, setBottomSelectedKey] = useState<string>("");
+
   const [userData, setUserData] = useState<UserData>({
     fullName: "Unknown User",
     email: "unknown@example.com",
@@ -56,12 +59,12 @@ export const AppSider: React.FC = () => {
       }
     };
     fetchData();
-    setUnread();
+    if (localStorage.getItem("role") === EROLE.CUSTOMER) setUnread();
   }, []);
 
   const checkRole = (requiredRoles: EROLE[]) => {
     if (requiredRoles.length === 0) return true;
-    return requiredRoles.includes(role as EROLE); // Check if the user's role is in the required roles
+    return requiredRoles.includes(role as EROLE);
   };
 
   // Generate menu item
@@ -89,6 +92,7 @@ export const AppSider: React.FC = () => {
       onClick: () => {
         if (!props.path) return;
         navigate(props.path);
+        setBottomSelectedKey(props.path);
       },
     } as MenuItem;
   };
@@ -170,7 +174,7 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.CUSTOMER.HISTORY,
       label: "Lịch sử giao dịch",
-      icon: <Clock size={20} />,
+      icon: <History size={20} />,
       path: ROUTES_PATH.CUSTOMER.HISTORY,
       requiredRoles: [EROLE.CUSTOMER],
     }),
@@ -180,7 +184,7 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.EMPLOYEE.CUSTOMER,
       label: "Quản lý tài khoản",
-      icon: <UserRound size={20} />,
+      icon: <UsersRound size={20} />,
       children: [
         getItem({
           key: ROUTES_PATH.EMPLOYEE.CUSTOMER_LIST,
@@ -188,26 +192,13 @@ export const AppSider: React.FC = () => {
           path: ROUTES_PATH.EMPLOYEE.CUSTOMER_LIST,
           requiredRoles: [EROLE.EMPLOYEE],
         }),
-        getItem({
-          key: ROUTES_PATH.EMPLOYEE.CUSTOMER_CREATE,
-          label: "Tạo tài khoản",
-          path: ROUTES_PATH.EMPLOYEE.CUSTOMER_CREATE,
-          requiredRoles: [EROLE.EMPLOYEE],
-        }),
       ],
-      requiredRoles: [EROLE.EMPLOYEE],
-    }),
-    getItem({
-      key: ROUTES_PATH.EMPLOYEE.DEPOSIT,
-      label: "Nạp tiền",
-      icon: <DollarSign size={20} />,
-      path: ROUTES_PATH.EMPLOYEE.DEPOSIT,
       requiredRoles: [EROLE.EMPLOYEE],
     }),
     getItem({
       key: ROUTES_PATH.EMPLOYEE.HISTORY,
       label: "Lịch sử giao dịch",
-      icon: <Clock size={20} />,
+      icon: <History size={20} />,
       path: ROUTES_PATH.EMPLOYEE.HISTORY,
       requiredRoles: [EROLE.EMPLOYEE],
     }),
@@ -253,7 +244,11 @@ export const AppSider: React.FC = () => {
             <Avatar shape="square" size={40} icon={<UserRound size={20} />} />
           )}
 
-          <Flex vertical style={{ flex: 1, marginLeft: 16 }}>
+          <Flex
+            vertical
+            style={{ flex: 1, marginLeft: 16 }}
+            className="userProfileContainer"
+          >
             <Typography.Text strong>{userData.fullName}</Typography.Text>
             <Typography.Text type="secondary">{userData.email}</Typography.Text>
           </Flex>
@@ -367,13 +362,6 @@ export const AppSider: React.FC = () => {
         >
           <Menu
             selectedKeys={[selectedKey]}
-            // defaultOpenKeys={[
-            //   ROUTES_PATH.STUDENT,
-            //   ROUTES_PATH.STUDENT_AFFAIRS,
-            //   ROUTES_PATH.ACTIVITY,
-            //   ROUTES_PATH.BLACKLIST,
-            //   ROUTES_PATH.TRAINING_POINT,
-            // ]}
             mode="inline"
             items={topMenuItems}
             className={isSiderCollapsed ? "appSider_TopMenuCollapsed" : ""}
@@ -381,7 +369,11 @@ export const AppSider: React.FC = () => {
 
           <Menu
             mode="vertical"
+            selectedKeys={[bottomSelectedKey || ""]}
             items={bottomMenuItems}
+            onClick={(e) => {
+              setBottomSelectedKey(e.key);
+            }}
             className={
               isSiderCollapsed
                 ? "appSider_BottomMenuCollapsed"

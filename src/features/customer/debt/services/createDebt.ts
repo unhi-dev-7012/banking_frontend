@@ -3,16 +3,12 @@ import { CreateDebtFormValue, Debt } from "../debtType"; // Importing necessary 
 
 // Create debt API service
 export const createDebt = async (debt: CreateDebtFormValue): Promise<Debt> => {
-  console.log("debt in api:", debt);
-
   try {
     const { data } = await api.post("/api/customer/v1/debt", {
       debtorId: debt.debtorId,
       amount: debt.amount,
       message: debt.message,
     });
-
-    console.log("data in api:", data);
 
     return data;
   } catch (error: any) {

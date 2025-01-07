@@ -46,7 +46,7 @@ const ContactListScreen: React.FC<IContactListScreenProps> = () => {
 
   return (
     <ContactProvider>
-      <div style={{ padding: 12, maxHeight: "100vh", overflow: "auto" }}>
+      <div>
         <Flex
           justify="space-between"
           align="flex-end"

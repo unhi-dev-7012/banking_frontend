@@ -17,8 +17,6 @@ export const ROUTES_PATH = {
   EMPLOYEE: {
     CUSTOMER: "/customer",
     CUSTOMER_LIST: "/customer/list",
-    CUSTOMER_CREATE: "/customer/create",
-    DEPOSIT: "/deposit",
     HISTORY: "/employee-history",
   },
   ADMIN: {

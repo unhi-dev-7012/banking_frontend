@@ -51,6 +51,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ closeModal }) => {
 
   return (
     <Form
+      form={form}
       onFinish={handleSubmit}
       layout="vertical"
       initialValues={initialValues}
