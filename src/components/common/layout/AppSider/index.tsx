@@ -174,7 +174,7 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.CUSTOMER.HISTORY,
       label: "Lịch sử giao dịch",
-      icon: <Clock size={20} />,
+      icon: <History size={20} />,
       path: ROUTES_PATH.CUSTOMER.HISTORY,
       requiredRoles: [EROLE.CUSTOMER],
     }),

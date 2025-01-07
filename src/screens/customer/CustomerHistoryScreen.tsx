@@ -78,7 +78,7 @@ const CustomerHistoryScreen: React.FC = () => {
       />
 
       <TableComponent<Record<string, any>>
-        rowKey="CustomerHistoryTable"
+        rowKey="id"
         datasource={transactionHistory}
         pagination={pagination}
         columns={CustomerTransactionHistoryColumnConfig(

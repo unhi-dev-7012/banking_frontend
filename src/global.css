@@ -25,3 +25,7 @@ body {
   height: 100%;
   overflow-y: hidden;
 }
+
+.ant-typography {
+  margin: 0;
+}

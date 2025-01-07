@@ -2,6 +2,8 @@ import { Button, Card, Col, message, Row, Space, Typography } from "antd";
 import { ArrowRightCircle, Clock, Copy, Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getUserData, UserData } from "../../auth/services/getUserData";
+import { useNavigate } from "react-router-dom";
+import { ROUTES_PATH } from "@constants/path";
 
 const { Text } = Typography;
 
@@ -11,6 +13,7 @@ const AccountCard: React.FC = () => {
     bankAccount: "",
   });
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
+  const navigate = useNavigate();
 
   const toggleBalance = () => {
     setIsBalanceVisible((prev) => !prev);
@@ -127,9 +130,11 @@ const AccountCard: React.FC = () => {
               alignItems: "center",
               gap: 8,
               color: "#1677ff",
+              padding: 0,
             }}
+            onClick={() => navigate(ROUTES_PATH.CUSTOMER.HISTORY)}
           >
-            <Clock size="small" />
+            <Clock size={22} />
             Lịch sử giao dịch
           </Button>
         </Col>
@@ -141,9 +146,11 @@ const AccountCard: React.FC = () => {
               alignItems: "center",
               gap: 8,
               color: "#1677ff",
+              padding: 0,
             }}
+            onClick={() => navigate(ROUTES_PATH.CUSTOMER.INTERNAL_TRANSFER)}
           >
-            <ArrowRightCircle size="small" />
+            <ArrowRightCircle size={22} />
             Chuyển tiền
           </Button>
         </Col>

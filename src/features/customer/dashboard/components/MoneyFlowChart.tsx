@@ -109,7 +109,7 @@ const MoneyFlowChart: React.FC<MoneyFlowChartProps> = ({ mode, data }) => {
         axis: {
           y: {
             position: "left",
-            title: "Tổng giao dịch",
+            title: "Tổng số giao dịch",
             style: { titleFill: "#052bec" },
             tickMethod: (min: number, max: number) => {
               // Tạo mảng các giá trị nguyên giữa min và max

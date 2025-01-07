@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Alert, Flex, Select, Spin, Typography } from "antd";
 import MoneyFlowChart from "@features/customer/dashboard/components/MoneyFlowChart";
 import AccountCard from "@features/account/components/AccountCard";
