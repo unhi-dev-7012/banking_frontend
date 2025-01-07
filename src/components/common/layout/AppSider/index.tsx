@@ -7,6 +7,7 @@ import {
   Layout,
   Menu,
   MenuProps,
+  Spin,
   Typography,
 } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -45,17 +46,30 @@ export const AppSider: React.FC = () => {
 
   const [bottomSelectedKey, setBottomSelectedKey] = useState<string>("");
 
-  const [userData, setUserData] = useState<UserData>({
-    fullName: "Unknown User",
-    email: "unknown@example.com",
-  });
+  // const [userData, setUserData] = useState<UserData>({
+  //   fullName: "Unknown User",
+  //   email: "unknown@example.com",
+  // });
+
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getUserData();
+    // const fetchData = async () => {
+    //   const data = await getUserData();
 
-      if (data) {
-        setUserData(data);
+    //   if (data) {
+    //     setUserData(data);
+    //   }
+    // };
+    const fetchData = async () => {
+      try {
+        const data = await getUserData();
+        if (data) {
+          setUserData(data);
+        }
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -233,7 +247,9 @@ export const AppSider: React.FC = () => {
   const bottomMenuItems: MenuProps["items"] = [
     {
       key: "Profile",
-      label: (
+      label: loading ? (
+        <Spin />
+      ) : (
         <Flex align="center" style={{ padding: "12px 0px 10px" }}>
           {localStorage.getItem("role") &&
           localStorage.getItem("role") === EROLE.CUSTOMER ? (
@@ -249,8 +265,10 @@ export const AppSider: React.FC = () => {
             style={{ flex: 1, marginLeft: 16 }}
             className="userProfileContainer"
           >
-            <Typography.Text strong>{userData.fullName}</Typography.Text>
-            <Typography.Text type="secondary">{userData.email}</Typography.Text>
+            <Typography.Text strong>{userData?.fullName}</Typography.Text>
+            <Typography.Text type="secondary">
+              {userData?.email}
+            </Typography.Text>
           </Flex>
         </Flex>
       ),
