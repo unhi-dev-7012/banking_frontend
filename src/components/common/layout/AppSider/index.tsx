@@ -59,7 +59,7 @@ export const AppSider: React.FC = () => {
       }
     };
     fetchData();
-    if (localStorage.getItem("role") === EROLE.CUSTOMER) setUnread();
+    setUnread();
   }, []);
 
   const checkRole = (requiredRoles: EROLE[]) => {
