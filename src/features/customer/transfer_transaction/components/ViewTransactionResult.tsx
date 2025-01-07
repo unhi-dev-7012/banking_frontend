@@ -6,7 +6,7 @@ import { BankInfoUI, getBankDetails } from "./ViewTransactionDetails";
 import { replace, useNavigate } from "react-router-dom";
 import { ROUTES_PATH } from "@constants/path";
 import { onMessage } from "firebase/messaging";
-import { messaging } from "../../../../config/firebase";
+import { setupOnMessageHandler } from "../../../../config/firebase";
 import { createContact } from "@features/customer/contact/services/createContact";
 
 interface ViewTransactionResultProps {
@@ -79,22 +79,19 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (transaction?.id) {
-          fetchTransaction(transaction?.id);
-        }
-      } catch (error) {
-        console.error("Có lỗi khi lấy thông tin giao dịch", error);
+  const fetchData = async () => {
+    try {
+      if (transaction?.id) {
+        fetchTransaction(transaction?.id);
       }
-    };
+    } catch (error) {
+      console.error("Có lỗi khi lấy thông tin giao dịch", error);
+    }
+  };
 
-    onMessage(messaging, (payload) => {
-      console.log(payload);
-      fetchData();
-    });
-  }, []);
+  useEffect(() => {
+    setupOnMessageHandler([fetchData]);
+  }, [fetchData, onMessage]);
 
   useEffect(() => {
     if (transaction) {
