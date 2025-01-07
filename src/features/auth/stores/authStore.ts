@@ -47,20 +47,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
   handleLogout: async () => {
     const fcmToken = localStorage.getItem("fcm_token");
-    if (get().role === EROLE.CUSTOMER && fcmToken) {
-      await deleteFcm(fcmToken);
-      localStorage.removeItem("fcm_token");
-    }
+    const currentRole = get().role;
 
-    console.log("handle logout");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("role");
     set({
       accessToken: null,
       refreshToken: null,
       role: null,
       isAuthenticated: false,
     });
+
+    if (currentRole === EROLE.CUSTOMER && fcmToken) {
+      await deleteFcm(fcmToken);
+      localStorage.removeItem("fcm_token");
+    }
+
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("role");
   },
 }));
