@@ -26,8 +26,6 @@ const routeTitles: Record<string, string> = {
   //EMPLOYEE
   [ROUTES_PATH.EMPLOYEE.CUSTOMER]: "Quản lý khách hàng",
   [ROUTES_PATH.EMPLOYEE.CUSTOMER_LIST]: "Danh sách khách hàng",
-  [ROUTES_PATH.EMPLOYEE.CUSTOMER_CREATE]: "Thêm mới khách hàng",
-  [ROUTES_PATH.EMPLOYEE.DEPOSIT]: "Nạp tiền",
   [ROUTES_PATH.EMPLOYEE.HISTORY]: "Lịch sử giao dịch",
 
   //ADMIN

@@ -17,14 +17,15 @@ import {
   Bell,
   Clock,
   CreditCard,
-  DollarSign,
   FileText,
+  History,
   Home,
   LogOut,
   UserPlus,
   UserRound,
   UserRoundCog,
   Users,
+  UsersRound,
 } from "lucide-react";
 import "./index.css";
 import { useAppStore } from "@stores/app";
@@ -180,7 +181,7 @@ export const AppSider: React.FC = () => {
     getItem({
       key: ROUTES_PATH.EMPLOYEE.CUSTOMER,
       label: "Quản lý tài khoản",
-      icon: <UserRound size={20} />,
+      icon: <UsersRound size={20} />,
       children: [
         getItem({
           key: ROUTES_PATH.EMPLOYEE.CUSTOMER_LIST,
@@ -188,26 +189,13 @@ export const AppSider: React.FC = () => {
           path: ROUTES_PATH.EMPLOYEE.CUSTOMER_LIST,
           requiredRoles: [EROLE.EMPLOYEE],
         }),
-        getItem({
-          key: ROUTES_PATH.EMPLOYEE.CUSTOMER_CREATE,
-          label: "Tạo tài khoản",
-          path: ROUTES_PATH.EMPLOYEE.CUSTOMER_CREATE,
-          requiredRoles: [EROLE.EMPLOYEE],
-        }),
       ],
-      requiredRoles: [EROLE.EMPLOYEE],
-    }),
-    getItem({
-      key: ROUTES_PATH.EMPLOYEE.DEPOSIT,
-      label: "Nạp tiền",
-      icon: <DollarSign size={20} />,
-      path: ROUTES_PATH.EMPLOYEE.DEPOSIT,
       requiredRoles: [EROLE.EMPLOYEE],
     }),
     getItem({
       key: ROUTES_PATH.EMPLOYEE.HISTORY,
       label: "Lịch sử giao dịch",
-      icon: <Clock size={20} />,
+      icon: <History size={20} />,
       path: ROUTES_PATH.EMPLOYEE.HISTORY,
       requiredRoles: [EROLE.EMPLOYEE],
     }),
