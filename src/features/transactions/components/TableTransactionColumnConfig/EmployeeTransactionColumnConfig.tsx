@@ -12,17 +12,21 @@ export const EmployeeTransactionHistoryColumnConfig = (
     title: "Ngày giao dịch",
     dataIndex: "completedAt",
     key: "completedAt",
-    render: (date: string) => new Date(date).toLocaleString(),
+    render: (date: string) =>
+      date ? new Date(date).toLocaleString() : "Unknown Date",
   },
   {
     title: "Người gửi",
     dataIndex: "remitter",
     key: "remitter",
-    render: (remitter: Record<string, any>) => (
+    render: (remitter?: Record<string, any>) => (
       <div>
-        <Text strong>{remitter.name ?? "Unknown"}</Text> <br />
-        <Text type="secondary">Số tài khoản: {remitter?.id}</Text> <br />
-        <Text type="secondary">{remitter.bankName ?? "Unknown"}</Text>
+        <Text strong>{remitter?.name ?? "Unknown"}</Text> <br />
+        <Text type="secondary">
+          Số tài khoản: {remitter?.id ?? "Unknown"}
+        </Text>{" "}
+        <br />
+        <Text type="secondary">{remitter?.bankName ?? "Unknown"}</Text>
       </div>
     ),
   },
@@ -30,11 +34,14 @@ export const EmployeeTransactionHistoryColumnConfig = (
     title: "Người nhận",
     dataIndex: "beneficiary",
     key: "beneficiary",
-    render: (beneficiary: Record<string, any>) => (
+    render: (beneficiary?: Record<string, any>) => (
       <div>
-        <Text strong>{beneficiary.name ?? "Unknown"}</Text> <br />
-        <Text type="secondary">Số tài khoản: {beneficiary?.id}</Text> <br />
-        <Text type="secondary">{beneficiary.bankName}</Text>
+        <Text strong>{beneficiary?.name ?? "Unknown"}</Text> <br />
+        <Text type="secondary">
+          Số tài khoản: {beneficiary?.id ?? "Unknown"}
+        </Text>{" "}
+        <br />
+        <Text type="secondary">{beneficiary?.bankName ?? "Unknown"}</Text>
       </div>
     ),
   },
@@ -42,16 +49,20 @@ export const EmployeeTransactionHistoryColumnConfig = (
     title: "Trạng thái",
     dataIndex: "status",
     key: "status",
-    render: (status: string) => (
-      <Tag color={status === "success" ? "green" : "orange"}>{status}</Tag>
+    render: (status?: string) => (
+      <Tag color={status === "success" ? "green" : "orange"}>
+        {status ?? "Unknown"}
+      </Tag>
     ),
   },
   {
     title: "Loại giao dịch",
     dataIndex: "type",
     key: "type",
-    render: (type: string) => (
-      <Tag color={type === "normal" ? "blue" : "purple"}>{type}</Tag>
+    render: (type?: string) => (
+      <Tag color={type === "normal" ? "blue" : "purple"}>
+        {type ?? "Unknown"}
+      </Tag>
     ),
   },
   {
