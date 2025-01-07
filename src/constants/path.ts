@@ -28,7 +28,6 @@ export const ROUTES_PATH = {
   // General
   LOGIN: "/",
   PROFILE: "/profile",
-  // LANDING: "/",
   NOTIFICATION: "/notification",
   NOTFOUND: "/notfound",
 };

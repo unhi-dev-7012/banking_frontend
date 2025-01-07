@@ -59,7 +59,9 @@ const CustomerDashboardScreen: React.FC<ICustomerDashboardScreenProps> = () => {
 
   return (
     <>
-      <Typography.Title level={2}>Trang chủ</Typography.Title>
+      <Typography.Title level={2} className="titleTypography">
+        Trang chủ
+      </Typography.Title>
       <Flex gap={20} vertical>
         <Flex style={{ height: "225px" }} justify="space-between">
           <AccountCard />

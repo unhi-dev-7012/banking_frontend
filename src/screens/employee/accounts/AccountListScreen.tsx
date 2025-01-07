@@ -51,7 +51,9 @@ const AccountListScreen: React.FC = () => {
 
   return (
     <div>
-      <Typography.Title level={2}>{messages.title}</Typography.Title>
+      <Typography.Title level={2} className="titleTypography">
+        {messages.title}
+      </Typography.Title>
       <Typography.Text>{messages.description}</Typography.Text>
 
       <Row justify="end" style={{ marginBottom: 16 }}>
