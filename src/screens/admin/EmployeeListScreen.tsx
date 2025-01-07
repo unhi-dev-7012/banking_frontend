@@ -26,7 +26,9 @@ const EmployeeListScreen: React.FC<IEmployeeListScreenProps> = () => {
 
   return (
     <div>
-      <Typography.Title level={3}>{messages.title}</Typography.Title>
+      <Typography.Title level={2} className="titleTypography">
+        {messages.title}
+      </Typography.Title>
 
       <Flex justify="space-between" style={{ marginBottom: "20px" }}>
         <Typography.Text>{messages.description}</Typography.Text>

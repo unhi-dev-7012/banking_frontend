@@ -26,9 +26,8 @@ body {
   overflow-y: hidden;
 }
 
-.ant-typography {
-  margin: 0 !important;
-  margin-bottom: 10px !important;
+.titleTypography {
+  margin: 0 0 10px 0 !important;
 }
 
 

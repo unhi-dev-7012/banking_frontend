@@ -57,7 +57,9 @@ const CustomerHistoryScreen: React.FC = () => {
 
   return (
     <div>
-      <Title level={2}>Lịch sử giao dịch</Title>
+      <Title level={2} className="titleTypography">
+        Lịch sử giao dịch
+      </Title>
 
       <Text style={{ color: "gray" }}>
         Lịch sử giao dịch được tính từ ngày{" "}
