@@ -160,14 +160,16 @@ export const useReconcile = create<ReconcileState>((set, get) => ({
     });
   },
   fetchStatistic: async () => {
+    const { from, to, bankId } = get();
+
+    if (from === "" || to === "" || bankId === "") return;
     set({ loading: true });
-    const { bankId } = get();
 
     if (bankId === "") {
       set({ loading: false });
       return;
     }
-    const data = await getStatistic(bankId);
+    const data = await getStatistic(bankId, from, to);
     set({
       statistic: data,
       loading: false,
