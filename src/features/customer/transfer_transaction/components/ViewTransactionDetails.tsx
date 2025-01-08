@@ -9,7 +9,7 @@ import { ROUTES_PATH } from "@constants/path";
 import { useNavigate } from "react-router-dom";
 
 interface ViewTransactionFormProps {
-  onSubmitSuccess: () => void; // Function to trigger step change
+  onSubmitSuccess: (offset: number) => void; // Function to trigger step change
 }
 
 export interface BankInfoUI {
@@ -68,7 +68,7 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
       if (transaction) values.id = transaction.id;
       values.otp = otp;
       await verifyOtp(values);
-      onSubmitSuccess();
+      onSubmitSuccess(1);
     } catch (error: any) {
       message.error(error.message);
     }
@@ -94,7 +94,11 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
       navigate(ROUTES_PATH.CUSTOMER.DEBT_LIST, {
         replace: true,
       });
-    window.location.reload();
+    if (transaction?.beneficiaryBankId === transaction?.remitterBankId) {
+      navigate(ROUTES_PATH.CUSTOMER.INTERNAL_TRANSFER);
+    } else {
+      navigate(ROUTES_PATH.CUSTOMER.EXTERNAL_TRANSFER);
+    }
   };
 
   const contentStyle: React.CSSProperties = {

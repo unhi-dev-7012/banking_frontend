@@ -16,7 +16,7 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0); // State to track the current step
 
-  const steps = (next: () => void) => [
+  const steps = (next: (offset: number) => void) => [
     {
       title: "Điền thông tin",
       content: <CreateInternalTransactionForm onSubmitSuccess={next} />,
@@ -31,8 +31,8 @@ const InternalTransferScreen: React.FC<IInternalTransferScreenProps> = () => {
     },
   ];
 
-  const next = () => {
-    setCurrent(current + 1);
+  const next = (offset: number) => {
+    setCurrent(current + offset);
   };
 
   const items = steps(next).map((item) => ({

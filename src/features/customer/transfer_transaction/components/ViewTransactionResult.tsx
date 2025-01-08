@@ -11,10 +11,12 @@ import verticalLogo from "@assets/images/vertical_logo.png";
 import { useAuthStore } from "@features/auth/stores/authStore";
 
 interface ViewTransactionResultProps {
-  onSubmitSuccess: () => void; // Function to trigger step change
+  onSubmitSuccess: (offset: number) => void; // Function to trigger step change
 }
 
-const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({}) => {
+const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
+  onSubmitSuccess,
+}) => {
   const { token } = theme.useToken();
   const [beneficiaryBank, setBeneficiaryBank] = useState<BankInfoUI | null>(
     null
@@ -295,7 +297,16 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({}) => {
                 replace: true,
               });
             } else {
-              window.location.reload();
+              // navigate(
+              //   transactionDetailsRespones?.beneficiaryBankId ===
+              //     transactionDetailsRespones?.remitterBankId
+              //     ? ROUTES_PATH.CUSTOMER.INTERNAL_TRANSFER
+              //     : ROUTES_PATH.CUSTOMER.EXTERNAL_TRANSFER,
+              //   {
+              //     replace: true,
+              //   }
+              // );
+              onSubmitSuccess(-2);
             }
           }}
         >

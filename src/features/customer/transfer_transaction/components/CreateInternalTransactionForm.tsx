@@ -17,7 +17,7 @@ import useTransactionStore from "../stores/transactionStore";
 import { CreateTransactionPayload } from "../transactionType";
 
 interface CreateInternalTransactionFormProps {
-  onSubmitSuccess: () => void; // Function to trigger step change
+  onSubmitSuccess: (offset: number) => void; // Function to trigger step change
 }
 
 const CreateInternalTransactionForm: React.FC<
@@ -71,7 +71,7 @@ const CreateInternalTransactionForm: React.FC<
         values.beneficiaryBankId = bankAccountInfo?.bankId;
       }
       await createTransaction(values);
-      onSubmitSuccess();
+      onSubmitSuccess(1);
     } catch (error: any) {
       message.error(error.message);
     }
