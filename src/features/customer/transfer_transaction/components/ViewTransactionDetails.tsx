@@ -44,6 +44,13 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
   const navigate = useNavigate();
 
   const [otp, setOtp] = useState<string>("");
+  const [otpExpirationTime, setOtpExpirationTime] = useState(
+    Date.now() + 120000
+  );
+
+  useEffect(() => {
+    setOtpExpirationTime(Date.now() + 120000);
+  }, []);
 
   const { verifyLoading, transaction, verifyOtp, bankAccountInfo, banks } =
     useTransactionStore();
@@ -267,7 +274,7 @@ const ViewTransactionForm: React.FC<ViewTransactionFormProps> = ({
             </Typography.Text>
             <div className={styles.countDownContainer}>
               <Countdown
-                value={Date.now() + 120000}
+                value={otpExpirationTime}
                 format="mm:ss"
                 onFinish={handleCountdownFinish}
               />
