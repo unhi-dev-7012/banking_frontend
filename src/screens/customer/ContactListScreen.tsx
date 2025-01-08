@@ -20,6 +20,8 @@ const messages = {
 };
 
 const emptyContact = {
+  id: "",
+  bankId: "",
   beneficiaryId: "",
   bankName: "",
   beneficiaryName: "",
