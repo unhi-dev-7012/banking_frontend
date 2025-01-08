@@ -244,10 +244,16 @@ const CreateExternalTransactionForm: React.FC<
               { type: "number", min: 1, message: "Số tiền phải lớn hơn 0" },
             ]}
           >
-            <InputNumber
+            <InputNumber<number>
               style={{ width: "100%", height: "42px", alignContent: "center" }}
-              placeholder="Nhập số tiền"
               min={1}
+              placeholder="Nhập số tiền"
+              formatter={(value) =>
+                ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) =>
+                value?.replace(/\$\s?|(,*)/g, "") as unknown as number
+              }
               suffix="VND"
             />
           </Form.Item>
