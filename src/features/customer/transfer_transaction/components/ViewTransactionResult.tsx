@@ -5,19 +5,16 @@ import { TransactionStatus, TransactionType } from "../transactionType";
 import { BankInfoUI, getBankDetails } from "./ViewTransactionDetails";
 import { useNavigate } from "react-router-dom";
 import { ROUTES_PATH } from "@constants/path";
-import { onMessage } from "firebase/messaging";
-import { setupOnMessageHandler } from "../../../../config/firebase";
 import { createContact } from "@features/customer/contact/services/createContact";
 
 import verticalLogo from "@assets/images/vertical_logo.png";
+import { useAuthStore } from "@features/auth/stores/authStore";
 
 interface ViewTransactionResultProps {
   onSubmitSuccess: () => void; // Function to trigger step change
 }
 
-const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
-  onSubmitSuccess,
-}) => {
+const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({}) => {
   const { token } = theme.useToken();
   const [beneficiaryBank, setBeneficiaryBank] = useState<BankInfoUI | null>(
     null
@@ -32,6 +29,14 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
     transactionDetailsRespones,
     banks,
   } = useTransactionStore();
+  const { socket, userData } = useAuthStore();
+
+  useEffect(() => {
+    socket?.emit("register", { userId: userData.id });
+    socket?.on("transaction", async (_: any) => {
+      await fetchData();
+    });
+  }, []);
 
   const contentStyle: React.CSSProperties = {
     color: token.colorTextTertiary,
@@ -91,9 +96,22 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
     }
   };
 
-  useEffect(() => {
-    setupOnMessageHandler([fetchData]);
-  }, [fetchData, onMessage]);
+  // useEffect(() => {
+  //   const socketIo = io(import.meta.env.VITE_API_URL);
+  //   socketIo.emit("register", { userId: userData.id });
+  //   socketIo.on("transaction", (message) => {
+  //     console.log(message);
+  //     fetchData();
+  //   });
+
+  //   return () => {
+  //     socketIo.disconnect();
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   setupOnMessageHandler([fetchData]);
+  // }, [fetchData, onMessage]);
 
   useEffect(() => {
     if (transaction) {

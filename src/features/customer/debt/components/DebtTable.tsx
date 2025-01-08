@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { DebtView } from "./ViewDebtForm";
 import { getDebtDetail } from "../services/getDebtDetail";
 import useTransactionStore from "@features/customer/transfer_transaction/stores/transactionStore";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ROUTES_PATH } from "@constants/path";
 
 interface DebtTableProps {
