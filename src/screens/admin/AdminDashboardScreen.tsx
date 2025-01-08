@@ -63,7 +63,7 @@ const AdminDashboardScreen: React.FC<IAdminDashboardScreenProps> = () => {
         <Card style={{ flexGrow: 1 }} size="small">
           <p>Số tiền đã ứng</p>
           <h2>
-            {statistic.incomingAmount.toLocaleString("vi-VN", {
+            {statistic.outcomingAmount.toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
             })}
@@ -72,7 +72,7 @@ const AdminDashboardScreen: React.FC<IAdminDashboardScreenProps> = () => {
         <Card style={{ flexGrow: 1 }} size="small">
           <p>Số tiền được ứng</p>
           <h2>
-            {statistic.outcomingAmount.toLocaleString("vi-VN", {
+            {statistic.incomingAmount.toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
             })}
