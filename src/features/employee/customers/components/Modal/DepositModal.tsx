@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, Form, InputNumber, Button } from "antd";
 import { useCustomerManagement } from "../../stores/useCustomerManagement";
 
@@ -26,6 +26,12 @@ const DepositModal: React.FC<DepositModalProps> = ({
     form.resetFields();
     onCancel();
   };
+
+  useEffect(() => {
+    if (visible) {
+      form.resetFields(); // Reset form whenever modal becomes visible
+    }
+  }, [visible, form]);
 
   return (
     <Modal
