@@ -98,6 +98,7 @@ const useTransactionStore = create<TransactionState>((set) => ({
       set({ transactionDetailsRespones: null });
       set({ fetchLoading: true, fetchError: null });
       const response = await getTransactionDetails.execute(id);
+      // console.log(response);
       set({ transactionDetailsRespones: response }); // Cập nhật thông tin giao dịch
     } catch (error: any) {
       set({

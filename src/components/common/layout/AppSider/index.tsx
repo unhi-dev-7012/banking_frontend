@@ -42,7 +42,7 @@ export const AppSider: React.FC = () => {
   const location = useLocation();
   const selectedKey = location.pathname || "/";
   const { isSiderCollapsed } = useAppStore();
-  const { role, handleLogout } = useAuthStore();
+  const { role, socket, handleLogout } = useAuthStore();
   const { unreads, setUnread } = useNotification();
 
   const [bottomSelectedKey, setBottomSelectedKey] = useState<string>("");
@@ -68,6 +68,7 @@ export const AppSider: React.FC = () => {
         const data = await getUserData();
         if (data) {
           setUserData(data);
+          socket?.emit("register", { userId: data.id });
         }
       } finally {
         setLoading(false);

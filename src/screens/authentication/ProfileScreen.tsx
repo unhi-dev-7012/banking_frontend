@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Row, Typography } from "antd";
+import { Row, Typography } from "antd";
 import ProfileRow from "@components/common/authorization/ProfileRow";
 import { getUserData, UserData } from "@features/auth/services/getUserData";
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Flex, message, Steps, theme, Typography } from "antd";
+import { Flex, Steps, theme, Typography } from "antd";
 import ViewTransactionForm from "@features/customer/transfer_transaction/components/ViewTransactionDetails";
 import ViewTransactionResult from "@features/customer/transfer_transaction/components/ViewTransactionResult";
 import CreateExternalTransactionForm from "@features/customer/transfer_transaction/components/CreateExternalTransactionForm";

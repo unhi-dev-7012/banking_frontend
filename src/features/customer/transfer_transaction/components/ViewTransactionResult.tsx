@@ -29,12 +29,24 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({}) => {
     transactionDetailsRespones,
     banks,
   } = useTransactionStore();
-  const { socket, userData } = useAuthStore();
+  const { socket } = useAuthStore();
+
+  const fetchData = async (id: string) => {
+    try {
+      if (id) {
+        fetchTransaction(id);
+      }
+    } catch (error) {
+      console.error("Có lỗi khi lấy thông tin giao dịch", error);
+    }
+  };
 
   useEffect(() => {
-    socket?.emit("register", { userId: userData.id });
-    socket?.on("transaction", async (_: any) => {
-      await fetchData();
+    // fetchData();
+    socket?.on("transaction", async (message: any) => {
+      setTimeout(async () => {
+        await fetchData(message.id);
+      }, 100); // 100ms debounce
     });
   }, []);
 
@@ -83,16 +95,6 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({}) => {
       }
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchData = async () => {
-    try {
-      if (transaction?.id) {
-        fetchTransaction(transaction?.id);
-      }
-    } catch (error) {
-      console.error("Có lỗi khi lấy thông tin giao dịch", error);
     }
   };
 
