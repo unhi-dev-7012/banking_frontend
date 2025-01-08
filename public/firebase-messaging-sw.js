@@ -7,11 +7,11 @@ importScripts(
 
 fetch("/firebase-config.json")
   .then((response) => {
+    console.log(response.json());
     return response.json();
   })
   .then((jsContent) => {
-    const config = eval(jsContent);
-    firebase.initializeApp(config.firebaseConfig);
+    firebase.initializeApp(jsContent.firebaseConfig);
     firebase.messaging();
   })
   .catch((error) => {

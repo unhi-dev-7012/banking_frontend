@@ -1,0 +1,11 @@
+{
+  "firebaseConfig": {
+    "apiKey": "AIzaSyBCUsmImEJMbDNGI6wfFKtwLjW7DrdoVxg",
+    "authDomain": "ib-wnc.firebaseapp.com",
+    "projectId": "ib-wnc",
+    "storageBucket": "ib-wnc.firebasestorage.app",
+    "messagingSenderId": "176090395098",
+    "appId": "1:176090395098:web:ad16e724cf387a89bfd0e3",
+    "measurementId": "G-2WDZCEQF2M"
+  }
+}

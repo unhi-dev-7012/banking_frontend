@@ -49,7 +49,11 @@ const useTransactionStore = create<TransactionState>((set) => ({
 
   createTransaction: async (payload) => {
     try {
-      set({ createLoading: true, fetchError: null });
+      set({
+        createLoading: true,
+        fetchError: null,
+        transactionDetailsRespones: null,
+      });
       const response = await createInternalTransaction.execute(payload);
       set({ transaction: response }); // Lưu giao dịch mới vào 'transaction'
     } catch (error: any) {

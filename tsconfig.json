@@ -27,11 +27,10 @@
       "@stores/*": ["src/stores/*"],
       "@utils/*": ["src/utils/*"],
       "@features/*": ["src/features/*"],
-      "@routes/*": ["src/routes/*"],
-      
+      "@routes/*": ["src/routes/*"]
     },
     "types": ["node"]
   },
-  "include": ["src"],
+  "include": ["src", "public/firebase-messaging-sw.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
