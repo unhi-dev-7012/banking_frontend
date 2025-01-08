@@ -108,10 +108,17 @@ const CreateDebtForm: React.FC<DebtFormProps> = ({ closeModal }) => {
           },
         ]}
       >
-        <InputNumber
-          placeholder="Nhập số tiền"
+        <InputNumber<number>
           style={{ width: "100%" }}
           min={1}
+          placeholder="Nhập số tiền"
+          formatter={(value) =>
+            ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) =>
+            value?.replace(/\$\s?|(,*)/g, "") as unknown as number
+          }
+          suffix="VND"
           onChange={(value) => form.setFieldsValue({ amount: value ?? 0 })}
         />
       </Form.Item>

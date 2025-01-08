@@ -60,7 +60,19 @@ const DepositModal: React.FC<DepositModalProps> = ({
             },
           ]}
         >
-          <InputNumber style={{ width: "100%" }} min={1} max={10000000} />
+          <InputNumber<number>
+            style={{ width: "100%" }}
+            min={1}
+            max={10000000}
+            placeholder="Nhập số tiền"
+            formatter={(value) =>
+              ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) =>
+              value?.replace(/\$\s?|(,*)/g, "") as unknown as number
+            }
+            suffix="VND"
+          />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" block loading={loading}>

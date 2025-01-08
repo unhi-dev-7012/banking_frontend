@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Form, Input, Modal, message } from "antd";
+import { Button, Form, Input, InputNumber, Modal, message } from "antd";
 import { useCustomerManagement } from "../../stores/useCustomerManagement";
 
 interface AddCustomerModalProps {
@@ -36,6 +36,7 @@ const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
       open={visible}
       onCancel={onCancel}
       footer={null}
+      destroyOnClose
     >
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <Form.Item
@@ -78,7 +79,18 @@ const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
           label="Số dư"
           rules={[{ required: true, message: "Vui lòng nhập số dư!" }]}
         >
-          <Input type="number" min={0} />
+          <InputNumber<number>
+            style={{ width: "100%" }}
+            min={0}
+            placeholder="Nhập số tiền"
+            formatter={(value) =>
+              ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) =>
+              value?.replace(/\$\s?|(,*)/g, "") as unknown as number
+            }
+            suffix="VND"
+          />
         </Form.Item>
 
         <Form.Item>
