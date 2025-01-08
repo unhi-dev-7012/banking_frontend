@@ -2,6 +2,7 @@ import api from "@utils/api";
 import { useAuthStore } from "../stores/authStore";
 
 export interface UserData {
+  id?: string;
   fullName?: string;
   email?: string;
   username?: string;
@@ -10,11 +11,11 @@ export interface UserData {
   balance?: number;
 }
 
-export const getUserData = async (): Promise<UserData | null> => {
-  const { role } = useAuthStore.getState();
+export const getUserData = async (): Promise<UserData | undefined> => {
+  const { role, setUser } = useAuthStore.getState();
 
   if (!role) {
-    return null;
+    return undefined;
   }
 
   let url = "";
@@ -30,13 +31,14 @@ export const getUserData = async (): Promise<UserData | null> => {
       url = "/api/customer/v1/me";
       break;
     default:
-      return null;
+      return undefined;
   }
 
   try {
     const response = await api.get(url);
     const data = response.data;
-    return {
+    const user = {
+      id: data.id,
       fullName: data.fullName || "Unknown User",
       email: data.email || "unknown@example.com",
       bankAccount: data?.bankAccount?.id || "",
@@ -44,8 +46,10 @@ export const getUserData = async (): Promise<UserData | null> => {
       username: data.username || "unknown",
       createdAt: data.createdAt || undefined,
     };
+    setUser(user);
+    return user;
   } catch (error) {
     console.error("Failed to fetch user data:", error);
-    return null;
+    return undefined;
   }
 };

@@ -12,7 +12,6 @@ import {
   theme,
   Typography,
 } from "antd";
-import BeneficiaryInput from "./BeneficiaryInput";
 import useTransactionStore from "../stores/transactionStore";
 import { CreateTransactionPayload } from "../transactionType";
 import { useExternalTransactionForm } from "../hooks/useExternalTransactionForm";
