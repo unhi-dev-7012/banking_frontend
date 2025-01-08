@@ -9,6 +9,8 @@ import { onMessage } from "firebase/messaging";
 import { setupOnMessageHandler } from "../../../../config/firebase";
 import { createContact } from "@features/customer/contact/services/createContact";
 
+import verticalLogo from "@assets/images/vertical_logo.png";
+
 interface ViewTransactionResultProps {
   onSubmitSuccess: () => void; // Function to trigger step change
 }
@@ -121,7 +123,7 @@ const ViewTransactionResult: React.FC<ViewTransactionResultProps> = ({
     <Flex vertical gap={10} style={contentStyle}>
       <Flex justify="center">
         <img
-          src="../src/assets/images/vertical_logo.png"
+          src={verticalLogo}
           alt="Not found!"
           style={{ width: 100, height: 100 }}
         />

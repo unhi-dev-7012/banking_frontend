@@ -16,6 +16,9 @@ import ReCAPTCHA from "react-google-recaptcha";
 import requestResetPassword from "@features/auth/services/requestResetPassword";
 import resetPassword from "@features/auth/services/resetPassword";
 
+import imgBackground from "@assets/images/bg.jpg";
+import horizontalLogo from "@assets/images/horizontal_logo.png";
+
 interface ILoginScreenProps {
   messageApi: MessageInstance; // Prop to pass messageApi
 }
@@ -116,7 +119,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
   return (
     <Flex className={styles.loginScreen}>
       <Flex className={styles.leftContainer} align="center" justify="center">
-        <img src="src/assets/images/bg.jpg" alt="" />
+        <img src={imgBackground} alt="" />
       </Flex>
       <Flex
         className={styles.rightContainer}
@@ -125,7 +128,7 @@ const LoginScreen: React.FC<ILoginScreenProps> = ({ messageApi }) => {
         gap="middle"
         justify="center"
       >
-        <img src="src/assets/images/horizontal_logo.png" alt="" />
+        <img src={horizontalLogo} alt="" />
 
         {/* Conditional Rendering based on currentForm */}
         {currentForm === FormState.LOGIN && (

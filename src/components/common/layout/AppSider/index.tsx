@@ -33,6 +33,7 @@ import { useAppStore } from "@stores/app";
 import { useAuthStore } from "@features/auth/stores/authStore";
 import { getUserData, UserData } from "@features/auth/services/getUserData";
 import { useNotification } from "../../../../features/customer/notification/stores/useNotification";
+import onlyLogo from "@assets/images/only_logo.png";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -365,7 +366,7 @@ export const AppSider: React.FC = () => {
           }}
         >
           <div className="appSider_LogoContainer">
-            <img src="../src/assets/images/only_logo.png" alt="Not found!" />
+            <img src={onlyLogo} alt="Not found!" />
           </div>
           {!isSiderCollapsed && (
             <span className="appSider_LogoText">NHBank</span>
