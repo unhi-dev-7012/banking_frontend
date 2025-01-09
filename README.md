@@ -1,12 +1,6 @@
 # Frontend Template (React + TypeScript + Vite)
 
 This project serves as a template for building scalable and maintainable frontend applications using **React**, **TypeScript**, and **Vite**.  
-
-> *"Try and fail, but don't fail to try."* – John Quincy Adams  
-
-The directory structure is not standardized—it varies depending on the project and personal preferences. The primary goal is to keep the file organization manageable. Ultimately, the build process transforms all files into static assets for deployment, so the structure itself doesn’t directly affect the end result.  
-Feel free to experiment! If the current setup doesn’t work well, we can always adapt and improve.  
-
 ---
 
 ## **Directory Structure**
@@ -17,85 +11,74 @@ The directory is organized for clarity and maintainability. Here's a high-level 
 ├── public/                 # Public assets served directly by the server
 ├── src/                    # Main source code for the application
 │   ├── assets/             # Static assets like images, icons...
-│   ├── components/         # Reusable UI components organized by feature/module
-│   │   ├── @activity/
-│   │   ├── @authentication/
-│   │   ├── @blacklist/
-│   │   ├── @check-in/
-│   │   ├── @participant/
-│   │   ├── @student/
-│   │   ├── @student-affairs/
-│   │   ├── @training-point/
-│   │   └── common/
-│   │       ├── @authorization/
-│   │       └── @layout/
-│   │           ├── AppContent/
-│   │           │   └── index.tsx
-│   │           ├── AppHeader/
-│   │           │   └── index.tsx
-│   │           ├── AppSider/
-│   │           │   └── index.tsx
-│   │           ├── Layout/
-│   │           │   └── index.tsx
-│   │           └── index.tsx
-│   │
-│   ├── constants/          # Application constants like paths and permissions, ...
+│   ├── components/         # Reusable UI components
+│   ├── config/             # Configuration files
+│   │   ├── firebase.ts
+│   ├── constants/          # Application constants
 │   │   ├── authorization.ts
-│   │   └── path.ts
-│   │
-│   ├── fonts/
-│   │   ├── Roboto-Black.woff2
-│   │   ├── Roboto-Bold.woff2
-│   │   ├── Roboto-Light.woff2
-│   │   ├── Roboto-Medium.woff2
-│   │   ├── Roboto-Regular.woff2
-│   │   └── Roboto-Thin.woff2
-│   │
-│   ├── hooks/              # Custom React hooks for reusable logic
+│   │   ├── globalStyle.ts
+│   │   ├── paginationParam.ts
+│   │   ├── path.ts
+│   │   └── tableState.ts
+│   ├── features/           # Feature-specific logic and modules
+│   │   ├── account/
+│   │   ├── admin/
+│   │   ├── auth/
+│   │   ├── customer/
+│   │   │   ├── contact/
+│   │   │   │   ├── components/
+│   │   │   │   ├── reducer/
+│   │   │   │   ├── services/
+│   │   │   │   ├── contact.state.ts
+│   │   │   │   └── contact.type.ts
+│   │   │   ├── dashboard/
+│   │   │   ├── debt/
+│   │   │   ├── notification/
+│   │   │   └── transfer_transaction/
+│   │   ├── employee/customers/
+│   │   └── transactions/
+│   ├── fonts/              # Custom fonts
+│   ├── hooks/              # Custom React hooks
+│   ├── routes/             # Application routes
 │   ├── screens/            # Feature-based screens or pages
-│   │   ├── @activity/
-│   │   │   ├── ActivityCheckinScreen.tsx
-│   │   │   ├── ActivityCreateScreen.tsx
-│   │   │   ├── ActivityDetailScreen.tsx
-│   │   │   ├── ActivityEditScreen.tsx
-│   │   │   ├── ActivityListScreen.tsx
-│   │   │   └── ActivityParticipantScreen.tsx
-│   │   ├── @authentication/
-│   │   │   ├── ChangePasswordScreen.tsx
-│   │   │   ├── LoginScreen.tsx
-│   │   │   └── RecoveryAccountScreen.tsx
-│   │   ├── @blacklist/
-│   │   │   ├── BlacklistDetailScreen.tsx
-│   │   │   ├── BlacklistEditScreen.tsx
-│   │   │   └── BlacklistListScreen.tsx
-│   │   ├── @student/
-│   │   │   ├── StudentDetailScreen.tsx
-│   │   │   └── StudentListScreen.tsx
-│   │   ├── @student-affairs/
-│   │   │   ├── StudentAffairsDetailScreen.tsx
-│   │   │   └── StudentAffairsListScreen.tsx
-│   │   └── @training-point/
-│   │       └── TrainingPointListScreen.tsx
-│   │
+│   │   ├── admin/
+│   │   ├── authentication/
+│   │   ├── customer/
+│   │   │   ├── DebtListScreen.tsx
+│   │   │   ├── DebtSettleScreen.tsx
+│   │   │   ├── CustomerDashboardScreen.tsx
+│   │   │   └── CustomerHistoryScreen.tsx
+│   │   ├── employee/
+│   │   │   ├── accounts/
+│   │   │   │   ├── AccountListScreen.tsx
+│   │   │   │   └── HistoryScreen.tsx
 │   ├── services/           # API interaction and business logic
+│   │   ├── fetchTableData.ts
+│   │   └── getBankAccountWithUser.ts
 │   ├── stores/             # Application state management
+│   │   └── app.ts
 │   ├── utils/              # General-purpose utility functions
-│   ├── App.tsx             # Root component of the app
+│   │   ├── api.ts
+│   │   ├── checkRole.ts
+│   │   ├── getUserRole.ts
+│   │   ├── menuHelper.ts
+│   │   └── redactBankAccount.ts
+│   ├── App.tsx             # Root component
 │   ├── global.css          # Global styles
-│   ├── main.tsx            # Application entry point
+│   ├── main.tsx            # Entry point
 │   └── vite-env.d.ts       # TypeScript environment declarations
 │
-├── .env                    # Environment configuration
-├── .gitignore              # Ignored files in Git
-├── eslint.config.js
+├── .env                    # Environment variables
+├── .env.sample             # Example environment variables
+├── .gitignore              # Git ignore rules
+├── eslint.config.js        # ESLint configuration
 ├── index.html              # Main HTML template
 ├── package-lock.json
-├── package.json            # Project dependencies and scripts
-├── README.md
-├── tsconfig.app.json
-├── tsconfig.json
+├── package.json            # Project dependencies
+├── README.md               # Project documentation
+├── tsconfig.json           # TypeScript configuration
 ├── tsconfig.node.json
-├── vercel.json             # Define paths when deploy on vercel
+├── vercel.json             # Vercel deployment configuration
 └── vite.config.ts          # Vite configuration
 ```
 
